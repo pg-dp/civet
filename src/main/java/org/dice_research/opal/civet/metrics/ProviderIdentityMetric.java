@@ -64,7 +64,7 @@ public class ProviderIdentityMetric implements Metric {
 		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
 		// DCAT.keyword);
 
-		int TotalDataSets = 0;
+        //Score to return
 		int score = 0;
 
 		// This is incremented if and only if we a solid name for provider.
