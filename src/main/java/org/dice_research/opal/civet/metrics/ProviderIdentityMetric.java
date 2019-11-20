@@ -67,13 +67,13 @@ public class ProviderIdentityMetric implements Metric {
         //Score to return
 		int score = 0;
 
-		// This is incremented if and only if we a solid name for provider.
+		// This is incremented if and only if we have a solid name for provider.
 		int TotalPublisherInfo = 0;
 
 		// Consistency check for Provider
 		Boolean InconsistentPublishers = false;
 
-		// Will be used to check for consistency
+		// Will be used to check for consistency among providers
 		ArrayList<String> ListOfPublishers = new ArrayList<String>();
 
 		Property FoafName = model.createProperty("http://xmlns.com/foaf/0.1/name");
