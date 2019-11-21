@@ -20,10 +20,10 @@ public class DataFormatMetricTest {
 
 	TestData testdata;
 
-	// Publisher with empty blank node
+	// In TestCase1, dataset has 2 distributions and all the distributions have a valid file format.
 	private static final String TestCase1 = "TestCaseDataFormat5stars.ttl";
 
-	// Publisher with non empty blank node
+	// In TestCase2, 1 out of 2 distributions have file format information. This is a 2 Star dataset.
 	private static final String TestCase2 = "TestCaseDataFormat2stars.ttl";
 
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
