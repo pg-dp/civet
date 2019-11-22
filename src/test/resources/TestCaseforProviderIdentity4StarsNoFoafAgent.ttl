@@ -20,14 +20,7 @@
         a                      dcat:Dataset ;
         dct:accrualPeriodicity  <http://publications.europa.eu/resource/authority/frequency/UNKNOWN> ;
         dct:description         "The Corine Land Cover datasets CLC2000, CLC2006and CLC change 2000-2006areproduced within the frame of the GMES land monitoringproject.Corine Land Cover (CLC) provides consistent information on land cover and land cover changes across Europe. This inventory was initiated in 1985 (reference year 1990) and established a time series of land cover information with updates in 2000 and 2006.CLC products are based on photointerpretation of satellite images by national teams of participating countries - the EEA member and cooperating countries – following a standard methodology and nomenclature with the following base parameters: 44 classes in the hierarchical three level Corine nomenclature; minimum mapping unit (MMU) for status layers is 25 hectares; minimum width of linear elements is 100 metres; minimum mapping unit (MMU) for Land Cover Changes (LCC) for the change layers is 5 hectares. The resulting national land cover inventories are further integrated into a seamless land cover map of Europe.Land cover and land use (LCLU) information is important not only for land change research, but also more broadly for the monitoring of environmental change, policy support, the creation of environmental indicators and reporting. CLC datasets provide important datasets supporting the implementation of key priority areas of the Environment Action Programmes of the European Union as protecting ecosystems, halting the loss of biological diversity, tracking the impacts of climate change, assessing developments in agriculture and implementing the EU Water Framework Directive, among others.More about the Corine Land Cover (CLC) and Copernicus land monitoring data in general can be found at http://land.copernicus.eu/." ;
-        dct:publisher           [ a       <http://xmlns.com/foaf/0.1/Organization> ;
-                                  <http://xmlns.com/foaf/0.1/name>
-                                          "DREAL Poitou-Charentes"
-                                ] ;
-		dct:publisher           [ a       <http://xmlns.com/foaf/0.1/Organization> ;
-                                  <http://xmlns.com/foaf/0.1/name>
-                                          "DREAL Poitou-Charentes"
-                                ] ;
+        dct:publisher           <https://www.data.gv.at/organization/f07172d7-d5f8-45df-9982-5a8d663ea3dc>;
 		dct:identifier          "{3DFF988D-59D2-415D-B2DA-818E8EF31117}" , "{CE1CBDCB-2D94-44C8-9D23-2A8F0D0F1F28}" ;
         dct:language            <http://publications.europa.eu/resource/authority/language/ENG> ;
         dct:modified            "2009-07-02T00:00:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
@@ -65,3 +58,10 @@
                 "European Environment Agency, Kongens Nytorv 6, 1050 Copenhagen, K, Denmark" ;
         <http://www.w3.org/2006/vcard/ns#hasEmail>
                 <mailto:eea.enquiries@eea.europa.eu> .
+				
+<https://www.data.gv.at/organization/f07172d7-d5f8-45df-9982-5a8d663ea3dc>
+        a       <http://purl.org/dc/terms/Agent> ;
+        <http://xmlns.com/foaf/0.1/mbox>
+                "offenerhaushalt@kdz.or.at" ;
+        <http://xmlns.com/foaf/0.1/name>
+                "offenerhaushalt.at" .				

@@ -2,19 +2,23 @@ package org.dice_research.opal.civet.metrics;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.ResIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.SimpleSelector;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
+import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -28,13 +32,12 @@ import org.dice_research.opal.common.vocabulary.Opal;
  */
 public class ProviderIdentityMetric implements Metric {
 
-	public static boolean isValidLicenseURL(String LicenseURL) {
+	public static boolean isValidURL(String checkURL) {
 		/*
-		 * new URL tries to create a new URL with provided license URL. If invalid
-		 * License URL then catch exception and return false.
+		 * Here we check whether the URL of foaf:homepage is a valid URL or not.
 		 */
 		try {
-			new URL(LicenseURL).toURI();
+			new URL(checkURL).toURI();
 			return true;
 		}
 
@@ -44,7 +47,7 @@ public class ProviderIdentityMetric implements Metric {
 	}
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Check if a consistent Dataset Provider name is given "
+	private static final String DESCRIPTION = "Check if a consistent Dataset Provider/Publisher name is given "
 			+ "If dataset has only 1 Publisher then 5 atars are awarded "
 			+ "If dataset has more than 1 publishers but they are consistent then 5 stars are awarded "
 			+ "If dataset has more than 1 publishers but they are inconsistent then 0 stars are awarded "
@@ -52,7 +55,9 @@ public class ProviderIdentityMetric implements Metric {
 			+ "If dataset has a non-empty blanknode for publlisher with publicher info then 5 stars are awarded"
 			+ "If dataset has more than 1 non-empty blanknode for publlisher with consistent publisher info then 5 stars are awarded"
 			+ "If dataset has more than 1 non-empty blanknode for publlisher with inconsistent publisher info then 0 stars are awarded"
-			+ "If dataset has no provider information at all then 0 stars are awarded.";
+			+ "If dataset has no provider information at all then 0 stars are awarded"
+			+ "Before awarding stars, we are checking whether the publishers are of type foaf:Agent"
+			+ "If no publisher info but there is a foaf:homePage in the DataCatalog with valid URL then in that case award 5 star";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
@@ -73,10 +78,11 @@ public class ProviderIdentityMetric implements Metric {
 		// Consistency check for Provider
 		Boolean InconsistentPublishers = false;
 
-		// Will be used to check for consistency among providers
-		ArrayList<String> ListOfPublishers = new ArrayList<String>();
+		// Will be used to check for consistency
+		HashMap<String, Integer> PublisherScore = new HashMap<String, Integer>();
 
 		Property FoafName = model.createProperty("http://xmlns.com/foaf/0.1/name");
+		Property a_Predicate = model.createProperty("a");
 
 		StmtIterator IteratorOverPublisher = model
 				.listStatements(new SimpleSelector(null, DCTerms.publisher, (RDFNode) null));
@@ -90,23 +96,102 @@ public class ProviderIdentityMetric implements Metric {
 				// Check if the publisher object is a blank node.
 				if (Publisher.isAnon()) {
 					Resource PublisherBlankNode = (Resource) Publisher;
-					// After checking for Property FoafName--->Check if the respective Subject is
-					// not empty
-					if (PublisherBlankNode.hasProperty(FoafName)) {
-						if (!(PublisherBlankNode.getProperty(FoafName).getObject().toString().isEmpty())) {
-							TotalPublisherInfo++;
-							ListOfPublishers.add(PublisherBlankNode.getProperty(FoafName).getObject().toString());
+					/*
+					 * If blanknode is of type foaf:agent and has an non-empty name then 5 stars are
+					 * awarded.
+					 */
+					if ((PublisherBlankNode.hasProperty(RDF.type, FOAF.Organization)
+							|| PublisherBlankNode.hasProperty(RDF.type, FOAF.Person)
+							|| PublisherBlankNode.hasProperty(RDF.type, FOAF.Agent))
+							&& (!PublisherBlankNode.getProperty(FOAF.name).getObject().toString().isEmpty())) {
+						if (PublisherScore.size() == 0 && !(PublisherScore
+								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString())))
+							PublisherScore.put(PublisherBlankNode.getProperty(FOAF.name).getObject().toString(), 5);
+						else if (!(PublisherScore.size() == 0) && !(PublisherScore
+								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.put("InconsistentPublishers", 0);
+							break;
 						}
 					}
-				} else {
-					// If it is not a blank node, then check if the respective object is not empty
-					if (!Publisher.toString().isEmpty()) {
-						TotalPublisherInfo++;
-						ListOfPublishers.add(Publisher.toString());
+					/*
+					 * If blanknode has a non-empty name but not sure about the type i.e not a
+					 * foaf:agent then 4 stars are awarded for not following DCAT recommendations.
+					 */
+					else if (PublisherBlankNode.hasProperty(FOAF.name)
+							&& (!PublisherBlankNode.getProperty(FOAF.name).getObject().toString().isEmpty())) {
+						if (PublisherScore.size() == 0 && !(PublisherScore
+								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString())))
+							PublisherScore.put(PublisherBlankNode.getProperty(FOAF.name).getObject().toString(), 4);
+						else if (!(PublisherScore.size() == 0) && !(PublisherScore
+								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.put("InconsistentPublishers", 0);
+							break;
+						}
+					}
+				} else if (Publisher.isURIResource()) {
+					Resource PublisherURI = (Resource) Publisher;
+
+					/*
+					 * If URI is of type foaf:agent and has an non-empty name then 5 stars are
+					 * awarded.
+					 */
+					if ((PublisherURI.hasProperty(RDF.type, FOAF.Organization)
+							|| PublisherURI.hasProperty(RDF.type, FOAF.Person)
+							|| PublisherURI.hasProperty(RDF.type, FOAF.Agent))
+							&& (!PublisherURI.getProperty(FOAF.name).getObject().toString().isEmpty())) {
+						if (PublisherScore.size() == 0 && !(PublisherScore
+								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString())))
+							PublisherScore.put(PublisherURI.getProperty(FOAF.name).getObject().toString(), 5);
+						else if (!(PublisherScore.size() == 0) && !(PublisherScore
+								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.put("InconsistentPublishers", 0);
+							break;
+						}
 					}
 
-				}
+					/*
+					 * If URI has a non-empty name but not sure about the type i.e not a foaf:agent
+					 * then 4 stars are awarded for not following DCAT recommendations.
+					 */
 
+					else if (PublisherURI.hasProperty(FOAF.name)
+							&& (!PublisherURI.getProperty(FOAF.name).getObject().toString().isEmpty())) {
+						if (PublisherScore.size() == 0 && !(PublisherScore
+								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString())))
+							PublisherScore.put(PublisherURI.getProperty(FOAF.name).getObject().toString(), 4);
+						else if (!(PublisherScore.size() == 0) && !(PublisherScore
+								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.put("InconsistentPublishers", 0);
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		/*
+		 * If PublisherInfo=0 then as a last resort check if foaf:homepage available in
+		 * dcat:catalog
+		 */
+		if (PublisherScore.size() == 0) {
+
+			ResIterator CatalogIterator = model.listSubjectsWithProperty(RDF.type, DCAT.Catalog);
+			if (CatalogIterator.hasNext()) {
+				while (CatalogIterator.hasNext()) {
+					Resource Catalog = CatalogIterator.nextResource();
+					if (Catalog.hasProperty(FOAF.homepage)
+							&& (!Catalog.getProperty(FOAF.homepage).getObject().toString().isEmpty())) {
+						if (PublisherScore.size() == 0 && !(PublisherScore
+								.containsKey(Catalog.getProperty(FOAF.name).getObject().toString()))) {
+							if (isValidURL(Catalog.getProperty(FOAF.name).getObject().toString()))
+								PublisherScore.put(Catalog.getProperty(FOAF.name).getObject().toString(), 5);
+						} else if (!(PublisherScore.size() == 0) && !(PublisherScore
+								.containsKey(Catalog.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.put("InconsistentPublishers", 0);
+							break;
+						}
+					}
+				}
 			}
 		}
 
@@ -114,26 +199,14 @@ public class ProviderIdentityMetric implements Metric {
 		 * This section is for scoring
 		 */
 
-		// First check if more than one publishers then are they consistent ?
-		if (TotalPublisherInfo > 1) {
-			for (int count = 0; count < ListOfPublishers.size() - 1; count++) {
-				if (!(ListOfPublishers.get(count).trim().equals(ListOfPublishers.get(count + 1).trim()))) {
-					// System.out.println(ListOfPublishers.get(count) +" AND "+
-					// ListOfPublishers.get(count+1));
-					InconsistentPublishers = true;
-					break;
-				}
-			}
-		}
-
-		if (TotalPublisherInfo == 0 || InconsistentPublishers)
+		if (PublisherScore.containsKey("InconsistentPublishers"))
 			score = 0;
-		// If Publishers have a consistent name then give 5 stars
-		else if (TotalPublisherInfo > 1 && !InconsistentPublishers)
-			score = 5;
-		else if (TotalPublisherInfo == 1)
-			score = 5;
-
+		else if (PublisherScore.size() == 0)
+			score = 0;
+		else if (PublisherScore.size() == 1)
+			for(String key: PublisherScore.keySet())
+				score= PublisherScore.get(key);
+		
 		return score;
 
 	}

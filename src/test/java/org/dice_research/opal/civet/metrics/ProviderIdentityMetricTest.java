@@ -38,6 +38,9 @@ public class ProviderIdentityMetricTest {
 	// 1 consistent provider
 	private static final String TestCase6 = "TestCaseforProviderIdentity1consistentProvider.ttl";
 
+	// 1 consistent provider but no FOAF:Agent
+	private static final String TestCase7 = "TestCaseforProviderIdentity4StarsNoFoafAgent.ttl";
+
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
 
 	@Before
@@ -50,9 +53,9 @@ public class ProviderIdentityMetricTest {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 
-		// Compute stars : TestCase1 check for 5 stars --------> MUST FAIL
+		// Compute stars : TestCase1 check for 0 stars --------> MUST Pass
 		Integer stars_test1 = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Provider Identity Test: One Blank Node", 5, stars_test1.intValue());
+		Assert.assertEquals("Provider Identity Test: One Blank Node", 0, stars_test1.intValue());
 	}
 
 	@Test
@@ -75,26 +78,34 @@ public class ProviderIdentityMetricTest {
 	@Test
 	public void TestCase4() throws Exception {
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		// Compute stars : TestCase4 check for 5 stars --------> MUST FAIL
+		// Compute stars : TestCase4 check for 0 stars --------> MUST PASS
 		Integer stars_test4 = metric.compute(testdata.getModel(TestCase4), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Provider Identity Test: More than One NonEmpty Blank Node with Inconsistent Info", 5,
+		Assert.assertEquals("Provider Identity Test: More than One NonEmpty Blank Node with Inconsistent Info", 0,
 				stars_test4.intValue());
 	}
 
 	@Test
 	public void TestCase5() throws Exception {
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		// Compute stars : TestCase5 check for 5 stars --------> MUST FAIL
+		// Compute stars : TestCase5 check for 5 stars --------> MUST PASS
 		Integer stars_test5 = metric.compute(testdata.getModel(TestCase5), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Provider Identity Test: Inconsistent Providers ", 5, stars_test5.intValue());
+		Assert.assertEquals("Provider Identity Test: Inconsistent Providers ", 0, stars_test5.intValue());
 	}
 
 	@Test
 	public void TestCase6() throws Exception {
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		// Compute stars : TestCase5 check for 5 stars --------> MUST PASS
+		// Compute stars : TestCase6 check for 5 stars --------> MUST PASS
 		Integer stars_test6 = metric.compute(testdata.getModel(TestCase6), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Provider Identity Test: Consistent Providers ", 5, stars_test6.intValue());
+	}
+
+	@Test
+	public void TestCase7() throws Exception {
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		// Compute stars : TestCase7 check for 5 stars --------> MUST PASS
+		Integer stars_test7 = metric.compute(testdata.getModel(TestCase7), TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("Provider Identity Test: 4star Providers because no foaf:agent ", 4, stars_test7.intValue());
 
 	}
 
