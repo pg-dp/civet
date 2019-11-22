@@ -32,6 +32,12 @@ public class KnownLicenseMetricTest {
 	// Out of 5 distributions 2 dist has licenses and 2 dist has rights -----> 4 stars
 	private static final String TestCase4 = "TestCaseForKnownLicense4stars_5dist_2license_2rights.ttl";
 	
+	// Out of 5 distributions 1 dist has license  -----> 2 stars
+    private static final String TestCase5 = "TestCaseForKnownLicense2stars_5dist_1license.ttl";
+    
+ // Out of 5 distributions 2 dist has licenses  -----> 3 stars
+    private static final String TestCase6 = "TestCaseForKnownLicense3stars_5dist_2rights.ttl";
+	
 	
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
 
@@ -68,6 +74,20 @@ public class KnownLicenseMetricTest {
 		KnownLicenseMetric metric = new KnownLicenseMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase4), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Dataset 5 distributions, 2 dis has dct:license and 2 dis has dct:rights", 4, stars.intValue());
+	}
+	
+	@Test
+	public void TestCase5() throws Exception {
+		KnownLicenseMetric metric = new KnownLicenseMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase5), TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("Dataset 5 distributions, only 1 distribution has license", 2, stars.intValue());
+	}
+	
+	@Test
+	public void TestCase6() throws Exception {
+		KnownLicenseMetric metric = new KnownLicenseMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase6), TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("Dataset 5 distributions, only 2 distributions have rights", 3, stars.intValue());
 	}
 
 }
