@@ -48,9 +48,9 @@ public class DataFormatMetricTest {
 
 		DataFormatMetric metric = new DataFormatMetric();
 
-		// Compute stars : TestCase2 check for 5 stars, but it is actually a 2 star dataset --------> MUST FAIL
+		// Compute stars : TestCase2 check for 5 stars, but it is actually a 2 star dataset --------> MUST Pass
 		Integer stars_test = metric.compute(testdata.getModel(TestCase2), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Data Format Test: Out of 2 distributions, only 1 has valid file format", 5, stars_test.intValue());
+		Assert.assertEquals("Data Format Test: Out of 2 distributions, only 1 has valid file format", 2, stars_test.intValue());
 	}
 
 }
