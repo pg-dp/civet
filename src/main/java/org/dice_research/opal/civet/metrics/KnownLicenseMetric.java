@@ -148,7 +148,7 @@ public class KnownLicenseMetric implements Metric {
 
 				if (EvaluationInPercentage == 100)
 					score = 5;
-				else if (EvaluationInPercentage < 100 && EvaluationInPercentage >= 60)
+				else if (EvaluationInPercentage < 100 && EvaluationInPercentage >= 70)
 					score = 4;
 				else if (EvaluationInPercentage >= 40)
 					score = 3;
