@@ -119,8 +119,7 @@ public class KnownLicenseMetric implements Metric {
 
 				/*
 				 * If control came here means, there is no dct:license keyword in available
-				 * distributions. So last step is to check if dct:right keyword with Valid URI
-				 * is there.
+				 * distributions or there maybe both dct:license and dct:rights keyword. Check for rights here.
 				 */
 				NodeIterator DistributionsIteratorRights = model.listObjectsOfProperty(DCAT.distribution);
 
@@ -155,7 +154,7 @@ public class KnownLicenseMetric implements Metric {
 					score = 3;
 				else if (EvaluationInPercentage >= 20)
 					score = 2;
-				else if (EvaluationInPercentage >= 0)
+				else if (EvaluationInPercentage > 0)
 					score = 1;
 				else
 					score = 0;
