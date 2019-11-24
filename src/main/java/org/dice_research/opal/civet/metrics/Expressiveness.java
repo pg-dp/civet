@@ -29,7 +29,7 @@ public class Expressiveness implements Metric {
 			}
 
 			return score += 3;
-	
+
 		} else {
 			return score++;
 		}
@@ -57,9 +57,6 @@ public class Expressiveness implements Metric {
 				scores += 1;
 				String dctdescription = DataSet.getProperty(DCTerms.description).getObject().toString();
 				String dcttitle = DataSet.getProperty(DCTerms.title).getObject().toString();
-				System.out.println("idar hai kate" + dctdescription);
-				System.out.println("ab idar" + dcttitle);
-
 				scores = compareDescWithTitle(dctdescription, dcttitle, scores);
 
 			} else {

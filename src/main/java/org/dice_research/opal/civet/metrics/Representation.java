@@ -27,14 +27,13 @@ public class Representation implements Metric {
 		}
 
 	}
+
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DESCRIPTION = "Check the metadata field of dateformat"
-			+ "If dateformat in the dataset is according to W3C standards then give 5 starts"
-			+ "Else return null";
+			+ "If dateformat in the dataset is according to W3C standards then give 5 starts" + "Else return null";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-		System.out.println("m idhar hu");
 		LOGGER.info("Processing dataset " + datasetUri);
 
 		StmtIterator DatasetIterator = model.listStatements(new SimpleSelector(null, RDF.type, DCAT.Dataset));
@@ -45,10 +44,7 @@ public class Representation implements Metric {
 			if (DataSet.hasProperty(DCTerms.issued)
 					&& !(DataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
 				String dateissued = DataSet.getProperty(DCTerms.issued).getObject().toString();
-				System.out.println("kya aara idar"+ dateissued);
 				int result = checkDateFormat(dateissued);
-				System.out.println("idar ?"+ result);
-				System.out.println("result::::::"+result);
 				return result;
 			} else {
 				return null;
