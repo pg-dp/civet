@@ -42,7 +42,7 @@ public class Expressiveness implements Metric {
 			+ "If dataset has description and if length is not empty and length of description > length of title then award 5 star "
 			+ "Else if dataset has description but length of desc = length of title give 4 star."
 			+ "Else if dataset has description but length of desc < length of title give 3 star."
-			+ "Else if dataset does not has description or its property is null then give 1 star";
+			+ "Else if dataset does not has description or its property is null then give 1 star.";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {

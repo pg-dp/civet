@@ -37,24 +37,25 @@ public class RepresentationTest {
 		Representation metric = new Representation();
 		System.out.println("..............."+testdata.getModel(TestCase1));
 		Integer stars = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
-//		System.out.println("Test case 1:"+stars);
+		System.out.println("Test case 1:"+stars);
 		Assert.assertEquals("Dateformat is according to W3C standards ", 5, stars.intValue());
 	}
 
 	@Test
 	public void TestCase2() throws Exception {
-		Expressiveness metric = new Expressiveness();
+		Representation metric = new Representation();
 		Integer stars = metric.compute(testdata.getModel(TestCase2), TEST_EDP_ICE_DATASET);
-//		System.out.println("Test case 2:"+stars);
+		System.out.println("Test case 2:"+stars);
 		Assert.assertEquals("Dateformat is not according to W3C standards", 1, stars.intValue());
 	}
 
 	@Test
 	public void TestCase3() throws Exception {
-		Expressiveness metric = new Expressiveness();
+		Representation metric = new Representation();
+		System.out.println("testdata.getModel(TestCase3)    "+ testdata.getModel(TestCase3));
 		Integer stars = metric.compute(testdata.getModel(TestCase3), TEST_EDP_ICE_DATASET);
-//		System.out.println("Test case 3:"+stars);
-		Assert.assertEquals("Dct:issued field is empty", null, stars.intValue());
+		System.out.println("Test case 3:"+stars);
+		Assert.assertEquals("Dct:issued field is empty", null, stars);
 	}
 
 }
