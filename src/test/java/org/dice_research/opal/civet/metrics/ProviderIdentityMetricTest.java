@@ -53,9 +53,9 @@ public class ProviderIdentityMetricTest {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 
-		// Compute stars : TestCase1 check for 0 stars --------> MUST Pass
+		// Compute stars : TestCase1 check for 1 star --------> MUST Pass
 		Integer stars_test1 = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Provider Identity Test: One Blank Node", 0, stars_test1.intValue());
+		Assert.assertEquals("Provider Identity Test: One Blank Node", 5, stars_test1.intValue());
 	}
 
 	@Test
