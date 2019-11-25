@@ -61,6 +61,11 @@ public class DataFormatMetric implements Metric {
 
 		// Model with file type information
 		Model ModelFileType = ModelFactory.createDefaultModel();
+		/*
+		 * To evaluate file format, we will use an RDF file "filetypes-skos.ttl" provided by 
+		 * https://op.europa.eu/en/web/eu-vocabularies/at-dataset/-/resource/dataset/file-type?target=About.
+		 * This turtle file contains information about all kinds of valid file formats.
+		 */
 		ModelFileType.read(getClass().getClassLoader().getResource("filetypes-skos.ttl").getFile(), "TURTLE");
 
 		// Property for Skos and PreferredLabel(we will extract string file type from
