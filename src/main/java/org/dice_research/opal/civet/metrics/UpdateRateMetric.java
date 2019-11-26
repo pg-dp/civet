@@ -49,10 +49,11 @@ public class UpdateRateMetric implements Metric {
 				return 2;
 		else if(updateRate.contains("QUARTERLY"))
 				return 3;
-		else if (updateRate.contains("MONTHLY"))
+		else if (updateRate.contains("MONTHLY") || updateRate.contains("BIMONTHLY"))
 				return 4;
 		else if (updateRate.contains("WEEKLY") || updateRate.contains("DAILY")
-				|| updateRate.contains("HOURLY") || updateRate.contains("CONT"))
+				|| updateRate.contains("HOURLY") || updateRate.contains("CONT")
+				|| updateRate.contains("BIWEEKLY"))
 				return 5;
 		else
 				return 0;
@@ -65,6 +66,6 @@ public class UpdateRateMetric implements Metric {
 
 	@Override
 	public String getUri() throws Exception {
-		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
+		return Opal.OPAL_METRIC_UPDATE_RATE.getURI();
 	}
 }
