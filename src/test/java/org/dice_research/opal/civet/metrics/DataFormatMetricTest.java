@@ -24,7 +24,7 @@ public class DataFormatMetricTest {
 	private static final String TestCase1 = "TestCaseDataFormat5stars.ttl";
 
 	// In TestCase2, 1 out of 2 distributions have file format information. This is a 2 Star dataset.
-	private static final String TestCase2 = "TestCaseDataFormat2stars.ttl";
+	private static final String TestCase2 = "TestCaseDataFormat3stars.ttl";
 
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
 
@@ -50,7 +50,7 @@ public class DataFormatMetricTest {
 
 		// Compute stars : TestCase2 check for 5 stars, but it is actually a 2 star dataset --------> MUST Pass
 		Integer stars_test = metric.compute(testdata.getModel(TestCase2), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Data Format Test: Out of 2 distributions, only 1 has valid file format", 2, stars_test.intValue());
+		Assert.assertEquals("Data Format Test: Out of 2 distributions, only 1 has valid file format", 3, stars_test.intValue());
 	}
 
 }

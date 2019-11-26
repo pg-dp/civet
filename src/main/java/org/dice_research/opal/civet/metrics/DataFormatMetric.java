@@ -2,7 +2,13 @@ package org.dice_research.opal.civet.metrics;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+
+import org.apache.tika.Tika;
+import com.google.common.net.MediaType;
+import java.io.File;
+import java.io.IOException;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
@@ -21,6 +27,8 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
+import com.google.common.net.MediaType;
+
 /**
  * The CategorizationMetric awards stars based on the number of keywords of a
  * dataset.
@@ -30,157 +38,246 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class DataFormatMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Check if all distributions in a dataset has valid format and accordingly award a score "
-            + "Check if dct:format keyword with respective object present. If present then check if it is of valid format(IANA File format) like XML or PDF or CSV etc. If \"YES\", then award 5 stars to the distribution "
-			+" Check if dct:format keyword with respective object present. If present then check if it is of valid URI format as prescribed in \"https://op.europa.eu/en/web/eu-vocabularies/at-dataset/-/resource/dataset/file-type?target=About\"."
-			+ "If object is of above type, then award 5 stars.  "
-			+" If dct:format keyword with respective object present(Object is not empty for sure) but it does not match any file format. Then award 4 stars for not following recommended procedures."
-			+ "If dct:format keyword is absent then check dcat:mediaType in the distribution: this procedure is same as dct:format "
-			+ "If both dct:format and dcat:keyword are not there in distributions or even if they are present but the respective objects are empty(Like empty String) then give \"0 Stars\".";
+	private static final String DESCRIPTION = 
+			 " A dataset can have many distributions, we will calculate individual score for each distribution and"
+			 +"finally add all these scores and calculate the averge score."
+			 +" "
+			 +"Check if all distributions in a dataset has valid mediaType(as per)IANA if yes then award 5 stars " 
+			 +"Else Check if dcat:mediaType is a non-empty typed literal like \"csv\"^^dct:MediaTypeOrExtent then award 5 stars"
+			 +"if dcat:mediaType does not satisfy above two conditions but contains a non-empty object then award 1 star "
+			 +"Else award 0 stars to that distribution"
+			 +"To Improve score:... "
+			 +"Check if all distributions in a dataset has valid dct:format(as per)IANA if yes then award 5 stars remove bad oldscore"
+			 +"if not then check dct:format is valid file extension, if yes remove bad score and give 5 stars "
+			 +"Else check if an URI of \"http://publications.europa.eu/resource/authority/file-type/\" with valid file extension exist. "
+			   + "If valid file extension then award 5 stars"
+			 +"Else Check if dct:format has a non-empty typed literal like \"csv\"^^dct:MediaTypeOrExtent then award 5 stars"
+			 +"Else check if dct:format is valid file extension like \"CSV\" or \"PDF\", if yes remove bad score and give 5 stars "
+	         +"If dct:format does not satisfy any of the above condition but it is not empty then award 1 star"
+			 +"if dct:format object is empty then 0 stars.";
+           
+	
+	
+	public static boolean ValidMediaType(String TypeToCheck) {
 
+		boolean isValidFileType = false;
+
+		try {
+			MediaType mediatype = MediaType.parse(TypeToCheck);
+
+			ArrayList<MediaType> ListOfValidMediaTypes = new ArrayList<MediaType>(Arrays.asList(
+
+					/*
+					 * This MediaTypes are from Google's open-source Guava Library Link:
+					 * https://guava.dev/releases/20.0/api/docs/com/google/common/net/MediaType.html
+					 */
+
+					/*
+					 * Why I am not using a wildcard(Like MediaType.AnyType) instead of manually
+					 * typing all the MediaTypes ?
+					 * 
+					 * Answer: Yes, there are several wild cards. But these wildcards do not detect if
+					 * there is any error in subType of the MediaType. For example, in folllowing
+					 * code snippet if we change "sheet" to "shit"then it will still print 'True'.
+					 * 
+					 * final MediaType anyType = MediaType.ANY_APPLICATION_TYPE; MediaType tocheck =
+					 * MediaType.parse(
+					 * "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+					 * System.out.println(tocheck.is(anyType));
+					 * 
+					 */
+
+					MediaType.AAC_AUDIO, MediaType.APPLE_MOBILE_CONFIG, MediaType.APPLE_PASSBOOK,
+					MediaType.APPLICATION_BINARY, MediaType.APPLICATION_XML_UTF_8, MediaType.ATOM_UTF_8,
+					MediaType.BASIC_AUDIO, MediaType.BASIC_AUDIO, MediaType.BMP, MediaType.BZIP2,
+					MediaType.CACHE_MANIFEST_UTF_8, MediaType.CRW, MediaType.CSS_UTF_8, MediaType.CSV_UTF_8,
+					MediaType.DART_UTF_8, MediaType.EOT, MediaType.EPUB, MediaType.FLV_VIDEO, MediaType.FORM_DATA,
+					MediaType.GIF, MediaType.GZIP, MediaType.HTML_UTF_8, MediaType.I_CALENDAR_UTF_8, MediaType.ICO,
+					MediaType.JAVASCRIPT_UTF_8, MediaType.JPEG, MediaType.JSON_UTF_8, MediaType.KEY_ARCHIVE,
+					MediaType.KML, MediaType.KMZ, MediaType.L24_AUDIO, MediaType.MANIFEST_JSON_UTF_8, MediaType.MBOX,
+					MediaType.MICROSOFT_EXCEL, MediaType.MICROSOFT_POWERPOINT, MediaType.MICROSOFT_WORD,
+					MediaType.MP4_AUDIO, MediaType.MP4_VIDEO, MediaType.MPEG_AUDIO, MediaType.MPEG_VIDEO,
+					MediaType.NACL_APPLICATION, MediaType.NACL_PORTABLE_APPLICATION, MediaType.OCTET_STREAM,
+					MediaType.OGG_AUDIO, MediaType.OGG_CONTAINER, MediaType.OGG_VIDEO, MediaType.OOXML_DOCUMENT,
+					MediaType.OOXML_PRESENTATION, MediaType.OOXML_SHEET, MediaType.OPENDOCUMENT_GRAPHICS,
+					MediaType.OPENDOCUMENT_PRESENTATION, MediaType.OPENDOCUMENT_SPREADSHEET,
+					MediaType.OPENDOCUMENT_TEXT, MediaType.PDF, MediaType.PLAIN_TEXT_UTF_8, MediaType.PNG,
+					MediaType.POSTSCRIPT, MediaType.PROTOBUF, MediaType.PSD, MediaType.QUICKTIME,
+					MediaType.RDF_XML_UTF_8, MediaType.RTF_UTF_8, MediaType.SFNT, MediaType.SHOCKWAVE_FLASH,
+					MediaType.SKETCHUP, MediaType.SOAP_XML_UTF_8, MediaType.SVG_UTF_8, MediaType.TAR,
+					MediaType.TEXT_JAVASCRIPT_UTF_8, MediaType.THREE_GPP_VIDEO, MediaType.THREE_GPP2_VIDEO,
+					MediaType.TIFF, MediaType.TSV_UTF_8, MediaType.VCARD_UTF_8, MediaType.VND_REAL_AUDIO,
+					MediaType.VND_WAVE_AUDIO, MediaType.VORBIS_AUDIO, MediaType.VTT_UTF_8, MediaType.WAX_AUDIO,
+					MediaType.WEBM_AUDIO, MediaType.WEBM_VIDEO, MediaType.WEBP, MediaType.WMA_AUDIO,
+					MediaType.WML_UTF_8, MediaType.WMV, MediaType.WOFF, MediaType.WOFF2, MediaType.XHTML_UTF_8,
+					MediaType.XML_UTF_8, MediaType.XRD_UTF_8, MediaType.ZIP));
+
+			for (int counter = 0; counter < ListOfValidMediaTypes.size(); counter++) {
+				// If MediaType matches then return True and exit.
+				if (mediatype.is(ListOfValidMediaTypes.get(counter))) {
+					isValidFileType = true;
+				}
+			}
+
+		} catch (IllegalArgumentException e) {
+			isValidFileType = false;
+		}
+		return isValidFileType;
+	}
+	
+	
+	
+	
+	// To check if dct:format has valid file extension if no IANA type found
+		public static boolean ValidFileExtension(String extension) throws Exception {
+
+			Tika formatChecker = new Tika();
+			File fileToCheck = File.createTempFile("something", "." + extension);
+
+			String DetectedFileType = formatChecker.detect(fileToCheck);
+
+			if (DetectedFileType.equals("application/octet-stream"))
+				return false;
+			else
+				return true;
+		}
+	
+	
+	
+	
+	
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
-		// Resource dataset = ResourceFactory.createResource(datasetUri);
+		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
 		// DCAT.keyword);
 
-		// Total number of distributions in a dataset.
-		int TotalDistributions = 0;
-
-		// Store a score for each distribution, we will use it for final evaluation.
-		HashMap<String, Integer> DistributionsAndScores = new HashMap<String, Integer>();
-
-		// URIs for filetype
-		ArrayList<String> UriFileType = new ArrayList<String>();
-		// Strings for filetype
-		ArrayList<String> StringFileType = new ArrayList<String>();
-
-		// Model with file type information
-		Model ModelFileType = ModelFactory.createDefaultModel();
-		/*
-		 * To evaluate file format, we will use an RDF file "filetypes-skos.ttl" provided by 
-		 * https://op.europa.eu/en/web/eu-vocabularies/at-dataset/-/resource/dataset/file-type?target=About.
-		 * This turtle file contains information about all kinds of valid file formats.
-		 */
-		ModelFileType.read(getClass().getClassLoader().getResource("filetypes-skos.ttl").getFile(), "TURTLE");
-
-		// Property for Skos and PreferredLabel(we will extract string file type from
-		// here)
-		Property SkosConcept = ModelFileType.createProperty("http://www.w3.org/2004/02/skos/core#Concept");
-		Property PrefLabel = ModelFileType.createProperty("http://www.w3.org/2004/02/skos/core#prefLabel");
-
-		// FillUp UriFileType and StringFileType
-		StmtIterator iterator = ModelFileType.listStatements(null, null, (RDFNode) SkosConcept);
-		while (iterator.hasNext()) {
-			Statement ST = iterator.nextStatement();
-			UriFileType.add(ST.getSubject().toString().toLowerCase());
-			StringFileType.add(ST.getSubject().getProperty(PrefLabel).getObject().toString().split("@")[0]);
-		}
-
-		/*
-		 * A dataset can have many distributions. So first check each distributions for
-		 * object of dct:format if none then check dcat:mediatype
-		 */
-		NodeIterator DistributionsIterator = model.listObjectsOfProperty(DCAT.distribution);
-
-		if (DistributionsIterator.hasNext()) {
-
-			while (DistributionsIterator.hasNext()) {
-
-				// Transform distribution objects into distribution resource
-				Resource Distribution = (Resource) DistributionsIterator.nextNode();
-				if (Distribution.hasProperty(DCTerms.format)) {
-					// If file type is of valid URI then the respective distribution is awarded 5
-					// stars
-					if (UriFileType.contains(Distribution.getProperty(DCTerms.format).getObject().toString()))
-						DistributionsAndScores.put(Distribution.toString(), 5);
-					// If file type is of valid string format like CSV or PDF then respective
-					// distribution is awarded 5 stars
-					else if (StringFileType
-							.contains(Distribution.getProperty(DCTerms.format).getObject().toString().toUpperCase()))
-						DistributionsAndScores.put(Distribution.toString(), 5);
-					// Else 4 stars are awarded for not following the standard procedure
-					else if (!(Distribution.getProperty(DCTerms.format).getObject().toString().isEmpty()))
-						DistributionsAndScores.put(Distribution.toString(), 4);
-					// In this case either the dct:format is not there or the object value is empty
-					// then 0 star is given
-					else if (Distribution.getProperty(DCTerms.format).getObject().toString().isEmpty())
-						DistributionsAndScores.put(Distribution.toString(), 0);
-				}
+		//Total number of distributions in a dataset.
+				int TotalDistributions = 0;
+				
+				//Store a score for each distribution, we will use it for final evaluation.
+				HashMap<String, Integer> DistributionsAndScores = new HashMap<String, Integer>();	
+				
 				/*
-				 * This elseif will be executed when dct:format is absent or it is present but
-				 * it's object is empty
+				 * A dataset can have many distributions. So first check each distributions for object of dct:MediaType whose 
+				 * format should conform to IANA media format: https://www.iana.org/assignments/media-types/media-types.xhtml
+				 * 
+				 * To find out if the object of dct:mediaType conform to IANA, we will use "com.google.common.net.MediaType" class
+				 * from Google's Guava Project. Link: https://guava.dev/releases/20.0/api/docs/com/google/common/net/MediaType.html
+				 * This MediaType class conforms to IANA specifications as mentioned in RFCs 2045 . 
 				 */
-				else if (!Distribution.hasProperty(DCTerms.format)
-						|| DistributionsAndScores.get(Distribution.toString()) == 0) {
-
-					// Then check if the distribution has property Dcat:mediaType
-					if (Distribution.hasProperty(DCAT.mediaType)) {
-						// Check If file type is of valid URI then the respective distribution is
-						// awarded 5 stars
-						if (UriFileType.contains(Distribution.getProperty(DCAT.mediaType).getObject().toString()))
-							DistributionsAndScores.put(Distribution.toString(), 5);
-						// If file type is of valid string format like CSV or PDF then respective
-						// distribution is awarded 5 stars
-						else if (StringFileType.contains(
-								Distribution.getProperty(DCAT.mediaType).getObject().toString().toUpperCase()))
-							DistributionsAndScores.put(Distribution.toString(), 5);
-						// Check if they are in this format, "shp"^^dct:MediaTypeOrExtent add 5 star if
-						// valid file type found
-						else if (StringFileType.contains(Distribution.getProperty(DCAT.mediaType).getObject()
-								.asLiteral().getString().toUpperCase())) {
-							DistributionsAndScores.put(Distribution.toString(), 5);
-						}
-						// Check if they are in this format, text/csv(As seen in DCAT page)---> add 5
-						// star if valid file type found
-						else if (Distribution.getProperty(DCAT.mediaType).getObject().toString().contains("/")) {
-							if (StringFileType.contains(
-									Distribution.getProperty(DCAT.mediaType).getObject().toString().split("/")[0]))
+				NodeIterator DistributionsIterator = model.listObjectsOfProperty(dataset, DCAT.distribution);
+				
+				if(DistributionsIterator.hasNext()) {
+					
+					while(DistributionsIterator.hasNext()) {
+						
+						//Transform distribution objects into distribution resource
+						Resource Distribution = (Resource) DistributionsIterator.nextNode();
+						if(Distribution.hasProperty(DCAT.mediaType)) {
+							
+							//If distribution has valid MediaType(as per IANA) then award 5 stars else 1 star if not valid MediaType
+							if(ValidMediaType(Distribution.getProperty(DCAT.mediaType).getObject().toString()))
 								DistributionsAndScores.put(Distribution.toString(), 5);
-							else if (StringFileType.contains(
-									Distribution.getProperty(DCAT.mediaType).getObject().toString().split("/")[1]
-											.toUpperCase()))
-								DistributionsAndScores.put(Distribution.toString(), 5);
-							// In last resort, check if dcat:mediatype not empty and give 4 stars for not
-							// following recommended file type
-							else if (!(Distribution.getProperty(DCAT.mediaType).getObject().toString().isEmpty()))
-								DistributionsAndScores.put(Distribution.toString(), 4);
-							// If object is an empty string then give 0 stars
-							else if (Distribution.getProperty(DCAT.mediaType).getObject().toString().isEmpty())
+							
+							/*
+							 * Check if a non-empty typed literal like "csv"^^dct:MediaTypeOrExtent. 
+							 * If it has a valid file extension then award 5 stars, 1 star for invalid extension
+							 * 0 stars for empty field.
+							 */
+							else if(!(Distribution.getProperty(DCAT.mediaType).getLiteral().getString().isEmpty())) {
+								if(ValidFileExtension(Distribution.getProperty(DCAT.mediaType).getLiteral().getString().trim()))
+									DistributionsAndScores.put(Distribution.toString(), 5);
+								else
+									DistributionsAndScores.put(Distribution.toString(), 1);
+							}
+							//else If object is not empty then award 5 star
+							else if(!(Distribution.getProperty(DCAT.mediaType).getObject().toString().isEmpty()))
+								DistributionsAndScores.put(Distribution.toString(), 1);
+							else 
+								//else 0 star for empty object
 								DistributionsAndScores.put(Distribution.toString(), 0);
 						}
+						/*
+						 * If the mediaType is absent or has bad score of 1 star because of invalid MediaType then check for 
+						 * dct:format. If dct:format has valid fileFormat then award 5 stars else keep the previous score of 1 star.
+						 */
+						if(!Distribution.hasProperty(DCAT.mediaType) || DistributionsAndScores.get(Distribution.toString()) < 5)
+						{		
+							//1st check if it is valid IANA format, if yes award 5 stars
+							if(Distribution.hasProperty(DCTerms.format)) {
+								
+								//If distribution has valid MediaType(as per IANA) then award 5 stars else 1 star if not valid MediaType
+								if(ValidMediaType(Distribution.getProperty(DCTerms.format).getObject().toString()))
+									DistributionsAndScores.put(Distribution.toString(), 5);
 
+								/*
+								 * Else check if an URI of "http://publications.europa.eu/resource/authority/file-type/" with valid
+								 * file extension. If valid file extension then award 5 stars
+								 */
+								else if(Distribution.getProperty(DCTerms.format).getObject().
+										toString().contains("http://publications.europa.eu/resource/authority/file-type/")) { 
+									if(ValidFileExtension(Distribution.getProperty(DCTerms.format).getObject().
+										toString().substring(59)))						
+										DistributionsAndScores.put(Distribution.toString(), 5);
+									else 
+										DistributionsAndScores.put(Distribution.toString(), 1);
+								}
+								
+								/*
+								 * Check if a non-empty typed literal like "csv"^^dct:MediaTypeOrExtent. 
+								 * If it has a valid file extension then award 5 stars, 1 star for invalid extension
+								 * 0 stars for empty field.
+								 */
+								else if(!(Distribution.getProperty(DCTerms.format).getLiteral().getString().isEmpty())) {
+									if(ValidFileExtension(Distribution.getProperty(DCTerms.format).getLiteral().getString().trim()))
+										DistributionsAndScores.put(Distribution.toString(), 5);
+									else
+										DistributionsAndScores.put(Distribution.toString(), 1);
+								}
+								
+								//Else if dct:format has valid extensions such as "CSV" or "PDF" then also award 5 stars. 
+								else if(!(Distribution.getProperty(DCTerms.format).getObject().toString().isEmpty())) {
+									if(ValidFileExtension(Distribution.getProperty(DCTerms.format).getObject().toString()))
+										DistributionsAndScores.put(Distribution.toString(), 5);
+									else
+										DistributionsAndScores.put(Distribution.toString(), 1);
+								}
+							}
+
+						}
+						
+					   //If both dct:format and dcat:mediatype are absent then give 0 stars to the distribution
+						if(!(Distribution.hasProperty(DCTerms.format)) && !(Distribution.hasProperty(DCAT.mediaType)))
+							DistributionsAndScores.put(Distribution.toString(), 0);
+						
+						//To calculate how many distributions in a dataset. It will be used for scoring.
+						TotalDistributions++;
 					}
 				}
-				// If both dct:format and dcat:mediatype are absent then give 0 stars to the
-				// distribution
-				else if (!(Distribution.hasProperty(DCTerms.format)) && !(Distribution.hasProperty(DCAT.mediaType)))
-					DistributionsAndScores.put(Distribution.toString(), 0);
+				
+				/**
+				 * Score Evaluation:
+				 * Total Number of distributions in Dataset = x
+				 * Total aggregated scores of all distributions = y
+				 * Overall Score = y/x
+				 */
+				float AggregatedScoreOfAllDistributions = 0;
+				float OverallScore = 0;
+				for (String key : DistributionsAndScores.keySet()) {
+					AggregatedScoreOfAllDistributions+=DistributionsAndScores.get(key);
+					System.out.println(key +":"+ DistributionsAndScores.get(key));
+				}
+				
+				OverallScore = (float) Math.ceil(AggregatedScoreOfAllDistributions/TotalDistributions);
+				
 
-				// To calculate how many distributions in a dataset. It will be used for
-				// scoring.
-				TotalDistributions++;
-			}
-		}
+				return (int)(OverallScore);
 
-		/**
-		 * Score Evaluation: Total Number of distributions in Dataset = x Total
-		 * aggregated scores of all distributions = y Overall Score = y/x
-		 */
-		int AggregatedScoreOfAllDistributions = 0;
-		int OverallScore = 0;
-		for (String key : DistributionsAndScores.keySet()) {
-			AggregatedScoreOfAllDistributions += DistributionsAndScores.get(key);
-			System.out.println(key + ":" + DistributionsAndScores.get(key));
-		}
-
-		OverallScore = AggregatedScoreOfAllDistributions / TotalDistributions;
-
-		return OverallScore;
 	}
 
 	@Override
