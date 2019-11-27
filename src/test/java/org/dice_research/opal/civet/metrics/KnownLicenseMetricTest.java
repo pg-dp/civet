@@ -80,14 +80,14 @@ public class KnownLicenseMetricTest {
 	public void TestCase5() throws Exception {
 		KnownLicenseMetric metric = new KnownLicenseMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase5), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Dataset 5 distributions, only 1 distribution has license", 2, stars.intValue());
+		Assert.assertEquals("Dataset 5 distributions, only 1 distribution has license", 1, stars.intValue());
 	}
 	
 	@Test
 	public void TestCase6() throws Exception {
 		KnownLicenseMetric metric = new KnownLicenseMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase6), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Dataset 5 distributions, only 2 distributions have rights", 3, stars.intValue());
+		Assert.assertEquals("Dataset 5 distributions, only 2 distributions have rights", 2, stars.intValue());
 	}
 
 }
