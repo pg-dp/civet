@@ -24,6 +24,8 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
+import com.google.common.net.MediaType;
+
 /**
  * The CategorizationMetric awards stars based on the number of keywords of a
  * dataset.
@@ -51,14 +53,17 @@ public class ProviderIdentityMetric implements Metric {
 			+ "If dataset has only 1 Publisher then 5 atars are awarded "
 			+ "If dataset has more than 1 publishers but they are consistent then 5 stars are awarded "
 			+ "If dataset has more than 1 publishers but they are inconsistent then 3 stars are awarded, 2 star less for inconsistency "
-			+ "If dataset has an empty blanknode for publlisher then 1 stars are awarded, 4 stars less for no Publisher info in the blanknNode"
+			+ "If dataset has an empty blanknode for publlisher then 0 stars are awarded"
+			
 			+ "If dataset has a non-empty blanknode for publlisher with publisher info then 5 stars are awarded"
 			+ "If dataset has more than 1 non-empty blanknode for publlisher with consistent publisher info then 5 stars are awarded"
 			+ "If dataset has more than 1 non-empty blanknode for publlisher with inconsistent publisher info then 3 stars are awarded, 2 star less"
 			+ "for Inconsistency."
 			+ "If dataset has no provider information at all then 0 stars are awarded"
+			
 			+ "Before awarding stars, we are checking whether the publishers are of type Foaf:Organization or Foaf:Person. IF this info is"
 			+ "not there then additionaly 1 more star will be deducted from scoring"
+			
 			+ "If no publisher info given then check for dcat:landingPage and if found award 5 star"
 	        + "If no publisher info, dcat:landingPage found then check for dcat:accessURL and award 5 stars if found.";
 
@@ -67,7 +72,7 @@ public class ProviderIdentityMetric implements Metric {
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
-		// Resource dataset = ResourceFactory.createResource(datasetUri);
+		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
 		// DCAT.keyword);
@@ -77,6 +82,16 @@ public class ProviderIdentityMetric implements Metric {
 
 		// Will be used to check for consistency
 		HashMap<String, Integer> PublisherScore = new HashMap<String, Integer>();
+		
+		//We will store landingpages here 
+		ArrayList<String> LandingPageStore = new ArrayList<String>();
+		
+		//We will store accessURL here 
+		ArrayList<String> AccessURLStore = new ArrayList<String>();
+		
+		//Total number of distributions
+		int TotalNumberOfDistributions=0;
+		
 
 		StmtIterator IteratorOverPublisher = model
 				.listStatements(new SimpleSelector(null, DCTerms.publisher, (RDFNode) null));
@@ -87,11 +102,11 @@ public class ProviderIdentityMetric implements Metric {
 
 				Statement StatementWithPublisher = IteratorOverPublisher.nextStatement();
 				RDFNode Publisher = StatementWithPublisher.getObject();
-				// Check if the publisher object is a blank node.
+				// Check if the publisher object is a blank node. We 1st start with checking if a non-empty blank node.
 				if (Publisher.isAnon()) {
 					Resource PublisherBlankNode = (Resource) Publisher;
 					/*
-					 * If blanknode is of type foaf:agent and has an non-empty name then 5 stars are
+					 * If blanknode is of type foaf:org or foaf:person and has an non-empty name then 5 stars are
 					 * awarded.
 					 */
 					if ((PublisherBlankNode.hasProperty(RDF.type, FOAF.Organization)|| PublisherBlankNode.hasProperty(RDF.type, FOAF.Person))
@@ -104,20 +119,21 @@ public class ProviderIdentityMetric implements Metric {
 						if (PublisherScore.size() == 0 )
 							PublisherScore.put(PublisherBlankNode.getProperty(FOAF.name).getObject().toString(), 5);
 						/*
-						 * If we already have a publisher and then we discover an another new publisher then
+						 * If we already have a publisher and then we discover another new publisher then
 						 * the publisher information is not consistent, because of inconsistency we award 3/5.
 						 * 
 						 * 2 star less for being inconsistent
 						 */
 						else if (!(PublisherScore.size() == 0) && !(PublisherScore
 								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.clear();
 							PublisherScore.put("InconsistentPublishers", 3);
 							break;
 						}
 					}
 					/*
-					 * If blanknode has a non-empty name but not sure about the type i.e not a
-					 * foaf:organisation or foaf:name then 4 stars are awarded for not following DCAT recommendations.
+					 * If blanknode has a non-empty foaf:name but not sure about the type i.e not a
+					 * foaf:organisation or foaf:Person then 4 stars are awarded for not following DCAT recommendations.
 					 */
 					else if (PublisherBlankNode.hasProperty(FOAF.name)
 							&& (!PublisherBlankNode.getProperty(FOAF.name).getObject().toString().isEmpty())) {
@@ -131,10 +147,11 @@ public class ProviderIdentityMetric implements Metric {
 						 * the publisher information is not consistent, because of inconsistency we award 2/5 because
 						 * of inconsistency + not following DCAT recommendation(foaf:type)
 						 * 
-						 * 2 star less for being inconsistent + 1 star less for not following DCAT foaf recommendation
+						 * 2 star less for being inconsistent, -1 star less for not following DCAT foaf recommendation
 						 */
 						else if (!(PublisherScore.size() == 0) && !(PublisherScore
 								.containsKey(PublisherBlankNode.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.clear();
 							PublisherScore.put("InconsistentPublishers", 2);
 							break;
 						}
@@ -165,6 +182,7 @@ public class ProviderIdentityMetric implements Metric {
 						 */
 						else if (!(PublisherScore.size() == 0) && !(PublisherScore
 								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString()))) {
+							PublisherScore.clear();
 							PublisherScore.put("InconsistentPublishers", 3);
 							break;
 						}
@@ -182,7 +200,7 @@ public class ProviderIdentityMetric implements Metric {
 							PublisherScore.put(PublisherURI.getProperty(FOAF.name).getObject().toString(), 4);
 						else if (!(PublisherScore.size() == 0) && !(PublisherScore
 								.containsKey(PublisherURI.getProperty(FOAF.name).getObject().toString()))) {
-							//2 star less for inconsistency + 1 star less for not following recommendation
+							//2 star less for inconsistency, -1 star less for not following DCAT Foaf recommendation
 							PublisherScore.put("InconsistentPublishers", 2);
 							break;
 						}
@@ -194,9 +212,8 @@ public class ProviderIdentityMetric implements Metric {
 					 * 2. A Publisher could be a blanknode of type foaf:org or foaf:name. We checked that.
 					 * 3. A Publisher could be an empty blank node.
 					 */
-					//This is the 3rd case. Award 1 star for only dct:publisher predicate and 4 stars less for no 
-					//Information for dct:Publishers.
-					PublisherScore.put("EmptyBlankNodeForPublisher",1);
+					//This is the 3rd case. Award 0 star 
+					PublisherScore.put("EmptyBlankNodeForPublisher",0);
 			}
 		}
 
@@ -205,59 +222,95 @@ public class ProviderIdentityMetric implements Metric {
 		 * dcat:catalog
 		 */
 		if (PublisherScore.size() == 0 || PublisherScore.containsKey("EmptyBlankNodeForPublisher")) {
-
+            
+			//Now just 1 dataset 
 			ResIterator DatasetIterator = model.listSubjectsWithProperty(RDF.type, DCAT.Dataset);
 			if (DatasetIterator.hasNext()) {
-				while (DatasetIterator.hasNext()) {
-					Resource Dataset = DatasetIterator.nextResource();
-					if (Dataset.hasProperty(DCAT.landingPage)
-							&& (!Dataset.getProperty(DCAT.landingPage).getObject().toString().isEmpty())) {
-						if (PublisherScore.size() == 0 && !(PublisherScore
-								.containsKey(Dataset.getProperty(DCAT.landingPage).getObject().toString()))) {
-							if (isValidURL(Dataset.getProperty(DCAT.landingPage).getObject().toString()))
-								//Award 5 stars if we find a landingPage
-								PublisherScore.put("PublisherLandingPage", 5);
-						} 
-					}
-				}
-			}
-			
-			//If LandingPage is not there then check for AccessURL in the distribution
-			if(!(PublisherScore.containsKey("PublisherLandingPage"))) {
 				
-				ResIterator DistributionIterator = model.listSubjectsWithProperty(RDF.type, DCAT.accessURL);
-				if (DistributionIterator.hasNext()) {
-					while (DistributionIterator.hasNext()) {
-						Resource Distribution = DistributionIterator.nextResource();
-						if (Distribution.hasProperty(DCAT.accessURL)
-								&& (!Distribution.getProperty(DCAT.accessURL).getObject().toString().isEmpty())) {
-							if (PublisherScore.size() == 0 && !(PublisherScore
-									.containsKey(Distribution.getProperty(DCAT.accessURL).getObject().toString()))) {
-								if (isValidURL(Distribution.getProperty(DCAT.accessURL).getObject().toString()))
-									//Award 5 stars if we find a landingPage
-									PublisherScore.put("PublisherAccessURL", 5);
-							} 
+				Resource Dataset = DatasetIterator.nextResource();
+				
+				// It could be possible that more than 1 landing pages exist in a dataset.
+				//So here also we must do consistency check and deduct 2 stars if found inconsistent.
+				StmtIterator landingpages = Dataset.listProperties(DCAT.landingPage);
+				
+				if(landingpages.hasNext()) {
+					
+					while(landingpages.hasNext()) {
+						
+					Statement landingPageSentence = landingpages.nextStatement();
+					    //If we do not have any landingPage in store then add it.
+						if(LandingPageStore.size()==0) {
+							if(isValidURL(landingPageSentence.getProperty(DCAT.landingPage).getObject().toString()))
+							LandingPageStore.add(landingPageSentence.getProperty(DCAT.landingPage).getObject().toString());
+						}
+							
+						else if(LandingPageStore.size()!=0) {
+							//If landing pages are inconsistent then add the landing page to store.
+							if(!(LandingPageStore.contains(landingPageSentence.getProperty(DCAT.landingPage).getObject().toString()))) {
+							 if(isValidURL(landingPageSentence.getProperty(DCAT.landingPage).getObject().toString()))
+							  LandingPageStore.add(landingPageSentence.getProperty(DCAT.landingPage).getObject().toString());
+							}
+							/*
+							 * At the end if we have only one value in LandingPageStore then
+							 * we will award 5 stars to the dataset.
+							 */
 						}
 					}
+					
+				}
+				if(LandingPageStore.size()==1)
+					PublisherScore.put("LandingPageScore",5);
+				else
+					PublisherScore.put("LandingPageScore",3);
+			}
+			
+			
+			//If LandingPage is not there then check for AccessURL in the distribution
+			if(LandingPageStore.size()==0) {
+				
+				ResIterator DistributionIterator = model.listSubjectsWithProperty(RDF.type, DCAT.Distribution);
+				if (DistributionIterator.hasNext()) {
+					while (DistributionIterator.hasNext()) {
+						
+						TotalNumberOfDistributions++;
+						
+						Resource Distribution = DistributionIterator.nextResource();
+						
+						if(Distribution.hasProperty(DCAT.accessURL)) {
+									
+							if(isValidURL(Distribution.getProperty(DCAT.accessURL).getObject().toString()))
+								AccessURLStore.add(Distribution.getProperty(DCAT.accessURL).getObject().toString());
+						}
+					}
+				}
+				
+				//Calculate a score based on availability of AccessURL and store a score in PublisherScore.
+				if(AccessURLStore.size()> 0) {
+					
+					int TotalPercentageOfAccessURL = (AccessURLStore.size() * 100 ) / TotalNumberOfDistributions;
+					
+					if(TotalPercentageOfAccessURL == 100)
+						PublisherScore.put("AccessURLScore",5);
+					else if(TotalPercentageOfAccessURL<100 && TotalPercentageOfAccessURL >= 75)
+						PublisherScore.put("AccessURLScore",4);
+					else if(TotalPercentageOfAccessURL<75 && TotalPercentageOfAccessURL >= 50)
+						PublisherScore.put("AccessURLScore",3);
+					else if(TotalPercentageOfAccessURL<50 && TotalPercentageOfAccessURL >= 25)
+						PublisherScore.put("AccessURLScore",2);
+					else if(TotalPercentageOfAccessURL<25 && TotalPercentageOfAccessURL >= 0)
+						PublisherScore.put("AccessURLScore",1);
+					else
+						PublisherScore.put("AccessURLScore",0);
 				}
 			}
 			
 		}
-
-		/*
-		 * This section is for scoring
-		 */
-
-		if (PublisherScore.containsKey("InconsistentPublishers"))
-			score = PublisherScore.get("InconsistentPublishers");
-		else if (PublisherScore.size() == 0)
-			score = 0;
-		else if (PublisherScore.size() == 1)
-			for(String key: PublisherScore.keySet())
-				score= PublisherScore.get(key);
 		
-		return score;
+		//There will be always only one key and value
+		for (String key : PublisherScore.keySet())
+			 score = PublisherScore.get(key);
 
+		return score;
 	}
 
 	@Override
