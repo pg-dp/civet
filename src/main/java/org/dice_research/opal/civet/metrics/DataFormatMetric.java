@@ -135,7 +135,12 @@ public class DataFormatMetric implements Metric {
 			File fileToCheck = File.createTempFile("something", "." + extension);
 
 			String DetectedFileType = formatChecker.detect(fileToCheck);
-
+            
+			/*
+			 * As per https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
+			 * "application/octet-stream" means unknown file type.
+			 */
+			
 			if (DetectedFileType.equals("application/octet-stream"))
 				return false;
 			else
