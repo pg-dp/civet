@@ -57,7 +57,7 @@ public class KnownLicenseMetric implements Metric {
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
-		// Resource dataset = ResourceFactory.createResource(datasetUri);
+		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
 		// DCAT.keyword);
