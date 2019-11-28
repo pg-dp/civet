@@ -12,11 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link KnownLicenseMetric}.
+ * Tests {@link AvailabilityOfLicensesMetric}.
  * 
- * @author Adrian Wilke
+ * @author Gourab Sahu
  */
-public class KnownLicenseMetricTest {
+public class AvailabilityOfLicensesMetricTest {
 
 	TestData testdata;
 
@@ -50,42 +50,42 @@ public class KnownLicenseMetricTest {
 	@Test
 	public void TestCase1() throws Exception {
 
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("5 Distributions and all have license ", 5, stars.intValue());
 	}
 
 	@Test
 	public void TestCase2() throws Exception {
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase2), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Out of 5 distributions, 4 distributions have rights info", 4, stars.intValue());
 	}
 
 	@Test
 	public void TestCase3() throws Exception {
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase3), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Dataset has license info directly", 5, stars.intValue());
 	}
 	
 	@Test
 	public void TestCase4() throws Exception {
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase4), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Dataset 5 distributions, 2 dis has dct:license and 2 dis has dct:rights", 4, stars.intValue());
 	}
 	
 	@Test
 	public void TestCase5() throws Exception {
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase5), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Dataset 5 distributions, only 1 distribution has license", 1, stars.intValue());
 	}
 	
 	@Test
 	public void TestCase6() throws Exception {
-		KnownLicenseMetric metric = new KnownLicenseMetric();
+		AvailabilityOfLicensesMetric metric = new AvailabilityOfLicensesMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase6), TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Dataset 5 distributions, only 2 distributions have rights", 2, stars.intValue());
 	}

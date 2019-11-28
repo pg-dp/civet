@@ -27,10 +27,10 @@ import org.dice_research.opal.common.vocabulary.Opal;
 import com.google.common.net.MediaType;
 
 /**
- * The CategorizationMetric awards stars based on the number of keywords of a
- * dataset.
+ * The ProviderIdentity gives a rating to a dataset based on
+ * available informations about the dataset publisher.
  * 
- * @author Adrian Wilke
+ * @author Gourab Sahu
  */
 public class ProviderIdentityMetric implements Metric {
 

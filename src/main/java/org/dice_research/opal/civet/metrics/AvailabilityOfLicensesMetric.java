@@ -20,12 +20,12 @@ import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * The CategorizationMetric awards stars based on the number of keywords of a
- * dataset.
+ * The AvailabilityOfLicensesMetric provides a rating to a dataset
+ * based on the number of available licenses/rights in a dataset.
  * 
- * @author Adrian Wilke
+ * @author Gourab Sahu
  */
-public class KnownLicenseMetric implements Metric {
+public class AvailabilityOfLicensesMetric implements Metric {
 
 	public static boolean isValidLicenseURL(String LicenseURL) {
 		/*
@@ -43,13 +43,13 @@ public class KnownLicenseMetric implements Metric {
 	}
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Extract License/rights information from dataset or it's distributions "
-			+ "If dataset has rights/license info then award 5 star "
-			+ "Else If dataset has no rights/license but more than 100% of dataset's distribution has then give 5 star"
-			+ "Else If dataset has no rights/license but less than 100% and more than 60% dataset's distribution has then 4 stars are awarded"
-			+ "Else If dataset has no rights/license but less than 60% and more than 40% dataset's distribution has then 3 stars are awarded"
-			+ "Else If dataset has no rights/license but less than 40% and more than 20% dataset's distribution has then 2 stars are awarded"
-			+ "Else If dataset has no rights/license but less than 20% and more than  0% dataset's distribution has then 1 stars are awarded"
+	private static final String DESCRIPTION = 
+			 "If dataset has rights/license info then award 5 stars "
+			+ "Else If dataset has no rights/license but all distributions in dataset have licenses/rights then give 5 star"
+			+ "Else If dataset has no rights/license but less than 100% and more than or equal to 75% dataset's distribution has then 4 stars are awarded"
+			+ "Else If dataset has no rights/license but less than 75% and more than or equal to 50% dataset's distribution has then 3 stars are awarded"
+			+ "Else If dataset has no rights/license but less than 50% and more than or equal to 25% dataset's distribution has then 2 stars are awarded"
+			+ "Else If dataset has no rights/license but less than 25% and more than  0% dataset's distribution has then 1 star is awarded"
 			+ "Else if no License at all then 0 star is awarded.";
 
 	@Override
@@ -75,27 +75,25 @@ public class KnownLicenseMetric implements Metric {
 		 * check anything with 'right'.
 		 */
 		int NumberOfLicensesInDataset = 0;
-		StmtIterator DatasetIterator = model.listStatements(new SimpleSelector(null, RDF.type, DCAT.Dataset));
-		if (DatasetIterator.hasNext()) {
-			Statement DataSetSentence = DatasetIterator.nextStatement();
-			Resource DataSet = DataSetSentence.getSubject();
-			// System.out.println(DataSet.toString());
-			if (DataSet.hasProperty(DCTerms.license)
-					&& !(DataSet.getProperty(DCTerms.license).getObject().toString().isEmpty())) {
-				if (isValidLicenseURL(DataSet.getProperty(DCTerms.license).getObject().toString()))
-					NumberOfLicensesInDataset++;
-			} else if (DataSet.hasProperty(DCTerms.rights)
-					&& !(DataSet.getProperty(DCTerms.rights).getObject().toString().isEmpty())) {
-				if (isValidLicenseURL(DataSet.getProperty(DCTerms.rights).getObject().toString()))
-					NumberOfLicensesInDataset++;
-			}
+		NodeIterator LicensesIterator = model.listObjectsOfProperty(dataset,DCTerms.license);
+		NodeIterator RightsIterator = model.listObjectsOfProperty(dataset,DCTerms.rights);
+		if (LicensesIterator.hasNext()) {
+           RDFNode licensObject = LicensesIterator.nextNode();
+		   if(!(licensObject.toString().isEmpty()) && isValidLicenseURL(licensObject.toString()))
+			   NumberOfLicensesInDataset++;   
 		}
-
+		else if (RightsIterator.hasNext()) {
+	           RDFNode RightsObject = RightsIterator.nextNode();
+			   if(!(RightsObject.toString().isEmpty()) && isValidLicenseURL(RightsObject.toString()))
+				   NumberOfLicensesInDataset++;   
+			}
+		
+		
 		if (NumberOfLicensesInDataset == 0) {
 			// This means there is no license/rights info in dct:dataset, we need to check
 			// each dct:distributions
 
-			NodeIterator DistributionsIteratorLicense = model.listObjectsOfProperty(DCAT.distribution);
+			NodeIterator DistributionsIteratorLicense = model.listObjectsOfProperty(dataset,DCAT.distribution);
 
 			if (DistributionsIteratorLicense.hasNext()) {
 
@@ -121,7 +119,7 @@ public class KnownLicenseMetric implements Metric {
 				 * If control came here means, there is no dct:license keyword in available
 				 * distributions or there maybe both dct:license and dct:rights keyword. Check for rights here.
 				 */
-				NodeIterator DistributionsIteratorRights = model.listObjectsOfProperty(DCAT.distribution);
+				NodeIterator DistributionsIteratorRights = model.listObjectsOfProperty(dataset,DCAT.distribution);
 
 				while (DistributionsIteratorRights.hasNext()) {
 

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link KnownLicenseMetric}.
+ * Tests {@link AvailabilityOfLicensesMetric}.
  * 
  * @author Adrian Wilke
  */

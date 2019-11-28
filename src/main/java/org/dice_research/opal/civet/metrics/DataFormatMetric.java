@@ -30,10 +30,10 @@ import org.dice_research.opal.common.vocabulary.Opal;
 import com.google.common.net.MediaType;
 
 /**
- * The CategorizationMetric awards stars based on the number of keywords of a
- * dataset.
+ * The DataFormatMetric gives a rating to a dataset based on informations provided 
+ * about the mediaType/Format of all distributions.
  * 
- * @author Adrian Wilke
+ * @author Gourab Sahu
  */
 public class DataFormatMetric implements Metric {
 
