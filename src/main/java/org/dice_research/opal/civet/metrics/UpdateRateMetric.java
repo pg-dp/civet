@@ -11,19 +11,20 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * The UpdateRateMetric awards stars based on how often the
  * dataset is updated
  */
+
 public class UpdateRateMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Computes the update rate/frquency"
+	private static final String DESCRIPTION = "Computes the update rate/frequency"
 			+ "If data is updated WEEKLY, DAILY, HOURLY,"
 			+ "CONTINUOUS, CONT, 5 stars are awarded. "
 			+ "If data is updated MONTHLY, 4 stars are awarded."
 			+ "If data is updated QUARTERLY, 3 stars are awarded."
-			+ "If data is updated ANNUALY,ANNUAL_2,TRIENNIAL"
-			+ " 2 stars are awarded."
-			+ "If data is updated IRREGULARY"
+			+ "If data is updated ANNUALLY,ANNUAL_2,TRIENNIAL"
+			+ "2 stars are awarded."
+			+ "If data is updated IRREGULARLY"
 			+ "1 star is awarded."
-			+ " FOR UNKNOWN  , null is returned. ";
+			+ "FOR UNKNOWN ,null is returned. ";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
@@ -31,17 +32,16 @@ public class UpdateRateMetric implements Metric {
 		LOGGER.info("Processing dataset " + datasetUri);
 
 		Resource dataset = ResourceFactory.createResource(datasetUri);
-		NodeIterator nodeIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
 		Statement statement = model.getProperty(dataset, DCTerms.accrualPeriodicity);
 
 		String updateRate = "";
 		if(statement != null)
-			 updateRate = String.valueOf(statement.getObject());
+			 updateRate = String.valueOf(statement.getObject()).toUpperCase();
 		else
 			return null;
 
-		if(updateRate.contains("UNKNOWN"))
-			return null;
+		     if(updateRate.contains("UNKNOWN"))
+			    return null;
 		else if (updateRate.contains("IRREG"))
 				return 1;
 		else if (updateRate.contains("TRIENNIAL") || updateRate.contains("ANNUAL_2")

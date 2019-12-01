@@ -36,7 +36,7 @@ public class UpdateRateMetricTest {
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 		model.add(dataset, RDF.type, DCAT.Dataset);
 
-		Assert.assertEquals("No Update Rate", null, metric.compute(model, datasetUri));
+        Assert.assertNull("No Update Rate", metric.compute(model, datasetUri));
 	}
 
 	@Test
