@@ -19,8 +19,9 @@ public class VersioningMetricTest {
 	TestData testdata;
 
 	private static final String TEST_GOV_AMH = "Govdata-Allermoehe.ttl";
-	private static final String TEST_GOV_AMH_DISTRIBUTION =
-			"http://projekt-opal.de/distribution/https___ckan_govdata_de_aaacd662_f576_4f20_b05d_4076fe211375";
+	private static final String TEST_GOV_AMH_DATASET =
+			"http://projekt-opal.de/dataset/https___" +
+					"ckan_govdata_de_001c9703_3556_4f62_a376_85804f18ab52";
 
 	@Before
 	public void setUp() throws Exception {
@@ -36,29 +37,40 @@ public class VersioningMetricTest {
 
 		Model model = ModelFactory.createDefaultModel();
 		String datasetUri = "https://example.org/dataset-1";
-		Resource distribution = ResourceFactory.createResource(datasetUri);
-		model.add(distribution, RDF.type, DCAT.Distribution);
+		Resource dataset = ResourceFactory.createResource(datasetUri);
+		model.add(dataset, RDF.type, DCAT.dataset);
 
-		Assert.assertEquals("No Version", null, metric.compute(model, datasetUri));
+		Assert.assertEquals("No Version Info", null,
+				metric.compute(model, datasetUri));
 
-		model.addLiteral(distribution, DCAT.accessURL, ResourceFactory.createPlainLiteral("version"));
-		Assert.assertEquals("Version Found", 5, metric.compute(model, datasetUri).intValue());
+//		model.addLiteral(dataset, DCAT.distribution, ResourceFactory.createPlainLiteral
+//				("version5"));
+//		Assert.assertEquals("Version Found In a Property", 5,
+//				metric.compute(model, datasetUri).intValue());
+//
+//		model.addLiteral(dataset, DCAT.distribution, ResourceFactory.createPlainLiteral
+//				("version4"));
+//		Assert.assertEquals("Version Found Through ConformsTo Property", 4,
+//				metric.compute(model, datasetUri).intValue());
+//
+//		model.addLiteral(dataset, DCAT.distribution, ResourceFactory.createPlainLiteral
+//				("version3"));
+//		Assert.assertEquals("Version Found through Access/download Url", 3,
+//				metric.compute(model, datasetUri).intValue());
 
 	}
 
-	/**
-	 * Tests all 3 cases.
-	 */
+
 	@Test
 	public void testEdpIce() throws Exception {
 		
 		// Compute stars
 		VersionMetric metric = new VersionMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_GOV_AMH), TEST_GOV_AMH_DISTRIBUTION);
+		Integer stars = metric.compute(testdata.getModel(TEST_GOV_AMH),
+				TEST_GOV_AMH_DATASET);
 
-		//Version is there
-		//Expected 5
-		Assert.assertEquals(TEST_GOV_AMH, 5, stars.intValue());
+		//Expected 3
+		Assert.assertEquals(TEST_GOV_AMH, 3, stars.intValue());
 	}
 
 }
