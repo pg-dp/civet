@@ -51,6 +51,12 @@
 			<version>[1.7.28,2)</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.languagetool</groupId>
+			<artifactId>language-en</artifactId>
+			<version>4.7</version>
+		</dependency>
+
 
 		<!-- Test -->
 
