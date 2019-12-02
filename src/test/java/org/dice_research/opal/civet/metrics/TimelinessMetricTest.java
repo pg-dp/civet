@@ -19,10 +19,8 @@ public class TimelinessMetricTest {
 	TestData testdata;
 
 	private static final String TEST_EDP_ICE = "Europeandataportal-Iceland.ttl";
-	private static final String TEST_EDP_ICE_DATASET1 =
+	private static final String TEST_EDP_ICE_DATASET =
 			"http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
-	private static final String TEST_EDP_ICE_DATASET2 =
-			"http://projekt-opal.de/dataset/https___ckan_govdata_de_001c9703_3556_4f62_a376_85804f18ab52";
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,12 +62,11 @@ public class TimelinessMetricTest {
 		
 		// Compute stars
 		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_EDP_ICE_DATASET1);
-		Assert.assertEquals(TEST_EDP_ICE, 0, stars.intValue());
+		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_EDP_ICE_DATASET);
+		Assert.assertNull(TEST_EDP_ICE, stars);
 
 		//To do
-		// for 5,4,3,2,1 stars
+		// for 5,4,3,2,1,0 stars
 		// need TTL files
-
 	}
 }

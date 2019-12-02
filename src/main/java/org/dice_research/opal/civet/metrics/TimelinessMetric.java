@@ -12,7 +12,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,17 +42,59 @@ public class TimelinessMetric implements Metric {
 
 		String datetext ="";
 		if(statement != null) {
+			List<Pattern> patterns = new ArrayList<>();
+
+			patterns.add(Pattern.compile("\\d{4}-\\d{2}-\\d{2}"));
+
+			//			YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00)
+			patterns.add(Pattern.compile("\\d{4}[-]\\d{2}[-]\\d{2}[T][0-9]{2}[:]" +
+					"\\d{2}[:]\\d{2}[+]\\d{2}[:]\\d{2}"));
+
+			//			YYYY-MM-DDThh:mmTZD (eg 1997-07-16T19:20+01:00)
+			patterns.add(Pattern.compile("\\d{4}[-]\\d{2}[-]\\d{2}[T][0-9]{2}[:]" +
+					"\\d{2}[+]\\d{2}[:]\\d{2}"));
+
+			//			YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)
+			patterns.add(Pattern.compile("\\d{4}[-]\\d{2}[-]\\d{2}[T][0-9]{2}" +
+					"[:]\\d{2}[:]\\d{2}[.]\\d{2}[+]\\d{2}[:]\\d{2}"));
+
 			datetext = String.valueOf(statement.getObject());
-			Pattern pattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
-			Matcher matcher = pattern.matcher(datetext);
 			long millis=System.currentTimeMillis();
 			java.sql.Date current=new java.sql.Date(millis);
-			if (matcher.find()) {
-				Date modified = new SimpleDateFormat("yyyy-MM-dd").parse(matcher.group(0));
+
+			for (Pattern pattern: patterns) {
+				String modifiedDay = "";
+				Matcher matcher = pattern.matcher(datetext);
+				if(matcher.matches()) {
+					modifiedDay = matcher.group(0).substring(0, 10);
+					Date modified = new SimpleDateFormat("yyyy-MM-dd").parse(modifiedDay);
+					long diff = current.getTime() - modified.getTime();
+					long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+					int rating = getRating(days);
+					return rating;
+				}
+			}
+
+			Pattern patternYear = Pattern.compile("\\d{4}");
+			Matcher matcherYear = patternYear.matcher(datetext);
+			if (matcherYear.matches())
+			{
+				Date modified = new SimpleDateFormat("yyyy").
+						parse(matcherYear.group(0));
 				long diff = current.getTime() - modified.getTime();
 				long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-				int rating = getRating(days);
-				return rating;
+				return getRating(days);
+			}
+
+			Pattern patternYearMonth = Pattern.compile("\\d{4}-\\d{2}");
+			Matcher matcherYearMonth = patternYearMonth.matcher(datetext);
+			if (matcherYearMonth.matches())
+			{
+				Date modified = new SimpleDateFormat("yyyy-MM").
+						parse(matcherYearMonth.group(0));
+				long diff = current.getTime() - modified.getTime();
+				long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+				return getRating(days);
 			}
 		}
 
