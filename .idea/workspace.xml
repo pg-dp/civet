@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="71ba41dd-4cb0-4223-932d-a44afdace40d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/civet.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.project" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1UlmCFuFho8a22RttSOxtYFG4m2" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/org/dice_research/opal/civet/metrics" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.All in civet">
+    <configuration name="CategorizationMetricTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="civet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dice_research.opal.civet.metrics.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dice_research.opal.civet.metrics" />
+      <option name="MAIN_CLASS_NAME" value="org.dice_research.opal.civet.metrics.CategorizationMetricTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AccessabilityMetricTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="civet" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.dice_research.opal.civet.metrics.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.dice_research.opal.civet.metrics" />
+      <option name="MAIN_CLASS_NAME" value="org.dice_research.opal.civet.metrics.AccessabilityMetricTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in civet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="civet" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="civet" />
+      <option name="MAIN_CLASS_NAME" value="CategorizationMetric" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Android JUnit.CategorizationMetricTest" />
+      <item itemvalue="JUnit.Unnamed" />
+      <item itemvalue="JUnit.AccessabilityMetricTest" />
+      <item itemvalue="JUnit.All in civet" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in civet" />
+        <item itemvalue="JUnit.AccessabilityMetricTest" />
+        <item itemvalue="Android JUnit.CategorizationMetricTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="71ba41dd-4cb0-4223-932d-a44afdace40d" name="Default Changelist" comment="" />
+      <created>1575939427158</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1575939427158</updated>
+      <workItem from="1575939431821" duration="500000" />
+      <workItem from="1575969839292" duration="1895000" />
+      <workItem from="1575974157220" duration="793000" />
+      <workItem from="1576370438386" duration="944000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="184" y="98" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575939488870">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state x="184" y="98" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.823/1440.23.1680.1027@0.23.1440.823" timestamp="1575939488870" />
+    <state x="553" y="332" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1575974167269">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state x="553" y="332" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.23.1440.823@0.23.1440.823" timestamp="1575974167269" />
+    <state width="1398" height="212" key="GridCell.Tab.0.bottom" timestamp="1575974071442">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="212" key="GridCell.Tab.0.bottom/0.23.1440.823@0.23.1440.823" timestamp="1575974071442" />
+    <state width="1398" height="212" key="GridCell.Tab.0.center" timestamp="1575974071441">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="212" key="GridCell.Tab.0.center/0.23.1440.823@0.23.1440.823" timestamp="1575974071441" />
+    <state width="1398" height="212" key="GridCell.Tab.0.left" timestamp="1575974071440">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="212" key="GridCell.Tab.0.left/0.23.1440.823@0.23.1440.823" timestamp="1575974071440" />
+    <state width="1398" height="212" key="GridCell.Tab.0.right" timestamp="1575974071441">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state width="1398" height="212" key="GridCell.Tab.0.right/0.23.1440.823@0.23.1440.823" timestamp="1575974071441" />
+    <state x="127" y="149" key="NewModule_or_Project.wizard" timestamp="1576378735307">
+      <screen x="0" y="23" width="1440" height="820" />
+    </state>
+    <state x="127" y="149" key="NewModule_or_Project.wizard/0.23.1440.820/1440.23.1680.1027@0.23.1440.820" timestamp="1576378735307" />
+    <state x="100" y="123" width="1240" height="623" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1575974865808">
+      <screen x="0" y="23" width="1440" height="823" />
+    </state>
+    <state x="100" y="123" width="1240" height="623" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.23.1440.823@0.23.1440.823" timestamp="1575974865808" />
+    <state x="374" y="269" key="com.intellij.ide.util.TipDialog" timestamp="1576370445782">
+      <screen x="0" y="23" width="1440" height="820" />
+    </state>
+    <state x="374" y="269" key="com.intellij.ide.util.TipDialog/0.23.1440.820@0.23.1440.820" timestamp="1576370445782" />
+    <state x="374" y="269" key="com.intellij.ide.util.TipDialog/0.23.1440.823/1440.23.1680.1027@0.23.1440.823" timestamp="1575939434064" />
+    <state x="374" y="270" key="com.intellij.ide.util.TipDialog/0.23.1440.823@0.23.1440.823" timestamp="1575974157542" />
+  </component>
+</project>
