@@ -28,7 +28,7 @@ public class ContactabilityMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DESCRIPTION = "Computes the quality of dataset as per contactability metric." 
-			+ "Four kinds of ratings are awarded to the dataset which are following: "
+			+ "Two kinds of ratings are awarded to the dataset which are following: "
 			+ "Stars 5: Name, Email, Telephone Number and Address is in the dataset."
 			+ "Stars 4: If any three of the Name, Email, Address or Telephone number is in the dataset."
 			+ "Stars 3: If any two of the Name, Email, Telephone Number or Address is in the dataset."
