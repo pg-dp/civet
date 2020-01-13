@@ -83,6 +83,4 @@ public class ContactURLMetricTest {
 		Integer stars = metric.compute(testdata.getModel(TEST_Model4881), TEST_DATASET_Rating2);
 		Assert.assertEquals(TEST_Model4881, 5, stars.intValue());
 	}
-	
-	
 }

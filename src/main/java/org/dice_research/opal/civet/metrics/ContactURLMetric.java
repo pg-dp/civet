@@ -25,8 +25,8 @@ import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * The ContactabilityMetric awards stars based on the availability 
- * of contact details in the dataset.
+ * The ContactURLMetric awards stars based on the availability
+ * of URL from provider in the dataset.
  * 
  * @author Amit Kumar
  */
@@ -35,13 +35,10 @@ public class ContactURLMetric implements Metric {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DESCRIPTION = "Computes the quality of dataset as per contactability metric." 
 			+ "Two kinds of ratings are awarded to the dataset which are following: "
-			+ "Stars 5: Email is in the dataset."
-			+ "Stars 0: If none of the Name, Email and Address is in the dataset."
+			+ "Stars 5: Contact URL is in DCAT.landingPage or DCAT.accessURL."
+			+ "Stars 0: Contact URL is not in DCAT.landingPage or DCAT.accessURL."
 			+ "Above given ratings are saved in the hashmap"
-			+ "An average of those ratings are computed and a final rating is returned" +
-			"" +
-			"Looking into DCAT.landingPage and DCAT.accessURL for finding ContactURL";
-
+			+ "Final Rating: An average of the ratings are computed by using hashmap" ;
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		Resource dataset = ResourceFactory.createResource(datasetUri);
@@ -71,8 +68,7 @@ public class ContactURLMetric implements Metric {
 				}
 			}
 		}
- 		
- 		
+
 // Iterating through dcat:landingPage to fetch contract URL
  		while(stmtItr.hasNext())
 		{
