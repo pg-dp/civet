@@ -9,10 +9,19 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
-
 /**
  * The VersionMetric awards stars based on the version given in
  * datasets.
+ * Version numbering
+ * For different states of data, a version number can be given in the metadata to provide
+ * an identification of the current version.
+ * metadata contains a dedicated field for the version or extracted it out of description texts inside the metadata.
+ * Implementation -
+ * - Uses downloadUrl with accessUrl to get the version .
+ * - Uses ConformTo property to get version Number https://www.w3.org/TR/vocab-dcat/#Property:resource_conforms_to
+ * - Uses Version Info to get the Version number https://www.w3.org/2002/07/owl#versionInfo
+ *
+ * * @author Vikrant Singh, Adrian Wilke
  */
 
 public class VersionMetric implements Metric {
@@ -33,10 +42,6 @@ public class VersionMetric implements Metric {
 		LOGGER.info("Processing dataset " + datasetUri);
 
 		Resource dataset = ResourceFactory.createResource(datasetUri);
-
-		StmtIterator iter = model.listStatements
-				(dataset, DCAT.distribution ,(RDFNode) null);
-
 		Statement versionInfoAsProperty = model.getProperty(dataset, OWL.versionInfo);
 
 		//checks if the version information is given
@@ -51,6 +56,8 @@ public class VersionMetric implements Metric {
 			versionInfoAsPropertyFound = true;
 
 		//checks if the version info is given in the access and download url
+		StmtIterator iter = model.listStatements
+				(dataset, DCAT.distribution ,(RDFNode) null);
 		boolean versionStringFound = false;
 		String downloadUrl = "";
 		String accessUrl = "";
@@ -58,10 +65,9 @@ public class VersionMetric implements Metric {
 			Statement stmt = iter.nextStatement();
 			RDFNode object = null ;
 
-			if(stmt != null)
-				object = stmt.getObject();
+			object = stmt.getObject();
 
-			if (object != null && object.isURIResource())
+			if (object.isURIResource())
 			{
 				Resource distributionURI = (Resource) object;
 				Statement statementAccessUrl = model.getProperty(distributionURI,
