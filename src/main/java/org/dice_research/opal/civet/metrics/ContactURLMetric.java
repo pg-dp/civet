@@ -19,16 +19,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * The ContactURLMetric awards stars based on the availability
  * of URL from provider in the dataset.
  *
- * Url metrics can be found under dcat:contactPoint and dcat:landing page
- *
- *
- * There are three sub metrics under contactability(Contact URL, Contact Email and Classical contact information)
- *
- * These will be used for Metadata Quality Assurance
- *
  * @author Amit Kumar
  */
-
 public class ContactURLMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -38,10 +30,8 @@ public class ContactURLMetric implements Metric {
 			+ "Stars 0: Contact URL is not in DCAT.landingPage or DCAT.accessURL."
 			+ "Above given ratings are saved in the hashmap"
 			+ "Final Rating: An average of the ratings are computed by using hashmap" ;
-
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 		NodeIterator distributionObjectsIterator = model.listObjectsOfProperty(dataset,DCAT.distribution);
 		StmtIterator stmtItr = model.listStatements(new SimpleSelector(dataset,DCAT.landingPage,(RDFNode) null));
@@ -53,16 +43,13 @@ public class ContactURLMetric implements Metric {
 		// Iterating through dcat:accessURL to fetch contract URL
 		while(distributionObjectsIterator.hasNext()) {
 			Resource distribution = (Resource) distributionObjectsIterator.next();
-			urlCount++;
-
 			if(distribution.hasProperty(DCAT.accessURL))
 			{
 				RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
+				urlCount++;
+
 				if(accessUrl !=null) {
 					URLRatingMap.put(accessUrl, 5);
-				}
-				else {
-					URLRatingMap.put(null, 0);
 				}
 			}
 		}
@@ -72,19 +59,15 @@ public class ContactURLMetric implements Metric {
 		{
 			Statement stmt = stmtItr.nextStatement();
 			urlCount++;
-			if(stmt.getObject().isAnon()){
-				URLRatingMap.put(null, 0);
-			}
-			else {
-				System.out.println(stmt.getObject());
+
+			if(!stmt.getObject().isAnon()){
 				URLRatingMap.put(stmt.getObject(), 5);
 			}
 		}
 
-		// Calculating an average of stars using hashmap to return a final rating
-		int sumRating=0;
-		int averageRating=0;
-		int finalRating=0;
+		int sumRating=0, finalRating=0;
+		System.out.println(urlCount);
+
 		if(URLRatingMap.isEmpty())
 		{
 			finalRating=0;
@@ -93,10 +76,8 @@ public class ContactURLMetric implements Metric {
 			for (Integer i : URLRatingMap.values()) {
 				sumRating+=i;
 			}
-			averageRating=sumRating/urlCount;
-			finalRating = Math.round(averageRating);
+			finalRating=Math.round(sumRating/urlCount);
 		}
-
 		return finalRating;
 	}
 
