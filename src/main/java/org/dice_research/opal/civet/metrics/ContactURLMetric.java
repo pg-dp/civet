@@ -19,8 +19,15 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * The ContactURLMetric awards stars based on the availability
  * of URL from provider in the dataset.
  *
+ * Url metrics can be found under dcat:contactPoint and dcat:landing page
+ *
+ *  There are three sub metrics under contactability(Contact URL, Contact Email and Classical contact information)
+ *
+ *  These will be used for Metadata Quality Assurance
+ *
  * @author Amit Kumar
  */
+
 public class ContactURLMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -66,7 +73,6 @@ public class ContactURLMetric implements Metric {
 		}
 
 		int sumRating=0, finalRating=0;
-		System.out.println(urlCount);
 
 		if(URLRatingMap.isEmpty())
 		{
