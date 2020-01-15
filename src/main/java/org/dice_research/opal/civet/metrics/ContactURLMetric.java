@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
@@ -39,8 +40,10 @@ public class ContactURLMetric implements Metric {
 			+ "Stars 0: Contact URL is not in DCAT.landingPage or DCAT.accessURL."
 			+ "Above given ratings are saved in the hashmap"
 			+ "Final Rating: An average of the ratings are computed by using hashmap" ;
+
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
+
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 		NodeIterator distributionObjectsIterator = model.listObjectsOfProperty(dataset,DCAT.distribution);
 		StmtIterator stmtItr = model.listStatements(new SimpleSelector(dataset,DCAT.landingPage,(RDFNode) null));
@@ -110,6 +113,5 @@ return result2;
 		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
 	}
 }
-
 
 

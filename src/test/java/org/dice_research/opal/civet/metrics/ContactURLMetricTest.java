@@ -21,10 +21,9 @@ import org.junit.Test;
  * 
  * @author Amit Kumar
  */
-public class ContactURLMetricTest {
+public class ContactURLMetricTest  {
 
 	TestData testdata;
-	
 	private static final String TEST_Model4881 = "model4881.ttl";
 	
 	private static final String TEST_Model1483 = "model1483.ttl";
@@ -48,7 +47,8 @@ public class ContactURLMetricTest {
 	public void setUp() throws Exception {
 		testdata = new TestData();
 	}
-	
+
+
 	@Test
 	public void testDatasetName() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
