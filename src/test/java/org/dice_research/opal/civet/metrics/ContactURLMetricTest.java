@@ -49,35 +49,35 @@ public class ContactURLMetricTest  {
 	}
 
 	@Test
-	public void testDatasetRating_1() throws Exception {
+	public void testDatasetAccessURL_1() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_Model4881), TEST_Case_DATASET_2);
 		Assert.assertEquals(TEST_Model4881, 5, stars.intValue());
 	}
 	
 	@Test
-	public void testDatasetRating_2() throws Exception {
+	public void testDatasetAccessURL_2() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_Model4881), TEST_Case_DATASET_1);
 		Assert.assertEquals(TEST_Model4881, 5, stars.intValue());
 	}
 	
 	@Test
-	public void testDatasetRating_3() throws Exception {
+	public void testDatasetLandingPage_1() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_Model1483), TEST_DATASET_3);
 		Assert.assertEquals(TEST_Model1483, 5, stars.intValue());
 	}
 	
 	@Test
-	public void testDatasetRating_4() throws Exception {
+	public void testDatasetLandingPage_2() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_Model1200), TEST_DATASET_4);
 		Assert.assertEquals(TEST_Model1200, 5, stars.intValue());
 	}
 	
 	@Test
-	public void testDatasetRating_5() throws Exception {
+	public void testDatasetAccessURL_3() throws Exception {
 		ContactURLMetric metric = new ContactURLMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_Model4881), TEST_DATASET_5);
 		Assert.assertEquals(TEST_Model4881, 5, stars.intValue());

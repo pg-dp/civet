@@ -61,9 +61,8 @@ public class ContactURLMetric implements Metric {
 				if(accessUrl !=null) {
 					URLRatingMap.put(accessUrl, 5);
 				}
-				else
-				{
-					URLRatingMap.put(distribution, 0);
+				else {
+					URLRatingMap.put(null, 0);
 				}
 			}
 		}
@@ -74,7 +73,7 @@ public class ContactURLMetric implements Metric {
 			Statement stmt = stmtItr.nextStatement();
 			urlCount++;
 			if(stmt.getObject().isAnon()){
-				URLRatingMap.put(stmt.getObject(), 0);
+				URLRatingMap.put(null, 0);
 			}
 			else {
 				System.out.println(stmt.getObject());
