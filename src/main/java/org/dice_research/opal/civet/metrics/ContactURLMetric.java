@@ -1,15 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
-
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
@@ -17,9 +10,6 @@ import org.apache.jena.rdf.model.SimpleSelector;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VCARD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -28,13 +18,21 @@ import org.dice_research.opal.common.vocabulary.Opal;
 /**
  * The ContactURLMetric awards stars based on the availability
  * of URL from provider in the dataset.
- * 
+ *
+ * Url metrics can be found under dcat:contactPoint and dcat:landing page
+ *
+ *
+ * There are three sub metrics under contactability(Contact URL, Contact Email and Classical contact information)
+ *
+ * These will be used for Metadata Quality Assurance
+ *
  * @author Amit Kumar
  */
+
 public class ContactURLMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Computes the quality of dataset as per contactability metric." 
+	private static final String DESCRIPTION = "Computes the quality of dataset as per contactability metric."
 			+ "Two kinds of ratings are awarded to the dataset which are following: "
 			+ "Stars 5: Contact URL is in DCAT.landingPage or DCAT.accessURL."
 			+ "Stars 0: Contact URL is not in DCAT.landingPage or DCAT.accessURL."
@@ -49,59 +47,59 @@ public class ContactURLMetric implements Metric {
 		StmtIterator stmtItr = model.listStatements(new SimpleSelector(dataset,DCAT.landingPage,(RDFNode) null));
 
 		boolean contactUrl=false;
- 		HashMap<RDFNode,  Integer> URLRatingMap = new HashMap<RDFNode,Integer>();    
- 		int urlCount = 0;
-		
- 		while(distributionObjectsIterator.hasNext()) {	
+		HashMap<RDFNode,  Integer> URLRatingMap = new HashMap<RDFNode,Integer>();
+		int urlCount = 0;
+
+		// Iterating through dcat:accessURL to fetch contract URL
+		while(distributionObjectsIterator.hasNext()) {
 			Resource distribution = (Resource) distributionObjectsIterator.next();
+			urlCount++;
+
 			if(distribution.hasProperty(DCAT.accessURL))
 			{
 				RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
 				if(accessUrl !=null) {
-					urlCount++;
 					URLRatingMap.put(accessUrl, 5);
 				}
-			}
-			else
-			{
-				RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
-				if(accessUrl !=null) {
-					urlCount++;
-					URLRatingMap.put(accessUrl, 0);
+				else
+				{
+					URLRatingMap.put(distribution, 0);
 				}
 			}
 		}
 
-// Iterating through dcat:landingPage to fetch contract URL
- 		while(stmtItr.hasNext())
+		// Iterating through dcat:landingPage to fetch contract URL
+		while(stmtItr.hasNext())
 		{
 			Statement stmt = stmtItr.nextStatement();
+			urlCount++;
 			if(stmt.getObject().isAnon()){
-				urlCount++;
 				URLRatingMap.put(stmt.getObject(), 0);
 			}
 			else {
-				urlCount++;
+				System.out.println(stmt.getObject());
 				URLRatingMap.put(stmt.getObject(), 5);
 			}
 		}
 
- 		int sumRating=0;
+		// Calculating an average of stars using hashmap to return a final rating
+		int sumRating=0;
 		int finalRating=0;
 		int result2=0;
 		if(URLRatingMap.isEmpty())
-			{
-				result2=0;
-			}
+		{
+			result2=0;
+		}
 		else {
 			for (Integer i : URLRatingMap.values()) {
-					sumRating+=i;
+				sumRating+=i;
 			}
 			finalRating=sumRating/urlCount;
 			result2 = Math.round(finalRating);
 		}
-return result2;
-}
+
+		return result2;
+	}
 
 	@Override
 	public String getDescription() {
@@ -113,5 +111,3 @@ return result2;
 		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
 	}
 }
-
-
