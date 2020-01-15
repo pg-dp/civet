@@ -24,6 +24,20 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
+/**
+ * The ContactEmailMetric awards stars based on the availability of correct Email addresses.
+ * Email address can be found under dcat:contactPoint
+ *
+ * There are three sub metrics under contactability(Contact URL, Contact Email and Classical contact information)
+ *
+ * These will be used for Metadata Quality Assurance
+ *
+ * @see https://www.regular-expressions.info/email.html
+ *
+ * @author Amit Kumar
+ */
+
+
 public class ContactEmailMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -52,27 +66,34 @@ public class ContactEmailMetric implements Metric {
 		int countEmail = 0;
 		Property customEmail = model.createProperty("http://www.w3.org/2006/vcard/ns#hasEmail");
 
-		if (stmtItr.hasNext()) {
+		while (stmtItr.hasNext()) {
+
 			countEmail++;
 			Statement stmt = stmtItr.nextStatement();
 			RDFNode object = stmt.getObject();
 			Resource objectAsResource = (Resource) object;
+
 			if (objectAsResource.hasProperty(customEmail)) {
 				String email = objectAsResource.getProperty(customEmail).getObject().toString();
 				emailFound = validate(email);
+
+				//	if email found is of valid format, 5 stars are given
 				if (emailFound)
 					EmailRatingMap.put(email, 5);
+				//	if email found is of incorrect format, 1 star is given
 				else
 					EmailRatingMap.put(email, 1);
-			} else {
+			}
+			//	if email is not found in dataset, 0 star is given
+			else {
 				EmailRatingMap.put(null, 0);
 			}
 		}
 
 		int sumRating = 0;
-		int averageRating = 0;
-		int finalRating = 0;
+		int averageRating, finalRating ;
 
+		// Calculating an average of stars using hashmap to return a final rating
 		if (EmailRatingMap.isEmpty()) {
 			finalRating = 0;
 		}
@@ -83,9 +104,13 @@ public class ContactEmailMetric implements Metric {
 			averageRating = sumRating / countEmail;
 			finalRating = Math.round(averageRating);
 		}
+
+		
 		return finalRating;
 	}
 
+
+//	A function to validate email address and return  true if a valid e-mail substring is found
 	public static boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr); 
         return matcher.find();
