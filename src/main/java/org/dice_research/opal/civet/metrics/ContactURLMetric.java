@@ -83,21 +83,21 @@ public class ContactURLMetric implements Metric {
 
 		// Calculating an average of stars using hashmap to return a final rating
 		int sumRating=0;
+		int averageRating=0;
 		int finalRating=0;
-		int result2=0;
 		if(URLRatingMap.isEmpty())
 		{
-			result2=0;
+			finalRating=0;
 		}
 		else {
 			for (Integer i : URLRatingMap.values()) {
 				sumRating+=i;
 			}
-			finalRating=sumRating/urlCount;
-			result2 = Math.round(finalRating);
+			averageRating=sumRating/urlCount;
+			finalRating = Math.round(averageRating);
 		}
 
-		return result2;
+		return finalRating;
 	}
 
 	@Override
