@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -14,11 +13,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.SimpleSelector;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VCARD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -36,7 +31,6 @@ import org.dice_research.opal.common.vocabulary.Opal;
  *
  * @author Amit Kumar
  */
-
 
 public class ContactEmailMetric implements Metric {
 
@@ -91,30 +85,26 @@ public class ContactEmailMetric implements Metric {
 		}
 
 		int sumRating = 0;
-		int averageRating, finalRating ;
+		int averageRating;
 
 		// Calculating an average of stars using hashmap to return a final rating
 		if (EmailRatingMap.isEmpty()) {
-			finalRating = 0;
+			averageRating = 0;
 		}
 		else {
 			for (Integer i : EmailRatingMap.values()) {
 				sumRating += i;
 			}
-			averageRating = sumRating / countEmail;
-			finalRating = Math.round(averageRating);
+			averageRating = Math.round(sumRating / countEmail);
 		}
-
-		
-		return finalRating;
+		return averageRating;
 	}
 
-
-//	A function to validate email address and return  true if a valid e-mail substring is found
+	//	A function to validate email address and return  true if a valid e-mail substring is found
 	public static boolean validate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr); 
         return matcher.find();
-}
+	}
 	
 	@Override
 	public String getDescription() {
@@ -125,5 +115,4 @@ public class ContactEmailMetric implements Metric {
 	public String getUri() throws Exception {
 		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
 	}
-	
 }
