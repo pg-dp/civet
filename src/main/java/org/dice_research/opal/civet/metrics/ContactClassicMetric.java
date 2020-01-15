@@ -1,7 +1,6 @@
 package org.dice_research.opal.civet.metrics;
 
-import java.net.URL;
-import java.util.HashMap;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
@@ -14,8 +13,6 @@ import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
-import org.apache.jena.vocabulary.VCARD;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -24,7 +21,11 @@ import org.dice_research.opal.common.vocabulary.Opal;
 /**
  * The ContactClassicMetric awards stars based on the availability 
  * of classical contact details in the dataset like name, address and telephone number.
- * 
+ *
+ * Url metrics can be found under dcat:contactPoint and DCTerms.publisher
+ *
+ * There are three sub metrics under contactability(Contact URL, Contact Email and Classical contact information)
+ *
  * @author Amit Kumar
  */
 
@@ -52,8 +53,9 @@ public class ContactClassicMetric implements Metric {
 		boolean nameFound2=false;
 		boolean adrFound=false;
 		boolean telephoneFound=false;
-		
-		while(publisherObjectsIterator.hasNext()) {	
+
+		//		iterating through DCTerms.publisher to find Name and Phone
+		while(publisherObjectsIterator.hasNext()) {
 			RDFNode Publisher = publisherObjectsIterator.next();
 			Resource PublisherBlankNode = (Resource) Publisher;
 			if(PublisherBlankNode.hasProperty(FOAF.name)) {
@@ -77,8 +79,8 @@ public class ContactClassicMetric implements Metric {
 		Property customAdr = model.createProperty("http://www.w3.org/2006/vcard/ns/ns#hasAddress");
 		Property customTelephone = model.createProperty("http://www.w3.org/2006/vcard/ns#hasTelephone");
 
-		
-		if(stmtItr.hasNext())
+		//		iterating through dcat:contactpoint to find Name, Address and Phone
+		while(stmtItr.hasNext())
 		{
 			Statement stmt = stmtItr.nextStatement();
 			RDFNode object = stmt.getObject();
@@ -110,6 +112,7 @@ public class ContactClassicMetric implements Metric {
 			}
 		}
 		
+//		checking what boolean values are true and returning appropriate ratings
 		if((nameFound || nameFound2)  && adrFound && telephoneFound) {
 			return 5;
 		}

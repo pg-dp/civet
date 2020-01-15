@@ -30,13 +30,13 @@ public class ContactClassicMetricTest {
 	
 	private static final String TEST_Case_DATASET_NAME = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_btopoctettehhn_pa3ttopedntejin_c_biodxet_b_obwnha_bopobo";
 
-	//  dcat:contactPoint  hasAddress hasEmail HasTelephone   
+	//  It has dcat:contactPoint  hasAddress hasEmail HasTelephone
 	private static final String TEST_DATASET_Model1483 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_pr_aspro_00001_20170127_120846_ds10";
 
-	//  dcat:contactPoint hasAddress   hasEmail   hasTelephone
+	// It has dcat:contactPoint hasAddress   hasEmail   hasTelephone
 	private static final String TEST_DATASET_Model1200 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_fr_120066022_jdd_95bc6446_3762_47fe_863f_f11c60faff58";
 
-	//	Test dataset with hasEmail
+	//	It has Test dataset with hasEmail
 	private static final String TEST_DATASET_Rating2 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_bsii1_6dds";
 
 	@Before
