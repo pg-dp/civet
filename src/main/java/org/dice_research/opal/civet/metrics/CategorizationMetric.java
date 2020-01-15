@@ -86,6 +86,7 @@ public class CategorizationMetric implements Metric {
 			}
 		}
 
+		System.out.print("Score" +score);
 		return score;
 	}
 
