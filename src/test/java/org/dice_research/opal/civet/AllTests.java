@@ -1,9 +1,7 @@
 package org.dice_research.opal.civet;
 
 import org.dice_research.opal.civet.example.ExampleTest;
-import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
-import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
-import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
+import org.dice_research.opal.civet.metrics.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -20,6 +18,14 @@ import org.junit.runners.Suite.SuiteClasses;
 		CategorizationMetricTest.class,
 
 		MultipleSerializationsMetricTest.class,
+
+		UpdateRateMetricTest.class,
+
+		VersioningMetricTest.class,
+
+		TimelinessMetricTest.class,
+
+		ReadabilityMetricTest.class,
 
 		// Metric aggregation
 
