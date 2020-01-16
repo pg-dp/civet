@@ -1,10 +1,7 @@
 package org.dice_research.opal.civet;
 
 import org.dice_research.opal.civet.example.ExampleTest;
-import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
-import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
-import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
-import org.dice_research.opal.civet.metrics.UpdateRateMetricTest;
+import org.dice_research.opal.civet.metrics.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -23,6 +20,32 @@ import org.junit.runners.Suite.SuiteClasses;
 		MultipleSerializationsMetricTest.class,
 
 		UpdateRateMetricTest.class,
+
+		VersioningMetricTest.class,
+
+		TimelinessMetricTest.class,
+
+		ReadabilityMetricTest.class,
+
+		AccessabilityMetricTest.class,
+
+		AvailabilityOfLicensesMetricTest.class,
+
+		ContactClassicMetricTest.class,
+
+		ContactEmailMetricTest.class,
+
+		ContactURLMetricTest.class,
+
+		DataFormatMetricTest.class,
+
+		DateformatTest.class,
+
+		DescriptionTest.class,
+
+		ProviderIdentityMetricTest.class,
+
+
 
 		// Metric aggregation
 
