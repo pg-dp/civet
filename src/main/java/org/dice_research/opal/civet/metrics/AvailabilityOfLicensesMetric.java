@@ -136,7 +136,6 @@ public class AvailabilityOfLicensesMetric implements Metric {
 						if (!(Distribution.getProperty(DCTerms.rights).getObject().toString().isEmpty()) && 
 								!Distribution.getProperty(DCTerms.rights).getObject().isAnon()) {
 							TotalDistributionsWithRights++;
-							System.out.println("TEST");
 						}
 					}
 				}

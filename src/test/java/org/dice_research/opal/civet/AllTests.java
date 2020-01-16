@@ -27,6 +27,26 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		ReadabilityMetricTest.class,
 
+		AccessabilityMetricTest.class,
+
+		AvailabilityOfLicensesMetricTest.class,
+
+		ContactClassicMetricTest.class,
+
+		ContactEmailMetricTest.class,
+
+		ContactURLMetricTest.class,
+
+		DataFormatMetricTest.class,
+
+		DateformatTest.class,
+
+		DescriptionTest.class,
+
+		ProviderIdentityMetricTest.class,
+
+
+
 		// Metric aggregation
 
 		MetadataQualityMetricTest.class,

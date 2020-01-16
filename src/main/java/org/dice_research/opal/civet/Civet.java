@@ -91,11 +91,21 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 	public List<Metric> getMetrics() {
 		List<Metric> metrics = new LinkedList<Metric>();
 
+		metrics.add(new AccessibilityMetric());
+		metrics.add(new AvailabilityOfLicensesMetric());
 		metrics.add(new CategorizationMetric());
-		metrics.add(new MultipleSerializationsMetric());
+		metrics.add(new ContactClassicMetric());
+		metrics.add(new ContactEmailMetric());
+		metrics.add(new ContactURLMetric());
+		metrics.add(new DataFormatMetric());
+		metrics.add(new Dateformat());
+		metrics.add(new Description());
 		metrics.add(new MetadataQualityMetric());
-		metrics.add(new TimelinessMetric());
+		metrics.add(new MultipleSerializationsMetric());
+		metrics.add(new ProviderIdentityMetric());
 		metrics.add(new ReadabilityMetric());
+		metrics.add(new TimelinessMetric());
+		metrics.add(new UpdateRateMetric());
 		metrics.add(new VersionMetric());
 
 		return metrics;
