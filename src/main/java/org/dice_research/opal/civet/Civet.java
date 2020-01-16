@@ -8,9 +8,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dice_research.opal.civet.metrics.CategorizationMetric;
-import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
-import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
+import org.dice_research.opal.civet.metrics.*;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.interfaces.ModelProcessor;
 
@@ -96,6 +94,9 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 		metrics.add(new CategorizationMetric());
 		metrics.add(new MultipleSerializationsMetric());
 		metrics.add(new MetadataQualityMetric());
+		metrics.add(new TimelinessMetric());
+		metrics.add(new ReadabilityMetric());
+		metrics.add(new VersionMetric());
 
 		return metrics;
 	}
