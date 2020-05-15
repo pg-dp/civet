@@ -1,5 +1,7 @@
 # OPAL Civet
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/20851e06b15b4a1c846f34458b634f2e)](https://app.codacy.com/gh/pg-dp/civet?utm_source=github.com&utm_medium=referral&utm_content=pg-dp/civet&utm_campaign=Badge_Grade_Settings)
+
 OPAL metadata quality component.
 
 
