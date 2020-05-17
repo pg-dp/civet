@@ -57,6 +57,7 @@ public class DescriptionTest {
 	public void TestCase2() throws Exception {
 		Description metric = new Description();
 		Integer stars = metric.compute(testdata.getModel(TestCase2), TEST_EDP_ICE_DATASET);
+		System.out.println(stars);
 		Assert.assertEquals("Dataset has description but length of desc == length of title", 5, stars.intValue());
 	}
 

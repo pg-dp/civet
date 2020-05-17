@@ -23,32 +23,25 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class Description implements Metric {
 
 	public static int compareDescWithTitle(String desc, String title, int score) {
-		if (desc.length() >= title.length()) {
-
-			if (desc.equals(title)) {
-				return score = score + 2;
-			}
-
-			return score += 3;
-
-		} else {
-			return score++;
+		if (desc.length() > title.length()) {
+			return 5;
+		} else if (desc.length() == title.length()) {
+			return 3;
+		} else if (desc.length() < title.length()) {
+			return 2;
 		}
+		return 1;
 	}
 
 	private static final Logger logger = LogManager.getLogger();
-	private static final String descriptions = "Extract description information from dataset"
-			+ "If dataset has description and if length is not empty and length of description > length of title then award 5 star "
-			+ "Else if dataset has description but length of desc = length of title give 5 star."
-			+ "Else if dataset has description but length of desc < length of title give 2 star."
-			+ "Else if dataset does not has description or its property is null then give 1 star.";
+	private static final String descriptions = "";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		logger.info("Processing dataset " + datasetUri);
 		Resource dataset = ResourceFactory.createResource(datasetUri);
-		 
-		if(model.isEmpty()) {
+
+		if (model.isEmpty()) {
 			return null;
 		}
 		int scores = 1;
@@ -64,14 +57,9 @@ public class Description implements Metric {
 				String dctdescription = dataSet.getProperty(DCTerms.description).getObject().toString();
 				String dcttitle = dataSet.getProperty(DCTerms.title).getObject().toString();
 				scores = compareDescWithTitle(dctdescription, dcttitle, scores);
-
-			} else {
-				return scores++;
 			}
-
 		}
 		return scores;
-
 	}
 
 	@Override
