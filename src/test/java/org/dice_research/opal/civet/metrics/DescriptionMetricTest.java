@@ -13,10 +13,12 @@ import org.junit.Test;
  * @author Aamir Mohammed
  */
 public class DescriptionMetricTest {
-	
+
 	@VisibleForTesting
 	TestData testdata;
+	@VisibleForTesting
 	final String MODEL = "TestDescriptionMetric.ttl";
+	@VisibleForTesting
 	Model model;
 
 	@Before
