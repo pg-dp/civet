@@ -96,10 +96,13 @@ public class DescriptionMetric implements Metric {
 		LOGGER.info("Processing dataset " + datasetUri);
 		Resource dataset = model.createResource(datasetUri);
 		int scores;
-		String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
-		String dct_title = dataset.getProperty(DCTerms.title).getObject().toString();
-		scores = compareDescriptionWithTitle(dct_description, dct_title);
-		return scores;
+		if (dataset.hasProperty(DCTerms.description) && (dataset.hasProperty(DCTerms.title))) {
+			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
+			String dct_title = dataset.getProperty(DCTerms.title).getObject().toString();
+			scores = compareDescriptionWithTitle(dct_description, dct_title);
+			return scores;
+		}
+		return null;
 	}
 
 	@Override

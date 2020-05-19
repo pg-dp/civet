@@ -96,4 +96,12 @@ public class DescriptionMetricTest {
 		Assert.assertEquals("If the length of description is greater than 75", 5, stars.intValue());
 	}
 
+	@Test
+	public void checkNull() throws Exception {
+		DescriptionMetric metric = new DescriptionMetric();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_flussgebietseinheiten-dewrrl";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertNull("Check If the description and title exists", stars);
+	}
+
 }

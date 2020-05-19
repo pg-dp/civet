@@ -3,10 +3,10 @@
 
 <http://projekt-opal.de/dataset/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf>
         a                  dcat:Dataset ;
-        dct:description    "" ;
+        dct:description    "";
         dct:issued         "08.01.2019" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf> ;
-        dct:title          "" ;
+        dct:title          "";
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_2> , <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_1> , <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_4> , <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_0> , <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_3> ;
         dcat:landingPage   <https://mcloud.de/web/guest/suche/-/results/detail/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf?_mcloudsearchportlet_backURL=https%3A%2F%2Fmcloud.de%2Fweb%2Fguest%2Fsuche%2F-%2Fresults%2FsearchAction%3F_mcloudsearchportlet_page%3D34%26_mcloudsearchportlet_sort%3Dlatest> ;
         dcat:theme         <http://projeckt-opal.de/theme/mcloud/street> , <http://projeckt-opal.de/theme/mcloud/infrastructure> ;
@@ -25108,10 +25108,8 @@
 
 <http://projekt-opal.de/dataset/_mcloudde_flussgebietseinheiten-dewrrl>
         a                  dcat:Dataset ;
-        dct:description    "Flussgebietseinheiten gemÃ¤ÃŸ EU-Wasserrahmenrichtlinie" ;
         dct:issued         "Februar 2015" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_flussgebietseinheiten-dewrrl> ;
-        dct:title          "Flussgebietseinheiten-DE (WRRL)" ;
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_1> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_3> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_0> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_2> ;
         dcat:landingPage   <https://mcloud.de/web/guest/suche/-/results/detail/_mcloudde_flussgebietseinheiten-dewrrl?_mcloudsearchportlet_backURL=https%3A%2F%2Fmcloud.de%2Fweb%2Fguest%2Fsuche%2F-%2Fresults%2FsearchAction%3F_mcloudsearchportlet_page%3D98%26_mcloudsearchportlet_sort%3Dlatest> ;
         dcat:theme         <http://projeckt-opal.de/theme/mcloud/waterwaysAndWaters> ;
