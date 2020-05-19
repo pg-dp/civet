@@ -56,7 +56,7 @@ public class DescriptionMetric implements Metric {
 		}
 
 		else if (!(title.isEmpty()) && description.isEmpty()) {
-			// Atleast description
+			// Atleast title
 			return 1;
 		}
 
@@ -97,6 +97,8 @@ public class DescriptionMetric implements Metric {
 		Resource dataset = model.createResource(datasetUri);
 		int scores = 1;
 		if (dataset.hasProperty(DCTerms.title) && !(dataset.hasProperty(DCTerms.description))) {
+			return scores;
+		} else if (!(dataset.hasProperty(DCTerms.title)) && dataset.hasProperty(DCTerms.description)) {
 			return scores;
 		} else if (dataset.hasProperty(DCTerms.title) && (dataset.hasProperty(DCTerms.description))) {
 			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();

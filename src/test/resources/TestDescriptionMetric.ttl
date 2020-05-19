@@ -25110,6 +25110,7 @@
         a                  dcat:Dataset ;
         dct:issued         "Februar 2015" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_flussgebietseinheiten-dewrrl> ;
+        dct:title          "Fluss";
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_1> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_3> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_0> , <http://projekt-opal.de/distribution/_mcloudde_flussgebietseinheiten-dewrrl_2> ;
         dcat:landingPage   <https://mcloud.de/web/guest/suche/-/results/detail/_mcloudde_flussgebietseinheiten-dewrrl?_mcloudsearchportlet_backURL=https%3A%2F%2Fmcloud.de%2Fweb%2Fguest%2Fsuche%2F-%2Fresults%2FsearchAction%3F_mcloudsearchportlet_page%3D98%26_mcloudsearchportlet_sort%3Dlatest> ;
         dcat:theme         <http://projeckt-opal.de/theme/mcloud/waterwaysAndWaters> ;

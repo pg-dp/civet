@@ -97,11 +97,11 @@ public class DescriptionMetricTest {
 	}
 
 	@Test
-	public void checkNull() throws Exception {
+	public void titleWithNoDescription() throws Exception {
 		DescriptionMetric metric = new DescriptionMetric();
 		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_flussgebietseinheiten-dewrrl";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertNull("Check If the description and title exists", stars);
+		Assert.assertEquals("Check If the title exists and no dct:description", 1, stars.intValue());
 	}
 
 }
