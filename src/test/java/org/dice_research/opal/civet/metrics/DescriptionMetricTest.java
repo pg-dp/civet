@@ -13,9 +13,9 @@ import org.junit.Test;
  */
 public class DescriptionMetricTest {
 
-	TestData testdata;
-	final String MODEL = "TestDescriptionMetric.ttl";
-	Model model;
+	private TestData testdata;
+	private final String MODEL = "TestDescriptionMetric.ttl";
+	private Model model;
 
 	@Before
 	public void setUp() throws Exception {
