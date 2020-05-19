@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet.metrics;
 
+import org.apache.jena.ext.com.google.common.annotations.VisibleForTesting;
 import org.apache.jena.rdf.model.Model;
 import org.dice_research.opal.civet.TestData;
 import org.junit.Assert;
@@ -12,7 +13,8 @@ import org.junit.Test;
  * @author Aamir Mohammed
  */
 public class DescriptionMetricTest {
-
+	
+	@VisibleForTesting
 	TestData testdata;
 	final String MODEL = "TestDescriptionMetric.ttl";
 	Model model;
