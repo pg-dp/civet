@@ -50,13 +50,13 @@ public class DescriptionMetric implements Metric {
 			return 0;
 		}
 
-		else if (title.isEmpty()) {
+		else if (title.isEmpty() && !(description.isEmpty())) {
 			// Atleast description
 			return 1;
 		}
 
-		else if (description.isEmpty()) {
-			// Atleast title
+		else if (!(title.isEmpty()) && description.isEmpty()) {
+			// Atleast description
 			return 1;
 		}
 
@@ -70,17 +70,17 @@ public class DescriptionMetric implements Metric {
 			return 1;
 		}
 
-		else if (description.length() <= 25) {
+		else if (description.length() > 15 && description.length() <= 25) {
 			// Below average description
 			return 2;
 		}
 
-		else if (description.length() <= 50) {
+		else if (description.length() > 25 && description.length() <= 50) {
 			// Average description
 			return 3;
 		}
 
-		else if (description.length() <= 75) {
+		else if (description.length() > 50 && description.length() <= 75) {
 			// Above average description
 			return 4;
 		}
@@ -95,14 +95,16 @@ public class DescriptionMetric implements Metric {
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		LOGGER.info("Processing dataset " + datasetUri);
 		Resource dataset = model.createResource(datasetUri);
-		int scores;
-		if (dataset.hasProperty(DCTerms.description) && (dataset.hasProperty(DCTerms.title))) {
+		int scores = 1;
+		if (dataset.hasProperty(DCTerms.title) && !(dataset.hasProperty(DCTerms.description))) {
+			return scores;
+		} else if (dataset.hasProperty(DCTerms.title) && (dataset.hasProperty(DCTerms.description))) {
 			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
 			String dct_title = dataset.getProperty(DCTerms.title).getObject().toString();
 			scores = compareDescriptionWithTitle(dct_description, dct_title);
 			return scores;
 		}
-		return null;
+		return scores;
 	}
 
 	@Override
