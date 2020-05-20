@@ -21,11 +21,19 @@ public class ProviderIdentityMetricTest {
 	TestData testdata;
 
 	/*
-	 *  Dataset no dct:publisher and no accessURL at distributions but 
+	 *  Dataset has no dct:publisher and no accessURL at distributions but 
 	 *  the dataset has a landingPage which as per Data Catalog can be 
 	 *  treated as publisher information ---> 5 stars
 	 */
-	private static final String TestCase_5stars = "TestCaseForPIs_LPatDataset_5star.ttl";
+	private static final String TestCase_5stars = "TestCaseForPI_5Stars.ttl";
+	private static final String TEST_dataset_5stars = "http://projekt-opal.de/dataset/https___ckan_govdata_de_0af72fb1_b058_4de4_b99e_369a5a463f24";
+	
+	
+	/*
+	 * 4 stars: dct:Publisher is not of FOAF:Person or Organization or Agent
+	 */
+	private static final String TestCase_4stars = "TestCaseForPI_4Stars__synthetic.ttl";
+	private static final String TEST_dataset_4stars = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
 	
 	
 	/*
@@ -34,45 +42,46 @@ public class ProviderIdentityMetricTest {
 	 * accessURL can be used as landingPage is distributions are accessed 
 	 * only through accessURL.
 	 */
-	private static final String TestCase_3stars = "TestCaseForPI_Access_URL_3Stars__synthetic.ttl";
+	private static final String TestCase_3stars = "TestCaseForPI_3Stars__synthetic.ttl";
+	private static final String TEST_dataset_3stars = "http://projekt-opal.de/dataset/https___ckan_govdata_de_34a3e19c_323f_474a_b21b_b03be924093a";
 	
 	
 	/*
 	 * No publisher information at all
 	 */
 	private static final String TestCase_0stars = "TestCaseForPI_0Stars__synthetic.ttl";
-
-	private static final String TEST_dataset_5stars = "http://projekt-opal.de/dataset/https___ckan_govdata_de_a642d7e5_bf1c_57f9_89df_cdad67c7c0fc";
-	private static final String TEST_dataset_3stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_c0e483fd_9d29_328f_9b83_9eb950c9f022";
-	private static final String TEST_dataset_0stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_c0e483fd_9d29_328f_9b83_9eb950c9f022";
+	private static final String TEST_dataset_0stars = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
 
 	@Before
 	public void setUp() throws Exception {
 		testdata = new TestData();
 	}
-
-	@Test
-	public void TestCase1() throws Exception {
-
-		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		Integer stars = metric.compute(testdata.getModel(TestCase_5stars), TEST_dataset_5stars);
-		Assert.assertEquals("Provider Identity Test: Test Case 5 stars", 5, stars.intValue());
-	}
 	
 	@Test
-	public void TestCase2() throws Exception {
+	public void TestCase1() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_3stars), TEST_dataset_3stars);
 		Assert.assertEquals("Provider Identity Test: Test Case 3 stars", 3, stars.intValue());
 	}
+
+	
+	@Test
+	public void TestCase2() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_4stars), TEST_dataset_4stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 4 stars", 4, stars.intValue());
+	}
+	
 	
 	@Test
 	public void TestCase3() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		Integer stars = metric.compute(testdata.getModel(TestCase_0stars), TEST_dataset_0stars);
-		Assert.assertEquals("Provider Identity Test: Test Case 0 stars", 0, stars.intValue());
+		Integer stars = metric.compute(testdata.getModel(TestCase_5stars), TEST_dataset_5stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 5 stars", 5, stars.intValue());
 	}
+
 
 }

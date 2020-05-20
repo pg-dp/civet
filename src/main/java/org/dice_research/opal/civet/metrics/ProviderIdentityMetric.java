@@ -25,14 +25,19 @@ import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * The ProviderIdentity gives a rating to a dataset based on available
- * information about the publisher of the dataset which is provided
- * through the predicate dct:publisher. If dct:publisher does not provide
- * any publisher information 
+ * The ProviderIdentity gives a star rating to a dataset based on any available
+ * publisher of the dataset which is provided through the predicate
+ * dct:publisher. If dct:publisher predicate is not present or empty then check
+ * for a landing page in the dataset which is given by a predicate
+ * dcat:landingPage. If still no publisher is found then check for access URL in
+ * each distributions which is given by a predicate dcat:accessURL. Award a 0
+ * star, in case of no availability of a pub- lisher.
  * 
  * @author Gourab Sahu
  */
 public class ProviderIdentityMetric implements Metric {
+
+	static int publisher_score = 0;
 
 	public static boolean isValidURL(String checkURL) {
 		/*
@@ -48,82 +53,49 @@ public class ProviderIdentityMetric implements Metric {
 		}
 	}
 
-	public void evaluatePublisher(RDFNode publisher, HashMap<String, Integer> PublisherScore) {
+	public static void evaluatePublisher(Resource publisher) {
 
-		Resource Publisher = (Resource) publisher;
+		boolean publisher_is_a_foaf_resource = publisher.hasProperty(RDF.type, FOAF.Agent) ? true
+				: publisher.hasProperty(RDF.type, FOAF.Person) ? true
+						: publisher.hasProperty(RDF.type, FOAF.Organization) ? true
+								: publisher.hasProperty(RDF.type, FOAF.Group) ? true : false;
+		String foaf_name = publisher.hasProperty(FOAF.name) ? publisher.getProperty(FOAF.name).getObject().toString()
+				: "";
+
 		/*
 		 * If a publisher is of type foaf:org or foaf:person and has an non-empty name
 		 * then 5 stars are awarded.
 		 */
-		if ((Publisher.hasProperty(RDF.type, FOAF.Agent) && (!Publisher.getProperty(FOAF.name).getObject().toString().isEmpty()))) {
-
-			/*
-			 * If we do not have a publisher yet, then rate the first publisher ( of type
-			 * foaf:org /foaf:name) 5 stars.
-			 */
-			if (PublisherScore.size() == 0)
-				PublisherScore.put(Publisher.getProperty(FOAF.name).getObject().toString(), 5);
-			/*
-			 * If we already have a publisher and then we discover another new publisher
-			 * then the publisher information is not consistent, because of inconsistency we
-			 * award 3/5.
-			 * 
-			 * 2 star less for being inconsistent
-			 */
-			else if (!(PublisherScore.size() == 0)
-					&& !(PublisherScore.containsKey(Publisher.getProperty(FOAF.name).getObject().toString()))) {
-				PublisherScore.clear();
-				PublisherScore.put("InconsistentPublishers", 3);
-			}
-		}
+		if (publisher_is_a_foaf_resource && !foaf_name.isEmpty())
+			publisher_score = 5;
 		/*
-		 * If blanknode has a non-empty foaf:name but not sure about the type i.e not a
-		 * foaf:organisation or foaf:Person then 4 stars are awarded for not following
-		 * DCAT recommendations.
+		 * If resource is not a FOAF:organisation or FOAF:Person or FOAF:Agent but has a
+		 * publisher then 4 stars are awarded for not following DCAT recommendations.
 		 */
-		else if (Publisher.hasProperty(FOAF.name)
-				&& (!Publisher.getProperty(FOAF.name).getObject().toString().isEmpty())) {
-			// If we find the first publisher but no mention of foaf:type then award 4
-			// stars.
-			// 1 star less for not following DCAT's Foaf recommendations
-			if (PublisherScore.size() == 0
-					&& !(PublisherScore.containsKey(Publisher.getProperty(FOAF.name).getObject().toString())))
-				PublisherScore.put(Publisher.getProperty(FOAF.name).getObject().toString(), 4);
-			/*
-			 * If we already have a publisher and then we discover an another new publisher
-			 * then the publisher information is not consistent, because of inconsistency we
-			 * award 2/5 because of inconsistency + not following DCAT
-			 * recommendation(foaf:type)
-			 * 
-			 * 2 star less for being inconsistent, -1 star less for not following DCAT foaf
-			 * recommendation
-			 */
-			else if (!(PublisherScore.size() == 0)
-					&& !(PublisherScore.containsKey(Publisher.getProperty(FOAF.name).getObject().toString()))) {
-				PublisherScore.clear();
-				PublisherScore.put("InconsistentPublishers", 2);
-			}
-		}
+		else if (!publisher_is_a_foaf_resource && !foaf_name.isEmpty())
+			publisher_score = 4;
+
+		/*
+		 * Last case check if dct:publisher has been given in the form of a URL. 4 stars
+		 * for not following DCAT recommendations.
+		 */
+		else if (isValidURL(publisher.toString()))
+			publisher_score = 4;
 
 	}
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Check if a consistent Dataset Provider/Publisher name is given "
-			+ "If dataset has only 1 Publisher then 5 atars are awarded "
-			+ "If dataset has more than 1 publishers but they are consistent then 5 stars are awarded "
-			+ "If dataset has more than 1 publishers but they are inconsistent then 3 stars are awarded, 2 star less for inconsistency "
-			+ "If dataset has an empty blanknode for publlisher then 0 stars are awarded"
+	private static final String DESCRIPTION = "If dataset has a Publisher which is of type FOAF.person or FOAF.organization "
+			+ "or FOAF.Agent then 5 atars are awarded "
 
-			+ "If dataset has a non-empty blanknode for publlisher with publisher info then 5 stars are awarded"
-			+ "If dataset has more than 1 non-empty blanknode for publlisher with consistent publisher info then 5 stars are awarded"
-			+ "If dataset has more than 1 non-empty blanknode for publlisher with inconsistent publisher info then 3 stars are awarded, 2 star less"
-			+ "for Inconsistency." + "If dataset has no provider information at all then 0 stars are awarded"
+			+ "If dataset has a Publisher which is not of type FOAF.person or FOAF.organization "
+			+ "or FOAF.Agent then 4 atars are awarded "
 
-			+ "Before awarding stars, we are checking whether the publishers are of type Foaf:Organization or Foaf:Person. IF this info is"
-			+ "not there then additionaly 1 more star will be deducted from scoring"
+			+ "If dct:publisher predicate does not provide a publisher then in that case if "
+			+ "dcat:Landingpage predicate provides a valid URL then award 5 stars. Landing page " + "has a FOAF range."
 
-			+ "If no publisher info given then check for dcat:landingPage and if found award 5 star"
-			+ "If no publisher info, dcat:landingPage found then check for dcat:accessURL and award 5 stars if found.";
+			+ "As a last resort check if all distributions have a access URL and based on the "
+			+ "percentage of availability of accessURL award a star rating ";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
@@ -132,134 +104,79 @@ public class ProviderIdentityMetric implements Metric {
 
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
-		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
-		// DCAT.keyword);
+		NodeIterator publishers = model.listObjectsOfProperty(dataset, DCTerms.publisher);
 
-		// Score to return
-		int score = 0;
+		while (publishers.hasNext()) {
 
-		// Will be used to check for consistency
-		HashMap<String, Integer> PublisherScore = new HashMap<String, Integer>();
+			RDFNode publisher = publishers.next();
 
-		// We will store landingpages here
-		ArrayList<String> LandingPageStore = new ArrayList<String>();
-
-		// We will store accessURL here
-		ArrayList<String> AccessURLStore = new ArrayList<String>();
-
-		// Total number of distributions
-		int TotalNumberOfDistributions = 0;
-
-//		StmtIterator IteratorOverPublisher = model
-//				.listStatements(new SimpleSelector(null, DCTerms.publisher, (RDFNode) null));
-
-		NodeIterator IteratorOverPublisher = model.listObjectsOfProperty(dataset, DCTerms.publisher);
-
-		while (IteratorOverPublisher.hasNext()) {
-
-			// Statement StatementWithPublisher = IteratorOverPublisher.nextStatement();
-			// RDFNode Publisher = StatementWithPublisher.getObject();
-			RDFNode Publisher = IteratorOverPublisher.next();
-			// Check if the publisher object is a blank node.
-			// We 1st start with checking if a non-empty blank node.
-			if (Publisher.isAnon()) {
-
-				evaluatePublisher(Publisher, PublisherScore);
-
-			} else if (Publisher.isURIResource()) {
-
-				evaluatePublisher(Publisher, PublisherScore);
-			} else
-				/*
-				 * 1. A Publisher could be an URI of type foaf:org or foaf:name. We checked
-				 * that. 2. A Publisher could be a blanknode of type foaf:org or foaf:name. We
-				 * checked that. 3. A Publisher could be an empty blank node.
-				 */
-				// This is the 3rd case. Award 0 star
-				PublisherScore.put("EmptyBlankNodeForPublisher", 0);
+			if (publisher.isAnon() || publisher.isURIResource()) {
+				evaluatePublisher((Resource) publisher);
+				if (publisher_score == 5)
+					break;
+			}
 		}
 
 		/*
-		 * If PublisherInfo=0 then check if dcat:landingPage is available in
+		 * If publisher_score=0 then check if dcat:landingPage is available in
 		 * dcat:catalog
 		 */
-		// System.out.println(PublisherScore.size());
-		// System.out.println(PublisherScore.containsKey("EmptyBlankNodeForPublisher"));
-		if (PublisherScore.size() == 0 || PublisherScore.containsKey("EmptyBlankNodeForPublisher")) {
+		if (publisher_score == 0) {
 
+			// It could be possible that more than 1 landing pages exist in a dataset.
 			NodeIterator landingpages = model.listObjectsOfProperty(dataset, DCAT.landingPage);
 
 			while (landingpages.hasNext()) {
 
-				Object landingPage = landingpages.next();
-				// If we do not have any landingPage in store then add it.
-				if (LandingPageStore.size() == 0) {
-					if (isValidURL(landingPage.toString()))
-						LandingPageStore.add(landingPage.toString());
+				Object landing_page = landingpages.next();
+
+				if (isValidURL(landing_page.toString())) {
+					publisher_score = 5;
+					break;
 				}
 
-				else if (LandingPageStore.size() != 0) {
-					// If landing pages are inconsistent then add the landing page to store.
-					if (!(LandingPageStore.contains(landingPage.toString()))) {
-						if (isValidURL(landingPage.toString()))
-							LandingPageStore.add(landingPage.toString());
-					}
-					/*
-					 * At the end if we have only one value in LandingPageStore then we will award 5
-					 * stars to the dataset.
-					 */
-				}
-			}
-
-			if (LandingPageStore.size() == 1)
-				PublisherScore.put("LandingPageScore", 5);
-			else
-				PublisherScore.put("LandingPageScore", 3);
-		
-			// If LandingPage is not there then check for AccessURL in the distribution
-			if (LandingPageStore.size() == 0) {
-
-				NodeIterator DistributionIterator = model.listObjectsOfProperty(dataset,DCAT.distribution);
-				while (DistributionIterator.hasNext()) {
-
-					TotalNumberOfDistributions++;
-
-					Resource Distribution = (Resource) DistributionIterator.next();
-
-					if (Distribution.hasProperty(DCAT.accessURL)) {
-
-						if (isValidURL(Distribution.getProperty(DCAT.accessURL).getObject().toString()))
-							AccessURLStore.add(Distribution.getProperty(DCAT.accessURL).getObject().toString());
-					}
-				}
-
-				// Calculate a score based on availability of AccessURL and store a score in
-				// PublisherScore.
-				if (AccessURLStore.size() > 0) {
-
-					int TotalPercentageOfAccessURL = (AccessURLStore.size() * 100) / TotalNumberOfDistributions;
-
-					if (TotalPercentageOfAccessURL == 100)
-						PublisherScore.put("AccessURLScore", 5);
-					else if (TotalPercentageOfAccessURL < 100 && TotalPercentageOfAccessURL >= 75)
-						PublisherScore.put("AccessURLScore", 4);
-					else if (TotalPercentageOfAccessURL < 75 && TotalPercentageOfAccessURL >= 50)
-						PublisherScore.put("AccessURLScore", 3);
-					else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
-						PublisherScore.put("AccessURLScore", 2);
-					else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL > 0)
-						PublisherScore.put("AccessURLScore", 1);
-						
-				}
-				else
-					PublisherScore.put("No provider identity information at all", 0);
 			}
 		}
-		// There will be always only one key and value
-		for (String key : PublisherScore.keySet())
-			score = PublisherScore.get(key);
 
-		return score;
+		// If LandingPage is not there then check for AccessURL in the distribution
+		if (publisher_score == 0) {
+
+			int number_of_access_url = 0;
+			int number_of_distributions = 0;
+
+			NodeIterator distributions = model.listObjectsOfProperty(dataset, DCAT.distribution);
+
+			while (distributions.hasNext()) {
+
+				number_of_distributions++;
+				RDFNode distribution = distributions.next();
+				if (distribution.isResource()) {
+					Resource distribution_resource = (Resource) distribution;
+					if (distribution_resource.hasProperty(DCAT.accessURL)) {
+						if (isValidURL(distribution_resource.getProperty(DCAT.accessURL).getObject().toString()))
+							number_of_access_url++;
+					}
+				}
+
+			}
+
+			int TotalPercentageOfAccessURL = (number_of_access_url * 100) / number_of_distributions;
+
+			if (TotalPercentageOfAccessURL == 100)
+				publisher_score = 5;
+			else if (TotalPercentageOfAccessURL < 100 && TotalPercentageOfAccessURL >= 75)
+				publisher_score = 4;
+			else if (TotalPercentageOfAccessURL < 75 && TotalPercentageOfAccessURL >= 50)
+				publisher_score = 3;
+			else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
+				publisher_score = 2;
+			else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL > 0)
+				publisher_score = 1;
+
+		}
+		System.out.println("score:" + publisher_score);
+		return publisher_score;
+
 	}
 
 	@Override
