@@ -61,13 +61,22 @@ public class ProviderIdentityMetricTest {
 	public void TestCase1() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_0stars), TEST_dataset_0stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 0 stars", 0, stars.intValue());
+	}
+	
+	
+	@Test
+	public void TestCase2() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_3stars), TEST_dataset_3stars);
 		Assert.assertEquals("Provider Identity Test: Test Case 3 stars", 3, stars.intValue());
 	}
 
 	
 	@Test
-	public void TestCase2() throws Exception {
+	public void TestCase3() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_4stars), TEST_dataset_4stars);
@@ -76,7 +85,7 @@ public class ProviderIdentityMetricTest {
 	
 	
 	@Test
-	public void TestCase3() throws Exception {
+	public void TestCase4() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_5stars), TEST_dataset_5stars);

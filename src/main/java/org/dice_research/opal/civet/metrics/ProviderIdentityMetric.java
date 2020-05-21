@@ -37,6 +37,20 @@ import org.dice_research.opal.common.vocabulary.Opal;
  */
 public class ProviderIdentityMetric implements Metric {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+	private static final String DESCRIPTION = 
+			"If dataset has a Publisher which is of type FOAF.person or FOAF.organization "
+			+ "or FOAF.Agent then 5 atars are awarded "
+
+			+ "If dataset has a Publisher which is not of type FOAF.person or FOAF.organization "
+			+ "or FOAF.Agent then 4 atars are awarded "
+
+			+ "If dct:publisher predicate does not provide a publisher then in that case if "
+			+ "dcat:Landingpage predicate provides a valid URL then award 5 stars. Landing page " + "has a FOAF range."
+
+			+ "As a last resort check if all distributions have a access URL and based on the "
+			+ "percentage of availability of accessURL award a star rating ";
+
 	static int publisher_score = 0;
 
 	public static boolean isValidURL(String checkURL) {
@@ -83,19 +97,6 @@ public class ProviderIdentityMetric implements Metric {
 			publisher_score = 4;
 
 	}
-
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "If dataset has a Publisher which is of type FOAF.person or FOAF.organization "
-			+ "or FOAF.Agent then 5 atars are awarded "
-
-			+ "If dataset has a Publisher which is not of type FOAF.person or FOAF.organization "
-			+ "or FOAF.Agent then 4 atars are awarded "
-
-			+ "If dct:publisher predicate does not provide a publisher then in that case if "
-			+ "dcat:Landingpage predicate provides a valid URL then award 5 stars. Landing page " + "has a FOAF range."
-
-			+ "As a last resort check if all distributions have a access URL and based on the "
-			+ "percentage of availability of accessURL award a star rating ";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
@@ -152,9 +153,9 @@ public class ProviderIdentityMetric implements Metric {
 				RDFNode distribution = distributions.next();
 				if (distribution.isResource()) {
 					Resource distribution_resource = (Resource) distribution;
-					if (distribution_resource.hasProperty(DCAT.accessURL)) {
-						if (isValidURL(distribution_resource.getProperty(DCAT.accessURL).getObject().toString()))
-							number_of_access_url++;
+					if (distribution_resource.hasProperty(DCAT.accessURL)
+							&& isValidURL(distribution_resource.getProperty(DCAT.accessURL).getObject().toString())) {
+						number_of_access_url++;
 					}
 				}
 
