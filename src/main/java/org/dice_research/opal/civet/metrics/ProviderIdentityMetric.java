@@ -51,7 +51,7 @@ public class ProviderIdentityMetric implements Metric {
 			+ "As a last resort check if all distributions have a access URL and based on the "
 			+ "percentage of availability of accessURL award a star rating ";
 
-	static int publisher_score = 0;
+	private static int publisher_score = 0;
 
 	public static boolean isValidURL(String checkURL) {
 		/*
