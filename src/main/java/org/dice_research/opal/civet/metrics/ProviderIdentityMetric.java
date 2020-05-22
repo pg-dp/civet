@@ -69,10 +69,15 @@ public class ProviderIdentityMetric implements Metric {
 
 	public static void evaluatePublisher(Resource publisher) {
 
-		boolean publisher_is_a_foaf_resource = publisher.hasProperty(RDF.type, FOAF.Agent) ? true
-				: publisher.hasProperty(RDF.type, FOAF.Person) ? true
-						: publisher.hasProperty(RDF.type, FOAF.Organization) ? true
-								: publisher.hasProperty(RDF.type, FOAF.Group) ? true : false;
+		boolean publisher_is_a_foaf_resource = true;
+		
+		if(publisher.hasProperty(RDF.type, FOAF.Agent));
+		else if(publisher.hasProperty(RDF.type, FOAF.Person));
+		else if (publisher.hasProperty(RDF.type, FOAF.Organization));
+		else if (publisher.hasProperty(RDF.type, FOAF.Group));
+		else 
+			publisher_is_a_foaf_resource = false;
+			
 		String foaf_name = publisher.hasProperty(FOAF.name) ? publisher.getProperty(FOAF.name).getObject().toString()
 				: "";
 
@@ -175,7 +180,7 @@ public class ProviderIdentityMetric implements Metric {
 				publisher_score = 1;
 
 		}
-		System.out.println("score:" + publisher_score);
+
 		return publisher_score;
 
 	}
@@ -187,7 +192,7 @@ public class ProviderIdentityMetric implements Metric {
 
 	@Override
 	public String getUri() throws Exception {
-		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
+		return Opal.OPAL_METRIC_PROVIDER_IDENTITY.getURI();
 	}
 
 }
