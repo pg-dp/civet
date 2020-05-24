@@ -1,9 +1,6 @@
 package org.dice_research.opal.civet.metrics;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
@@ -38,8 +35,7 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class ProviderIdentityMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = 
-			"If dataset has a Publisher which is of type FOAF.person or FOAF.organization "
+	private static final String DESCRIPTION = "If dataset has a Publisher which is of type FOAF.person or FOAF.organization "
 			+ "or FOAF.Agent then 5 atars are awarded "
 
 			+ "If dataset has a Publisher which is not of type FOAF.person or FOAF.organization "
@@ -69,15 +65,13 @@ public class ProviderIdentityMetric implements Metric {
 
 	public static void evaluatePublisher(Resource publisher) {
 
-		boolean publisher_is_a_foaf_resource = true;
-		
-		if(publisher.hasProperty(RDF.type, FOAF.Agent));
-		else if(publisher.hasProperty(RDF.type, FOAF.Person));
-		else if (publisher.hasProperty(RDF.type, FOAF.Organization));
-		else if (publisher.hasProperty(RDF.type, FOAF.Group));
-		else 
-			publisher_is_a_foaf_resource = false;
-			
+		boolean publisher_is_a_foaf_resource = false;
+
+		if (publisher.hasProperty(RDF.type, FOAF.Agent) || (publisher.hasProperty(RDF.type, FOAF.Person))
+				|| (publisher.hasProperty(RDF.type, FOAF.Organization))
+				|| (publisher.hasProperty(RDF.type, FOAF.Group)))
+			publisher_is_a_foaf_resource = true;
+
 		String foaf_name = publisher.hasProperty(FOAF.name) ? publisher.getProperty(FOAF.name).getObject().toString()
 				: "";
 
