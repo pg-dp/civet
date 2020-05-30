@@ -47,6 +47,22 @@ public class ProviderIdentityMetricTest {
 	
 	
 	/*
+	 * Dataset has no publisher info. 2 out of 5 distributions have a valid access_url.
+	 */
+	private static final String TestCase_2stars = "TestCaseForPI_2Stars__synthetic.ttl";
+	private static final String TEST_dataset_2stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_464819ee_0d2a_4ca4_b5a4_026e34488404";
+	
+	
+	
+	
+	/*
+	 * Dataset has no publisher info. 1 out of 5 distributions have a valid access_url.
+	 */
+	private static final String TestCase_1stars = "TestCaseForPI_1Stars__synthetic.ttl";
+	private static final String TEST_dataset_1stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_2013_03_visas_delivres_aux_etudiants";
+	
+	
+	/*
 	 * No publisher information at all
 	 */
 	private static final String TestCase_0stars = "TestCaseForPI_0Stars__synthetic.ttl";
@@ -58,16 +74,32 @@ public class ProviderIdentityMetricTest {
 	}
 	
 	@Test
-	public void testCase1() throws Exception {
+	public void testCase0() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_0stars), TEST_dataset_0stars);
 		Assert.assertEquals("Provider Identity Test: Test Case 0 stars", 0, stars.intValue());
 	}
 	
+	@Test
+	public void testCase1() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_1stars), TEST_dataset_1stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 1 stars", 1, stars.intValue());
+	}
 	
 	@Test
 	public void testCase2() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_2stars), TEST_dataset_2stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 2 stars", 2, stars.intValue());
+	}
+	
+	
+	@Test
+	public void testCase3() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_3stars), TEST_dataset_3stars);
@@ -76,7 +108,7 @@ public class ProviderIdentityMetricTest {
 
 	
 	@Test
-	public void testCase3() throws Exception {
+	public void testCase4() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_4stars), TEST_dataset_4stars);
@@ -85,7 +117,7 @@ public class ProviderIdentityMetricTest {
 	
 	
 	@Test
-	public void testCase4() throws Exception {
+	public void testCase5() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
 		Integer stars = metric.compute(testdata.getModel(TestCase_5stars), TEST_dataset_5stars);

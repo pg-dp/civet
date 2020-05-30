@@ -102,7 +102,7 @@ public class ProviderIdentityMetric implements Metric {
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
-		Resource dataset = ResourceFactory.createResource(datasetUri);
+		Resource dataset = model.createResource(datasetUri);
 
 		NodeIterator publishers = model.listObjectsOfProperty(dataset, DCTerms.publisher);
 
@@ -174,7 +174,11 @@ public class ProviderIdentityMetric implements Metric {
 				publisher_score = 1;
 
 		}
-
+		
+		System.out.println(" ");
+		System.out.println(" ");
+		System.out.println(" ");
+		model.write(System.out,"TURTLE");
 		return publisher_score;
 
 	}
