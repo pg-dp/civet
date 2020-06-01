@@ -4,7 +4,7 @@
 <http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_debat_dorientations_budgetaires_2018>
         a                       dcat:Dataset ;
         dct:accrualPeriodicity  <http://publications.europa.eu/resource/authority/frequency/UNKNOWN> ;
-        dct:description         "Le présent document a pour objectif d'apporter l’ensemble des informations budgétaires et financières disponibles à ce jour pour vous permettre de décider de l’évolution des politiques publiques menées sur l'Agglomération Plaine Vallée."@fr ;
+        dct:description         "Test sentenc with some error which os very v randomly written"@en ;
         dct:issued              "2019-01-16T02:53:16.624000" ;
         dct:publisher           [ a       <http://xmlns.com/foaf/0.1/Organization> ;
                                   <http://xmlns.com/foaf/0.1/name>
