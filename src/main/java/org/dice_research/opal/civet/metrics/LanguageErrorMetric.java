@@ -9,8 +9,12 @@ import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.AmericanEnglish;
+import org.languagetool.language.French;
+import org.languagetool.language.German;
+import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LanguageErrorMetric implements Metric {
@@ -20,16 +24,28 @@ public class LanguageErrorMetric implements Metric {
 
     @Override
     public Integer compute(Model model, String datasetUri) throws Exception {
+
         Resource dataset = ResourceFactory.createResource(datasetUri);
-
-        //TODO check the tag at the description and evaluate the for the language accordingly
-        //Could be @en , @fr , @de, @es
-
         JLanguageTool langTool = new JLanguageTool(new AmericanEnglish());
 
         int score = 0;
+
+//        if (!dataset.hasProperty(DCTerms.description))
+//            return null;
+
         Statement statement = model.getProperty(dataset, DCTerms.description);
-        List<RuleMatch> matches = langTool.check(String.valueOf(statement));
+        String dct_description = statement.getObject().toString();
+        String[] wordsCount = dct_description.split(" ");
+        int wordsCountLength = wordsCount.length;
+
+        if (dct_description.contains("@en"))
+            langTool = new JLanguageTool(new AmericanEnglish());
+        else if (dct_description.contains("@fr"))
+            langTool = new JLanguageTool(new French());
+        else if (dct_description.contains("@de"))
+            langTool = new JLanguageTool(new GermanyGerman());
+
+        List<RuleMatch> matches = langTool.check(dct_description);
 
         for (RuleMatch match : matches) {
             System.out.println("Potential error at characters " +
@@ -38,6 +54,21 @@ public class LanguageErrorMetric implements Metric {
             System.out.println("Suggested correction(s): " +
                     match.getSuggestedReplacements());
         }
+
+        int errorPerDescription = wordsCountLength / matches.size();
+
+        if (errorPerDescription > 0.9)
+            score = 0;
+        else if (errorPerDescription > 0.75)
+            score = 1;
+        else if (errorPerDescription > 0.5)
+            score = 2;
+        else if (errorPerDescription > 0.25)
+            score = 3;
+        else if (errorPerDescription > 0.05)
+            score = 4;
+        else if (errorPerDescription > 0)
+            score = 5;
 
         return score;
     }
