@@ -15,8 +15,8 @@ import org.junit.Test;
 
 public class ProviderIdentityMetricTest {
 
-	TestData testdata;
-	ProviderIdentityMetric metric;
+	private TestData testdata;
+	private ProviderIdentityMetric metric;
 	
 	/*
 	 *  Dataset has no dct:publisher and no accessURL at distributions but 
