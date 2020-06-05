@@ -42,10 +42,6 @@ public class ProviderIdentityMetric implements Metric {
 			+ "As a last resort check if all distributions have a access URL and based on the "
 			+ "percentage of availability of accessURL award a star rating ";
 
-	private static int publisher_score = 0;
-	private static int TotalPercentageOfAccessURL = 0;
-	private static int number_of_distributions = 0;
-
 	public static boolean isValidURL(String checkURL) {
 		/*
 		 * Here we check whether the URL of foaf:homepage is a valid URL or not.
@@ -60,7 +56,9 @@ public class ProviderIdentityMetric implements Metric {
 		}
 	}
 
-	public static void evaluatePublisher(Resource publisher) {
+	public int evaluatePublisher(Resource publisher) {
+		
+		int publisher_score = 0;
 
 		boolean publisher_is_a_foaf_resource = false;
 
@@ -91,11 +89,17 @@ public class ProviderIdentityMetric implements Metric {
 		 */
 		else if (isValidURL(publisher.toString()))
 			publisher_score = 4;
+		
+		return publisher_score;
 
 	}
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
+		
+		int publisher_score = 0;
+		int TotalPercentageOfAccessURL = 0;
+		int number_of_distributions = 0;
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
@@ -108,7 +112,7 @@ public class ProviderIdentityMetric implements Metric {
 			RDFNode publisher = publishers.next();
 
 			if (publisher.isAnon() || publisher.isURIResource()) {
-				evaluatePublisher((Resource) publisher);
+				publisher_score= evaluatePublisher((Resource) publisher);
 				if (publisher_score == 5)
 					break;
 			}
