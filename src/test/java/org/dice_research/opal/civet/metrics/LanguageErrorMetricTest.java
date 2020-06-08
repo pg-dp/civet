@@ -23,7 +23,7 @@ public class LanguageErrorMetricTest {
     @Test
     public void testStarNull() throws Exception {
 
-        final String TEST_DATASET = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_debat_dorientations_budgetaires_2018";
+        final String TEST_DATASET = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_de68f4fc_2886_4775_9537_2bf21d81dff7";
         LanguageErrorMetric metric = new LanguageErrorMetric();
         Integer stars = metric.compute(model, TEST_DATASET);
 

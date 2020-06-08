@@ -1,59 +1,73 @@
 package org.dice_research.opal.civet.metrics;
 
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.vocabulary.DCTerms;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.AmericanEnglish;
+import org.languagetool.language.BritishEnglish;
 import org.languagetool.language.French;
-import org.languagetool.language.German;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
-import java.util.ArrayList;
 import java.util.List;
+/**
+ * Checks the grammar of the description of the model and rate the model accordingly .
+ * JLANGTOOl lib is used for the grammar checking .
+ * 3 Languages are checked as of now ,
+ * but any number of languages can be added using this library.
+ * @author Vikrant Singh
+        */
 
 public class LanguageErrorMetric implements Metric {
 
     private static final String DESCRIPTION = "Computes a score based on the description " +
-            "given and how well the description is given";
+            "given and how well the description is given," +
+            " Works for english , german and french , " +
+            "support for other languages could be added easily";
 
     @Override
-    public Integer compute(Model model, String datasetUri) throws Exception {
+    public Integer compute(Model model, String datasetUri) throws Exception, LiteralRequiredException {
 
         Resource dataset = ResourceFactory.createResource(datasetUri);
         JLanguageTool langTool = new JLanguageTool(new AmericanEnglish());
-
+        String language = " ";
         int score = 0;
 
-//        if (!dataset.hasProperty(DCTerms.description))
-//            return null;
-
         Statement statement = model.getProperty(dataset, DCTerms.description);
+        if (statement == null) {
+            return null;
+        }
+
+        NodeIterator languageIterator = model.listObjectsOfProperty(dataset, DCTerms.description);
+
+        while (languageIterator.hasNext()) {
+            RDFNode languageNode = languageIterator.next();
+            if (languageNode.isLiteral())
+                language = languageNode.asLiteral().getLanguage();
+            else
+                return null;
+        }
+
         String dct_description = statement.getObject().toString();
+        dct_description.replaceAll(".", " ");
         String[] wordsCount = dct_description.split(" ");
         int wordsCountLength = wordsCount.length;
 
-        if (dct_description.contains("@en"))
-            langTool = new JLanguageTool(new AmericanEnglish());
-        else if (dct_description.contains("@fr"))
-            langTool = new JLanguageTool(new French());
-        else if (dct_description.contains("@de"))
-            langTool = new JLanguageTool(new GermanyGerman());
+        switch (language.toLowerCase()) {
+            case "en":
+                langTool = new JLanguageTool(new BritishEnglish());
+                break;
+            case "fr":
+                langTool = new JLanguageTool(new French());
+                break;
+            case "de":
+                langTool = new JLanguageTool(new GermanyGerman());
+                break;
+        }
 
         List<RuleMatch> matches = langTool.check(dct_description);
-
-        for (RuleMatch match : matches) {
-            System.out.println("Potential error at characters " +
-                    match.getFromPos() + "-" + match.getToPos() + ": " +
-                    match.getMessage());
-            System.out.println("Suggested correction(s): " +
-                    match.getSuggestedReplacements());
-        }
 
         int errorPerDescription = wordsCountLength / matches.size();
 
