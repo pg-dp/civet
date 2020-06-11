@@ -41,7 +41,16 @@ public class DescriptionMetricImproved implements Metric {
 			+ "else if dct:description contains >15 and <20 then 4 stars"
 			+ "else if dct:description contains >20 then 5 stars";
 
-	public int posTagger(String dct_issued) throws IOException {
+	// German parts of speech tags for noun, verb and adjective
+	private static String nounTag = "NN";
+	private static String verbTag = "VVFIN";
+	private static String adjectiveTag = "ADJA";
+	private int lastIndex = 0;
+	private int countNouns = 0;
+	private int countVerbs = 0;
+	private int countAdjectives = 0;
+
+	public int posTagger(String dct_description) throws IOException {
 
 		// Loading Parts of speech-maxent model
 		InputStream inputStream = new FileInputStream("C:/models/de-pos-maxent.bin");
@@ -52,17 +61,73 @@ public class DescriptionMetricImproved implements Metric {
 
 		// Tokenizing the sentence using WhitespaceTokenizer class
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
-		String[] tokens = whitespaceTokenizer.tokenize(dct_issued);
+		String[] tokens = whitespaceTokenizer.tokenize(dct_description);
 
 		// Generating tags
 		String[] tags = tagger.tag(tokens);
 
 		// Instantiating the POSSample class
-		POSSample sample = new POSSample(tokens, tags);
-		String result = sample.toString();
-		System.out.println(result);
-		return 1;
+		POSSample description_tags = new POSSample(tokens, tags);
+		String pos_tags = description_tags.toString();
 
+		// Counting occurrences of nouns
+		while (lastIndex != -1) {
+			lastIndex = pos_tags.indexOf(nounTag, lastIndex);
+
+			if (lastIndex != -1) {
+				countNouns++;
+				lastIndex += nounTag.length();
+			}
+		}
+
+		// Counting occurrences of verbs
+		while (lastIndex != -1) {
+			lastIndex = pos_tags.indexOf(verbTag, lastIndex);
+
+			if (lastIndex != -1) {
+				countVerbs++;
+				lastIndex += verbTag.length();
+			}
+		}
+
+		// Counting occurrences of adjectives
+		while (lastIndex != -1) {
+			lastIndex = pos_tags.indexOf(adjectiveTag, lastIndex);
+
+			if (lastIndex != -1) {
+				countAdjectives++;
+				lastIndex += adjectiveTag.length();
+			}
+		}
+
+		// Sum up all three posTags in one variable to rate metrics
+		int allPosTags = countNouns + countVerbs + countAdjectives;
+
+		// Now rating for the description is given
+		if (allPosTags <= 5) {
+			// Very less posTags
+			return 1;
+		}
+
+		else if (allPosTags > 5 && allPosTags <= 10) {
+			// less posTags
+			return 2;
+		}
+
+		else if (allPosTags > 10 && allPosTags <= 15) {
+			// average posTags
+			return 3;
+		}
+
+		else if (allPosTags > 15 && allPosTags <= 20) {
+			// above average posTags
+			return 4;
+		}
+
+		else {
+			// Best use of posTags
+			return 5;
+		}
 	}
 
 	@Override

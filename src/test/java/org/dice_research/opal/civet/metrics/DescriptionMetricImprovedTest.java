@@ -28,13 +28,13 @@ public class DescriptionMetricImprovedTest {
 	}
 
 	@Test
-	public void checkDemo() throws Exception {
+	public void checkLessPosTags() throws Exception {
 
 		DescriptionMetricImproved metric = new DescriptionMetricImproved();
 		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
 		System.out.println(stars);
-		Assert.assertEquals("Demo", 5, stars.intValue());
+		Assert.assertEquals("It contains less posTags", 2, stars.intValue());
 	}
 
 }
