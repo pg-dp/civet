@@ -132,14 +132,14 @@ public class DescriptionMetricImproved implements Metric {
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-		int scores = 1;
+		int score = 1;
 		Resource dataset = model.createResource(datasetUri);
 		if (dataset.hasProperty(DCTerms.description)) {
 			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
-			scores = posTagger(dct_description);
-			return scores;
+			score = posTagger(dct_description);
+			return score;
 		}
-		return scores;
+		return score;
 	}
 
 	@Override

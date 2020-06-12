@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link DescriptionMetric}.
+ * Tests {@link DescriptionMetric-Improved}.
  * 
  * @author Aamir Mohammed
  */
@@ -33,8 +33,52 @@ public class DescriptionMetricImprovedTest {
 		DescriptionMetricImproved metric = new DescriptionMetricImproved();
 		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		System.out.println(stars);
 		Assert.assertEquals("It contains less posTags", 2, stars.intValue());
+	}
+
+	@Test
+	public void checkVeryLessPosTags() throws Exception {
+
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vbb-fahrplandatenfebruarbisdezember2016";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It contains very less posTags", 1, stars.intValue());
+	}
+
+	@Test
+	public void checkEmptyDescription() throws Exception {
+
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It contains empty description value", 1, stars.intValue());
+	}
+
+	@Test
+	public void checkAveragePosTags() throws Exception {
+
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_elektroladestandortehamburg";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It contains average posTags", 3, stars.intValue());
+	}
+
+	@Test
+	public void checkAboveAveragePosTags() throws Exception {
+
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_tglicherasterderrealenevapotranspirationbergrasundsandigemlehm";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It contains above average posTags", 4, stars.intValue());
+	}
+
+	@Test
+	public void checkBestPosTags() throws Exception {
+
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_wettervorhersagemodellcosmo-de";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It contains best posTags", 5, stars.intValue());
 	}
 
 }
