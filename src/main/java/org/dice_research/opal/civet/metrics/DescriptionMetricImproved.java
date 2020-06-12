@@ -53,7 +53,7 @@ public class DescriptionMetricImproved implements Metric {
 	public int posTagger(String dct_description) throws IOException {
 
 		// Loading Parts of speech-maxent model
-		InputStream inputStream = new FileInputStream("C:/models/de-pos-maxent.bin");
+		InputStream inputStream = new FileInputStream("src/main/resources/de-pos-maxent.bin");
 		POSModel model = new POSModel(inputStream);
 
 		// Instantiating POSTaggerME class
