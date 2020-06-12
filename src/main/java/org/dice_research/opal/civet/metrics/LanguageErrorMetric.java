@@ -53,7 +53,7 @@ public class LanguageErrorMetric implements Metric {
         String dct_description = statement.getObject().toString();
         dct_description.replaceAll(".", " ");
         String[] wordsCount = dct_description.split(" ");
-        int wordsCountLength = wordsCount.length;
+        double wordsCountLength = wordsCount.length;
 
         switch (language.toLowerCase()) {
             case "en":
@@ -68,8 +68,8 @@ public class LanguageErrorMetric implements Metric {
         }
 
         List<RuleMatch> matches = langTool.check(dct_description);
-
-        int errorPerDescription = wordsCountLength / matches.size();
+        double errorCount = matches.size();
+        double errorPerDescription = errorCount / wordsCountLength;
 
         if (errorPerDescription > 0.9)
             score = 0;
@@ -81,7 +81,7 @@ public class LanguageErrorMetric implements Metric {
             score = 3;
         else if (errorPerDescription > 0.05)
             score = 4;
-        else if (errorPerDescription > 0)
+        else if (errorPerDescription >= 0)
             score = 5;
 
         return score;
