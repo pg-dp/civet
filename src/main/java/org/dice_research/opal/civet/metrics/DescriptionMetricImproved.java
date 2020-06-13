@@ -20,26 +20,28 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
  * order.
  * 
  * Rating Criteria is as follows: "If dct:description contains <5 nouns, verbs
- * and adjectives then 1 star" + "else if dct:description contains >5 and <10
- * then 2 stars" + "else if dct:description contains >10 and <15 then 3 stars" +
- * "else if dct:description contains >15 and <20 then 4 stars" + "else if
- * dct:description contains >20 then 5 stars"
+ * or adjectives then 1 star" + "else if dct:description contains >5 and <10
+ * nouns, verbs or adjectives then 2 stars" + "else if dct:description contains
+ * >10 and <15 nouns, verbs or adjectives then 3 stars" + "else if
+ * dct:description contains >15 and <20 nouns, verbs or adjectives then 4 stars"
+ * + "else if dct:description contains >20 nouns, verbs or adjectives then 5
+ * stars"
  * 
- * @Reference:"https://opennlp.apache.org/docs/1.9.0/manual/opennlp.html"
- * @Reference:"http://csjarchive.cogsci.rpi.edu/Proceedings/2013/papers/0263/paper0263.pdf"
- * @Reference:"https://pressbooks.bccampus.ca/technicalwriting/chapter/importanceverbs/"
- * @Reference:"https://www.diva-portal.org/smash/get/diva2:231227/fulltext01.pdf"
+ * @see:"https://opennlp.apache.org/docs/1.9.0/manual/opennlp.html"
+ * @see:"http://csjarchive.cogsci.rpi.edu/Proceedings/2013/papers/0263/paper0263.pdf"
+ * @see:"https://pressbooks.bccampus.ca/technicalwriting/chapter/importanceverbs/"
+ * @see:"https://www.diva-portal.org/smash/get/diva2:231227/fulltext01.pdf"
  * 
  * @author Aamir Mohammed
  */
 
 public class DescriptionMetricImproved implements Metric {
 
-	private static final String DESCRIPTION = "If dct:description contains <5 nouns, verbs and adjectives then 1 star"
-			+ "else if dct:description contains >5 and <10 then 2 stars"
-			+ "else if dct:description contains >10 and <15 then 3 stars"
-			+ "else if dct:description contains >15 and <20 then 4 stars"
-			+ "else if dct:description contains >20 then 5 stars";
+	private static final String DESCRIPTION = "If dct:description contains <5 nouns, verbs or adjectives then 1 star"
+			+ "else if dct:description contains >5 and <10 nouns, verbs or adjectives then 2 stars"
+			+ "else if dct:description contains >10 and <15 nouns, verbs or adjectives then 3 stars"
+			+ "else if dct:description contains >15 and <20 nouns, verbs or adjectives then 4 stars"
+			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars";
 
 	// German parts of speech tags for noun, verb and adjective
 	private static String nounTag = "NN";
