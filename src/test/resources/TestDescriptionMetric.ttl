@@ -33441,8 +33441,7 @@
                 "Deutscher Wetterdienst (DWD)" .
 
 <http://projekt-opal.de/dataset/_mcloudde_tglichestationsmessungendermittlerenwindgeschwindigkeitinms>
-        a                  dcat:Dataset ;
-        dct:description    "Diese Daten stammen aus den Stationen des DWD (Partnernetze nicht enthalten). Umfangreiche Stationsmetadaten (Stationsverlegungen, Instrumentenwechsel, Wechsel der Bezugszeit, Ãƒâ€žnderungen in den Algorithmen) werden mitgeliefert. Bis zum Stichtag sind die Daten versioniert, fÃƒÂ¼r jÃƒÂ¼ngere Daten ist die QualitÃƒÂ¤tskontrolle noch nicht abgeschlossen. Datensatzbeschreibung: https://cdc.dwd.de/sdi/pid/FM_MN003/BESCHREIBUNG_FM_MN003_de.pdf https://cdc.dwd.de/sdi/pid/FM_MN003/ISO_FM_MN003.xml" ;
+        a                  dcat:Dataset ; 
         dct:issued         "1911-01-01 bis gestern" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_tglichestationsmessungendermittlerenwindgeschwindigkeitinms> ;
         dct:title          "TÃƒÂ¤gliche Stationsmessungen der mittleren Windgeschwindigkeit in m/s" ;

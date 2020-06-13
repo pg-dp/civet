@@ -45,8 +45,8 @@ public class DescriptionMetricImproved implements Metric {
 	private static String nounTag = "NN";
 	private static String verbTag = "VVFIN";
 	private static String adjectiveTag = "ADJA";
-	private int lastIndexNoun = 0;
 	private int countNouns = 0;
+	private int lastIndexNoun = 0;
 	private int countVerbs = 0;
 	private int lastIndexVerb = 0;
 	private int countAdjectives = 0;
@@ -71,7 +71,6 @@ public class DescriptionMetricImproved implements Metric {
 		// Instantiating the POSSample class
 		POSSample description_tags = new POSSample(tokens, tags);
 		String pos_tags = description_tags.toString();
-		System.out.println("pos_tags " + pos_tags);
 
 		// Counting occurrences of nouns
 		while (lastIndexNoun != -1) {
@@ -103,12 +102,8 @@ public class DescriptionMetricImproved implements Metric {
 			}
 		}
 
-		// Sum up all three posTags in one variable to rate metrics
+		// Sum up all posTags in one variable to rate the metric
 		int allPosTags = countNouns + countVerbs + countAdjectives;
-		System.out.println("nouns" + countNouns);
-		System.out.println("verbs" + countVerbs);
-		System.out.println("adjec" + countAdjectives);
-		System.out.println("total" + allPosTags);
 
 		// Now rating for the description is given
 		if (allPosTags <= 5) {
@@ -141,7 +136,9 @@ public class DescriptionMetricImproved implements Metric {
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		int score = 1;
 		Resource dataset = model.createResource(datasetUri);
-		if (dataset.hasProperty(DCTerms.description)) {
+		if (!(dataset.hasProperty(DCTerms.description))) {
+			return score;
+		} else if (dataset.hasProperty(DCTerms.description)) {
 			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
 			score = posTagger(dct_description);
 			return score;
