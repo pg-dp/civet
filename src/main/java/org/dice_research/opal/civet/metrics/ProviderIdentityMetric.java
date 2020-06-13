@@ -21,8 +21,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * dct:publisher. If dct:publisher predicate is not present or empty then check
  * for a landing page in the dataset which is given by a predicate
  * dcat:landingPage. If still no publisher is found then check for access URL in
- * each distributions which is given by a predicate dcat:accessURL. Award a 0
- * star, in case of no availability of a pub- lisher.
+ * each distributions which is given by a predicate dcat:accessURL. A zero star
+ * is awarded in case of no availability of a publisher.
  * 
  * @author Gourab Sahu
  */
@@ -57,49 +57,49 @@ public class ProviderIdentityMetric implements Metric {
 	}
 
 	public int evaluatePublisher(Resource publisher) {
-		
-		int publisher_score = 0;
 
-		boolean publisher_is_a_foaf_resource = false;
+		int publisherScore = 0;
+
+		boolean publisherIsFoafResource = false;
 
 		if (publisher.hasProperty(RDF.type, FOAF.Agent) || (publisher.hasProperty(RDF.type, FOAF.Person))
 				|| (publisher.hasProperty(RDF.type, FOAF.Organization))
 				|| (publisher.hasProperty(RDF.type, FOAF.Group)))
-			publisher_is_a_foaf_resource = true;
+			publisherIsFoafResource = true;
 
-		String foaf_name = publisher.hasProperty(FOAF.name) ? publisher.getProperty(FOAF.name).getObject().toString()
+		String foafName = publisher.hasProperty(FOAF.name) ? publisher.getProperty(FOAF.name).getObject().toString()
 				: "";
 
 		/*
 		 * If a publisher is of type foaf:org or foaf:person and has an non-empty name
 		 * then 5 stars are awarded.
 		 */
-		if (publisher_is_a_foaf_resource && !foaf_name.isEmpty())
-			publisher_score = 5;
+		if (publisherIsFoafResource && !foafName.isEmpty())
+			publisherScore = 5;
 		/*
 		 * If resource is not a FOAF:organisation or FOAF:Person or FOAF:Agent but has a
 		 * publisher then 4 stars are awarded for not following DCAT recommendations.
 		 */
-		else if (!publisher_is_a_foaf_resource && !foaf_name.isEmpty())
-			publisher_score = 4;
+		else if (!publisherIsFoafResource && !foafName.isEmpty())
+			publisherScore = 4;
 
 		/*
 		 * Last case check if dct:publisher has been given in the form of a URL. 4 stars
 		 * for not following DCAT recommendations.
 		 */
 		else if (isValidURL(publisher.toString()))
-			publisher_score = 4;
-		
-		return publisher_score;
+			publisherScore = 4;
+
+		return publisherScore;
 
 	}
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-		
-		int publisher_score = 0;
-		int TotalPercentageOfAccessURL = 0;
-		int number_of_distributions = 0;
+
+		int publisherScore = 0;
+		int totalPercentageOfAccessURL = 0;
+		int numberOfDistributions = 0;
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
@@ -112,27 +112,27 @@ public class ProviderIdentityMetric implements Metric {
 			RDFNode publisher = publishers.next();
 
 			if (publisher.isAnon() || publisher.isURIResource()) {
-				publisher_score= evaluatePublisher((Resource) publisher);
-				if (publisher_score == 5)
+				publisherScore = evaluatePublisher((Resource) publisher);
+				if (publisherScore == 5)
 					break;
 			}
 		}
 
 		/*
-		 * If publisher_score=0 then check if dcat:landingPage is available in
+		 * If publisherScore=0 then check if dcat:landingPage is available in
 		 * dcat:catalog
 		 */
-		if (publisher_score == 0) {
+		if (publisherScore == 0) {
 
 			// It could be possible that more than 1 landing pages exist in a dataset.
-			NodeIterator landingpages = model.listObjectsOfProperty(dataset, DCAT.landingPage);
+			NodeIterator landingPages = model.listObjectsOfProperty(dataset, DCAT.landingPage);
 
-			while (landingpages.hasNext()) {
+			while (landingPages.hasNext()) {
 
-				Object landing_page = landingpages.next();
+				Object landingPage = landingPages.next();
 
-				if (isValidURL(landing_page.toString())) {
-					publisher_score = 5;
+				if (isValidURL(landingPage.toString())) {
+					publisherScore = 5;
 					break;
 				}
 
@@ -140,9 +140,9 @@ public class ProviderIdentityMetric implements Metric {
 		}
 
 		// If LandingPage is not there then check for AccessURL in the distribution
-		if (publisher_score == 0) {
+		if (publisherScore == 0) {
 
-			int number_of_access_url = 0;
+			int numberOfAccessUrl = 0;
 
 			NodeIterator distributions = model.listObjectsOfProperty(dataset, DCAT.distribution);
 
@@ -153,30 +153,30 @@ public class ProviderIdentityMetric implements Metric {
 					Resource distribution_resource = (Resource) distribution;
 					if (distribution_resource.hasProperty(DCAT.accessURL)
 							&& isValidURL(distribution_resource.getProperty(DCAT.accessURL).getObject().toString())) {
-						number_of_access_url++;
+						numberOfAccessUrl++;
 					}
 				}
-				number_of_distributions++;
+				numberOfDistributions++;
 			}
 
-			if (number_of_distributions > 0) {
-				TotalPercentageOfAccessURL = (number_of_access_url * 100) / number_of_distributions;
+			if (numberOfDistributions > 0) {
+				totalPercentageOfAccessURL = (numberOfAccessUrl * 100) / numberOfDistributions;
 			}
 
-			if (TotalPercentageOfAccessURL == 100)
-				publisher_score = 5;
-			else if (TotalPercentageOfAccessURL < 100 && TotalPercentageOfAccessURL >= 75)
-				publisher_score = 4;
-			else if (TotalPercentageOfAccessURL < 75 && TotalPercentageOfAccessURL >= 50)
-				publisher_score = 3;
-			else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
-				publisher_score = 2;
-			else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL > 0)
-				publisher_score = 1;
+			if (totalPercentageOfAccessURL == 100)
+				publisherScore = 5;
+			else if (totalPercentageOfAccessURL < 100 && totalPercentageOfAccessURL >= 75)
+				publisherScore = 4;
+			else if (totalPercentageOfAccessURL < 75 && totalPercentageOfAccessURL >= 50)
+				publisherScore = 3;
+			else if (totalPercentageOfAccessURL < 50 && totalPercentageOfAccessURL >= 25)
+				publisherScore = 2;
+			else if (totalPercentageOfAccessURL < 25 && totalPercentageOfAccessURL > 0)
+				publisherScore = 1;
 
 		}
 
-		return publisher_score;
+		return publisherScore;
 
 	}
 
