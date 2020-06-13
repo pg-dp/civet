@@ -45,10 +45,12 @@ public class DescriptionMetricImproved implements Metric {
 	private static String nounTag = "NN";
 	private static String verbTag = "VVFIN";
 	private static String adjectiveTag = "ADJA";
-	private int lastIndex = 0;
+	private int lastIndexNoun = 0;
 	private int countNouns = 0;
 	private int countVerbs = 0;
+	private int lastIndexVerb = 0;
 	private int countAdjectives = 0;
+	private int lastIndexAdjective = 0;
 
 	public int posTagger(String dct_description) throws IOException {
 
@@ -69,39 +71,44 @@ public class DescriptionMetricImproved implements Metric {
 		// Instantiating the POSSample class
 		POSSample description_tags = new POSSample(tokens, tags);
 		String pos_tags = description_tags.toString();
+		System.out.println("pos_tags " + pos_tags);
 
 		// Counting occurrences of nouns
-		while (lastIndex != -1) {
-			lastIndex = pos_tags.indexOf(nounTag, lastIndex);
+		while (lastIndexNoun != -1) {
+			lastIndexNoun = pos_tags.indexOf(nounTag, lastIndexNoun);
 
-			if (lastIndex != -1) {
+			if (lastIndexNoun != -1) {
 				countNouns++;
-				lastIndex += nounTag.length();
+				lastIndexNoun += nounTag.length();
 			}
 		}
 
 		// Counting occurrences of verbs
-		while (lastIndex != -1) {
-			lastIndex = pos_tags.indexOf(verbTag, lastIndex);
+		while (lastIndexVerb != -1) {
+			lastIndexVerb = pos_tags.indexOf(verbTag, lastIndexVerb);
 
-			if (lastIndex != -1) {
+			if (lastIndexVerb != -1) {
 				countVerbs++;
-				lastIndex += verbTag.length();
+				lastIndexVerb += verbTag.length();
 			}
 		}
 
 		// Counting occurrences of adjectives
-		while (lastIndex != -1) {
-			lastIndex = pos_tags.indexOf(adjectiveTag, lastIndex);
+		while (lastIndexAdjective != -1) {
+			lastIndexAdjective = pos_tags.indexOf(adjectiveTag, lastIndexAdjective);
 
-			if (lastIndex != -1) {
+			if (lastIndexAdjective != -1) {
 				countAdjectives++;
-				lastIndex += adjectiveTag.length();
+				lastIndexAdjective += adjectiveTag.length();
 			}
 		}
 
 		// Sum up all three posTags in one variable to rate metrics
 		int allPosTags = countNouns + countVerbs + countAdjectives;
+		System.out.println("nouns" + countNouns);
+		System.out.println("verbs" + countVerbs);
+		System.out.println("adjec" + countAdjectives);
+		System.out.println("total" + allPosTags);
 
 		// Now rating for the description is given
 		if (allPosTags <= 5) {
