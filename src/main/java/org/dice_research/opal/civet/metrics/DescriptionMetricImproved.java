@@ -44,15 +44,9 @@ public class DescriptionMetricImproved implements Metric {
 			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars";
 
 	// German parts of speech tags for noun, verb and adjective
-	private static String nounTag = "NN";
-	private static String verbTag = "VVFIN";
-	private static String adjectiveTag = "ADJA";
-	private int countNouns = 0;
-	private int lastIndexNoun = 0;
-	private int countVerbs = 0;
-	private int lastIndexVerb = 0;
-	private int countAdjectives = 0;
-	private int lastIndexAdjective = 0;
+	private final String nounTag = "NN";
+	private final String verbTag = "VVFIN";
+	private final String adjectiveTag = "ADJA";
 
 	public int posTagger(String dct_description) throws IOException {
 
@@ -75,7 +69,11 @@ public class DescriptionMetricImproved implements Metric {
 		String pos_tags = description_tags.toString();
 
 		// Counting occurrences of nouns
+		int countNouns = 0;
+		int lastIndexNoun = 0;
+
 		while (lastIndexNoun != -1) {
+			System.out.println("lastindex noun" + lastIndexNoun);
 			lastIndexNoun = pos_tags.indexOf(nounTag, lastIndexNoun);
 
 			if (lastIndexNoun != -1) {
@@ -85,6 +83,9 @@ public class DescriptionMetricImproved implements Metric {
 		}
 
 		// Counting occurrences of verbs
+		int countVerbs = 0;
+		int lastIndexVerb = 0;
+
 		while (lastIndexVerb != -1) {
 			lastIndexVerb = pos_tags.indexOf(verbTag, lastIndexVerb);
 
@@ -95,6 +96,9 @@ public class DescriptionMetricImproved implements Metric {
 		}
 
 		// Counting occurrences of adjectives
+		int countAdjectives = 0;
+		int lastIndexAdjective = 0;
+
 		while (lastIndexAdjective != -1) {
 			lastIndexAdjective = pos_tags.indexOf(adjectiveTag, lastIndexAdjective);
 
