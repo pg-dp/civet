@@ -73,7 +73,6 @@ public class DescriptionMetricImproved implements Metric {
 		int lastIndexNoun = 0;
 
 		while (lastIndexNoun != -1) {
-			System.out.println("lastindex noun" + lastIndexNoun);
 			lastIndexNoun = pos_tags.indexOf(nounTag, lastIndexNoun);
 
 			if (lastIndexNoun != -1) {
