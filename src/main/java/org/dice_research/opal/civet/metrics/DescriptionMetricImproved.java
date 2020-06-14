@@ -47,6 +47,12 @@ public class DescriptionMetricImproved implements Metric {
 	private final String nounTag = "NN";
 	private final String verbTag = "VVFIN";
 	private final String adjectiveTag = "ADJA";
+	int countNouns = 0;
+	int lastIndexNoun = 0;
+	int countVerbs = 0;
+	int lastIndexVerb = 0;
+	int countAdjectives = 0;
+	int lastIndexAdjective = 0;
 
 	public int posTagger(String dct_description) throws IOException {
 
@@ -69,9 +75,6 @@ public class DescriptionMetricImproved implements Metric {
 		String pos_tags = description_tags.toString();
 
 		// Counting occurrences of nouns
-		int countNouns = 0;
-		int lastIndexNoun = 0;
-
 		while (lastIndexNoun != -1) {
 			lastIndexNoun = pos_tags.indexOf(nounTag, lastIndexNoun);
 
@@ -82,9 +85,6 @@ public class DescriptionMetricImproved implements Metric {
 		}
 
 		// Counting occurrences of verbs
-		int countVerbs = 0;
-		int lastIndexVerb = 0;
-
 		while (lastIndexVerb != -1) {
 			lastIndexVerb = pos_tags.indexOf(verbTag, lastIndexVerb);
 
@@ -95,9 +95,6 @@ public class DescriptionMetricImproved implements Metric {
 		}
 
 		// Counting occurrences of adjectives
-		int countAdjectives = 0;
-		int lastIndexAdjective = 0;
-
 		while (lastIndexAdjective != -1) {
 			lastIndexAdjective = pos_tags.indexOf(adjectiveTag, lastIndexAdjective);
 
@@ -116,17 +113,17 @@ public class DescriptionMetricImproved implements Metric {
 			return 1;
 		}
 
-		else if (allPosTags > 5 && allPosTags <= 10) {
+		else if (allPosTags <= 10) {
 			// less posTags
 			return 2;
 		}
 
-		else if (allPosTags > 10 && allPosTags <= 15) {
+		else if (allPosTags <= 15) {
 			// average posTags
 			return 3;
 		}
 
-		else if (allPosTags > 15 && allPosTags <= 20) {
+		else if (allPosTags <= 20) {
 			// above average posTags
 			return 4;
 		}
