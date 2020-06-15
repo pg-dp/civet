@@ -4,7 +4,7 @@
 <http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_debat_dorientations_budgetaires_2018>
         a                       dcat:Dataset ;
         dct:accrualPeriodicity  <http://publications.europa.eu/resource/authority/frequency/UNKNOWN> ;
-        dct:description         "Test sentenc with some error which os very v randomly written"@en ;
+        dct:description         "Le présent document a pour objectif d'apporter l’ensemble des informations budgétaires et financières disponibles à ce jour pour vous permettre de décider de l’évolution des politiques publiques menées sur l'Agglomération Plaine Vallée."@fr ;
         dct:issued              "2019-01-16T02:53:16.624000" ;
         dct:publisher           [ a       <http://xmlns.com/foaf/0.1/Organization> ;
                                   <http://xmlns.com/foaf/0.1/name>
@@ -50,31 +50,6 @@
                 <http://projekt-opal.de/measurement2077161> , <http://projekt-opal.de/measurement2077162> , <http://projekt-opal.de/measurement2077163> , <http://projekt-opal.de/measurement2077164> , <http://projekt-opal.de/measurement2077165> , <http://projekt-opal.de/measurement2077166> , <http://projekt-opal.de/measurement2077160> ;
         <http://xmlns.com/foaf/0.1/page>
                 <https://www.data.gouv.fr/fr/datasets/declaration-du-profil-acheteur-35/> .
-
-<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_agricultural_land_classification_detailed_post1988_survey_alcl16793>
-    a                  dcat:Dataset ;
-    dct:description    "Survey name: Campsall, Longland Lane\n\n\nPost 1988 Agricultural Land Classification (ALC) site survey data - scanned original paper maps and survey reports for individual sites surveyed in detail between 1989 and 1999 by the Ministry of Agriculture Fisheries and Food. Where Grade 3 is mapped this includes the subdivision of Grade 3 into subgrades 3a and 3b. Surveys use the current grading methodology as described in \"Agricultural Land Classification of England and Wales,\" a link for which is provided with the data. Individual sites have been mapped at varying scales and level of detail from 1:5,000 to 1:50,000 (typically 1:10,000). Unedited sample point soils data and soil pit descriptions are also available for some surveys.\nAttribution statement: Natural England copyright. Contains Ordnance Survey data. Crown copyright and database right [year]. Attribution statement: © \t\t\t\t\t\t\tNatural England copyright. Contains Ordnance Survey data. Crown copyright and database right [year]."@en ;
-    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
-                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
-                         <http://xmlns.com/foaf/0.1/name>
-                                   "Natural England"
-                       ] ;
-    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
-                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
-                         <http://xmlns.com/foaf/0.1/name>
-                                   "Natural England"
-                       ] ;
-    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
-                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
-                         <http://xmlns.com/foaf/0.1/name>
-                                   "Natural England"
-                       ] ;
-    dct:title          "Agricultural Land Classification detailed Post1988 survey ALCL16793"@en ;
-    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_52b9f218_60ad_4cb7_9699_e1498bad9548> ;
-    dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/ENVI> ;
-    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
-                       <http://projekt-opal.de/measurement32981> , <http://projekt-opal.de/measurement32984> , <http://projekt-opal.de/measurement32978> , <http://projekt-opal.de/measurement32979> , <http://projekt-opal.de/measurement32982> , <http://projekt-opal.de/measurement32983> , <http://projekt-opal.de/measurement32980> .
-
 
 <http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_defibrillateurs_presents_sur_la_commune_de_sixt_sur_aff_en_2018>
         a                       dcat:Dataset ;

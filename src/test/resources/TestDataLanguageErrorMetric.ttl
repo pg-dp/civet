@@ -1,0 +1,152 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_agricultural_land_classification_detailed_post1988_survey_alcr00995>
+    a                  dcat:Dataset ;
+    dct:description    "Test sntc wth fr 1 str , rndm txt instrd hre"@en ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:title          "Agricultural Land Classification detailed Post1988 survey ALCR00995"@en ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_39c27cfa_18b4_4212_ad4c_3ca34e24828b> ;
+    dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/ENVI> ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement32846> , <http://projekt-opal.de/measurement32848> , <http://projekt-opal.de/measurement32851> , <http://projekt-opal.de/measurement32847> , <http://projekt-opal.de/measurement32850> , <http://projekt-opal.de/measurement32845> , <http://projekt-opal.de/measurement32849> .
+
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_agricultural_land_classification_detailed_post1988_survey_alcr008951>
+    a                  dcat:Dataset ;
+    dct:description    "rown copyht and databse right [year]."@en ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority>
+                       ] ;
+    dct:title          "Agricultural Land Classification detailed Post1988 survey ALCR00895"@en ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_aaaa58d2_3105_4929_a3d1_24a6f88c3ff8> ;
+    dcat:keyword       "Land use"@en , "business activity"@en , "OpenData"@en , "soil"@en ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement34150> , <http://projekt-opal.de/measurement34149> , <http://projekt-opal.de/measurement34147> , <http://projekt-opal.de/measurement34148> , <http://projekt-opal.de/measurement34153> , <http://projekt-opal.de/measurement34152> , <http://projekt-opal.de/measurement34151> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_14f6d44d_c5d4_5225_96d9_f42a0879c8f1>
+    a                  dcat:Dataset ;
+    dct:description    "Beginnen . Sie wärn an  eigenen Überrelfalt Natur, Rundschau, RS"@de ;
+    dct:identifier     "14F6D44D-C5D4-5225-96D9-F42A0879C8F1" ;
+    dct:issued         "2018-03-05T10:43:37.198983"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    dct:modified       "2019-03-05T10:59:56.383594"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    dct:publisher      <https://www.data.gv.at/organization/8999e6e9-8b74-43ce-80c3-4ba8a84d3099> ;
+    dct:title          "Kein Leben ohne Pilze" ;
+    dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Organization> ;
+                         <http://www.w3.org/2006/vcard/ns#fn>
+                                 "NP Kalkalpen"
+                       ] ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_d6483f4b_6fa4_4dab_808f_dc4fd8d59626> ;
+    dcat:keyword       "OpenDocument" , "Biologie" , "Schutzgebiet" , "Nationalparks Austria" , "Naturschutz" ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement318852> , <http://projekt-opal.de/measurement318853> , <http://projekt-opal.de/measurement318854> , <http://projekt-opal.de/measurement318855> , <http://projekt-opal.de/measurement318856> , <http://projekt-opal.de/measurement318857> , <http://projekt-opal.de/measurement318851> .
+
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_029d4698_6c32_46a1_ae7b_89beb74f8b14>
+    a                  dcat:Dataset ;
+    dct:description    "Rechnungsabschluss der Gemeinde - Einnahmen und Ausgaben" ;
+    dct:identifier     "029d4698-6c32-46a1-ae7b-89beb74f8b14" ;
+    dct:issued         "2017-12-21T16:45:55.852110"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    dct:modified       "2019-03-25T13:19:03.326329"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
+    dct:publisher      <https://www.data.gv.at/organization/f07172d7-d5f8-45df-9982-5a8d663ea3dc> ;
+    dct:title          "Rechnungsabschluss Faistenau 2011 (Statistik Austria)" ;
+    dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Organization> ;
+                         <http://www.w3.org/2006/vcard/ns#fn>
+                                 "Faistenau"
+                       ] ;
+    dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Organization> ;
+                         <http://www.w3.org/2006/vcard/ns#fn>
+                                 "Faistenau"
+                       ] ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_7751ff24_d549_42d3_be8e_82de268fbc2e> ;
+    dcat:keyword       "Einnahmen" , "Ausgaben" , "Gemeindefinanzen" , "Offenerhaushalt.at" , "Gemeinde" , "Haushalt" , "Rechnungsabschluss" ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement190891> , <http://projekt-opal.de/measurement190896> , <http://projekt-opal.de/measurement190893> , <http://projekt-opal.de/measurement190895> , <http://projekt-opal.de/measurement190897> , <http://projekt-opal.de/measurement190892> , <http://projekt-opal.de/measurement190894> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_agricultural_land_classification_detailed_post1988_survey_alcl16793>
+    a                  dcat:Dataset ;
+    dct:description    "Survey name: Campsall, Longland Lane\n\n\nPost 1988 Agricultural Land Classification (ALC) site survey data - scanned original paper maps and survey reports for individual sites surveyed in detail between 1989 and 1999 by the Ministry of Agriculture Fisheries and Food. Where Grade 3 is mapped this includes the subdivision of Grade 3 into subgrades 3a and 3b. Surveys use the current grading methodology as described in \"Agricultural Land Classification of England and Wales,\" a link for which is provided with the data. Individual sites have been mapped at varying scales and level of detail from 1:5,000 to 1:50,000 (typically 1:10,000). Unedited sample point soils data and soil pit descriptions are also available for some surveys.\nAttribution statement: Natural England copyright. Contains Ordnance Survey data. Crown copyright and database right [year]. Attribution statement: © \t\t\t\t\t\t\tNatural England copyright. Contains Ordnance Survey data. Crown copyright and database right [year]."@en ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                         dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                   "Natural England"
+                       ] ;
+    dct:title          "Agricultural Land Classification detailed Post1988 survey ALCL16793"@en ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_52b9f218_60ad_4cb7_9699_e1498bad9548> ;
+    dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/ENVI> ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement32981> , <http://projekt-opal.de/measurement32984> , <http://projekt-opal.de/measurement32978> , <http://projekt-opal.de/measurement32979> , <http://projekt-opal.de/measurement32982> , <http://projekt-opal.de/measurement32983> , <http://projekt-opal.de/measurement32980> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_02b05847_1f02_d38a_bd41_6bdc832c94ca>
+    a                  dcat:Dataset ;
+    dct:conformsTo     []  ;
+    dct:conformsTo     []  ;
+    dct:conformsTo     []  ;
+    dct:conformsTo     [ dct:issued  "2013-12-10"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                         dct:title   "VERORDNUNG (EU) Nr. 1253/2013 DER KOMMISSION vom 21. Oktober 2013 zur Änderung der Verordnung (EU) Nr. 1089/2010 zur Durchführung der Richtlinie 2007/2/EG hinsichtlich der Interoperabilität von Geodatensätzen und -diensten"@de
+                       ] ;
+    dct:description    "Bebauungspläne von Waldesch:2. Änderung des Bebauungsplans König von Rom der Ortsgemeinde Waldesch"@de ;
+    dct:hasPart        <file:///usr/verticles/http%3A%2F%2Fwww.komserv4gdi.service24.rlp.de%2Fe943e0d5-cbd0-7c8a-3d90-7682b09e621b> ;
+    dct:modified       "2019-03-28"^^<http://www.w3.org/2001/XMLSchema#date> ;
+    dct:publisher      [ a       <http://xmlns.com/foaf/0.1/Organization> ;
+                         <http://www.w3.org/ns/locn#address>
+                                 []  ;
+                         <http://xmlns.com/foaf/0.1/mbox>
+                                 <mailto:poststelle@lvermgeo.rlp.de> ;
+                         <http://xmlns.com/foaf/0.1/name>
+                                 "LVermGeo im Auftrag von Waldesch"
+                       ] ;
+    dct:spatial        []  ;
+    dct:title          "Waldesch - König von Rom 2. Änderung"@de ;
+    dct:type           <http://inspire.ec.europa.eu/metadata-codelist/ResourceType/services> , <http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/view> ;
+    dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_2090e5bd_0fa7_4978_96c3_ef0389a3c393> ;
+    dcat:keyword       "Bauleitplan"@de , "Bplan"@de , "inspireidentifiziert"@de , "infoMapAccessService"@de , "Waldesch"@de , "Bebauungsplan"@de ;
+    <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                       <http://projekt-opal.de/measurement193148> , <http://projekt-opal.de/measurement193147> , <http://projekt-opal.de/measurement193146> , <http://projekt-opal.de/measurement193145> , <http://projekt-opal.de/measurement193151> , <http://projekt-opal.de/measurement193150> , <http://projekt-opal.de/measurement193149> ;
+    <http://www.w3.org/ns/prov#wasUsedBy>
+                       []  ;
+    <http://www.w3.org/ns/prov#wasUsedBy>
+                       []  ;
+    <http://www.w3.org/ns/prov#wasUsedBy>
+                       []  ;
+    <http://www.w3.org/ns/prov#wasUsedBy>
+                       []  ;
+    <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                       [ a                  dcat:CatalogRecord ;
+                         dct:identifier     "02b05847-1f02-d38a-bd41-6bdc832c94ca" ;
+                         dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+                         dct:modified       "2019-03-28"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                         dct:source         []  ;
+                         <http://www.w3.org/2011/content#characterEncoding>
+                                            "UTF-8" ;
+                         dcat:contactPoint  []
+                       ] .
