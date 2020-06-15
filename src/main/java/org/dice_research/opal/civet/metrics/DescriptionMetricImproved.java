@@ -54,7 +54,7 @@ public class DescriptionMetricImproved implements Metric {
 	int countAdjectives = 0;
 	int lastIndexAdjective = 0;
 
-	public int posTagger(String dct_description) throws IOException {
+	public int posTagger(String description) throws IOException {
 
 		// Loading Parts of speech-maxent model
 		InputStream inputStream = new FileInputStream("src/main/resources/de-pos-maxent.bin");
@@ -65,18 +65,18 @@ public class DescriptionMetricImproved implements Metric {
 
 		// Tokenizing the sentence using WhitespaceTokenizer class
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
-		String[] tokens = whitespaceTokenizer.tokenize(dct_description);
+		String[] tokens = whitespaceTokenizer.tokenize(description);
 
 		// Generating tags
 		String[] tags = tagger.tag(tokens);
 
 		// Instantiating the POSSample class
-		POSSample description_tags = new POSSample(tokens, tags);
-		String pos_tags = description_tags.toString();
+		POSSample descriptionTags = new POSSample(tokens, tags);
+		String posTags = descriptionTags.toString();
 
 		// Counting occurrences of nouns
 		while (lastIndexNoun != -1) {
-			lastIndexNoun = pos_tags.indexOf(nounTag, lastIndexNoun);
+			lastIndexNoun = posTags.indexOf(nounTag, lastIndexNoun);
 
 			if (lastIndexNoun != -1) {
 				countNouns++;
@@ -86,7 +86,7 @@ public class DescriptionMetricImproved implements Metric {
 
 		// Counting occurrences of verbs
 		while (lastIndexVerb != -1) {
-			lastIndexVerb = pos_tags.indexOf(verbTag, lastIndexVerb);
+			lastIndexVerb = posTags.indexOf(verbTag, lastIndexVerb);
 
 			if (lastIndexVerb != -1) {
 				countVerbs++;
@@ -96,7 +96,7 @@ public class DescriptionMetricImproved implements Metric {
 
 		// Counting occurrences of adjectives
 		while (lastIndexAdjective != -1) {
-			lastIndexAdjective = pos_tags.indexOf(adjectiveTag, lastIndexAdjective);
+			lastIndexAdjective = posTags.indexOf(adjectiveTag, lastIndexAdjective);
 
 			if (lastIndexAdjective != -1) {
 				countAdjectives++;
@@ -141,8 +141,8 @@ public class DescriptionMetricImproved implements Metric {
 		if (!(dataset.hasProperty(DCTerms.description))) {
 			return score;
 		} else if (dataset.hasProperty(DCTerms.description)) {
-			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
-			score = posTagger(dct_description);
+			String description = dataset.getProperty(DCTerms.description).getObject().toString();
+			score = posTagger(description);
 			return score;
 		}
 		return score;
