@@ -103,7 +103,7 @@ public class DescriptionMetricImprovedTest {
 		DescriptionMetricImproved metric = new DescriptionMetricImproved();
 		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_fahrradabstellanlagen";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("It checks for title predicate", 1, stars.intValue());
+		Assert.assertEquals("It checks for empty title predicate", 1, stars.intValue());
 	}
 
 }
