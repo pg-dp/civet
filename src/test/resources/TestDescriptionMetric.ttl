@@ -44993,10 +44993,9 @@
 
 <http://projekt-opal.de/dataset/_mcloudde_fahrradabstellanlagen>
         a                  dcat:Dataset ;
-        dct:description    "Dieser Datensatz umfasst die Standorte der Fahrradabstellanlagen in der Hanse- und UniversitÃƒÂ¤tsstadt Rostock mit Informationen zu Art, StellplÃƒÂ¤tzen, GebÃƒÂ¼hren und ÃƒÅ“berdachung. Die Ressourcen werden in der Regel im folgenden Zeitabstand aktualisiert: 365 Tage" ;
         dct:issued         "29.11.2018" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_fahrradabstellanlagen> ;
-        dct:title          "Fahrradabstellanlagen" ;
+        dct:title          "" ;
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_6> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_4> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_1> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_2> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_0> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_7> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_5> , <http://projekt-opal.de/distribution/_mcloudde_fahrradabstellanlagen_3> ;
         dcat:landingPage   <https://mcloud.de/web/guest/suche/-/results/detail/_mcloudde_fahrradabstellanlagen?_mcloudsearchportlet_backURL=https%3A%2F%2Fmcloud.de%2Fweb%2Fguest%2Fsuche%2F-%2Fresults%2FsearchAction%3F_mcloudsearchportlet_page%3D34%26_mcloudsearchportlet_sort%3Dlatest> ;
         dcat:theme         <http://projeckt-opal.de/theme/mcloud/street> , <http://projeckt-opal.de/theme/mcloud/infrastructure> , <http://projeckt-opal.de/theme/mcloud/datarun> ;
@@ -45051,7 +45050,6 @@
 
 <http://projekt-opal.de/dataset/_mcloudde_vieljhrigesmittelderrasterderanzahldereistagefrdeutschland>
         a                  dcat:Dataset ;
-        dct:description    "Die Raster wurden aus Daten der DWD-Stationen und qualitativ gleichgestellten Partnernetzstationen in Deutschland abgeleitet, unter BerÃƒÂ¼cksichtigung der HÃƒÂ¶henabhÃƒÂ¤ngigkeiten. Weitere Informationen: https://opendata.dwd.de/climate_environment/CDC/grids_germany/multi_annual/ice_days/BESCHREIBUNG_gridsgermany_multi_annual_ice_days_de.pdf" ;
         dct:issued         "01.01.1961 - 31.12.2010" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_vieljhrigesmittelderrasterderanzahldereistagefrdeutschland> ;
         dct:title          "VieljÃƒÂ¤hriges Mittel der Raster der Anzahl der Eistage fÃƒÂ¼r Deutschland" ;

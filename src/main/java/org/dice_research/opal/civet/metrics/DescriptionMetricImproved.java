@@ -17,7 +17,8 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
  * The Description metric - Improved version checks the RDF property
  * dct:description. If the dct:description contains more number nouns, verbs and
  * adjectives then high stars are awarded, and less are awarded in a descending
- * order.
+ * order. If there is no description predicate, then check the same for
+ * dct:title and rate the dataset.
  * 
  * Rating Criteria is as follows: "If dct:description contains <5 nouns, verbs
  * or adjectives then 1 star" + "else if dct:description contains >5 and <10
@@ -41,7 +42,8 @@ public class DescriptionMetricImproved implements Metric {
 			+ "else if dct:description contains >5 and <10 nouns, verbs or adjectives then 2 stars"
 			+ "else if dct:description contains >10 and <15 nouns, verbs or adjectives then 3 stars"
 			+ "else if dct:description contains >15 and <20 nouns, verbs or adjectives then 4 stars"
-			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars";
+			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars"
+			+ "else if no dct:description but dct:title then evaluate title and give stars";
 
 	// German parts of speech tags for noun, verb and adjective
 	private final String nounTag = "NN";
@@ -54,7 +56,7 @@ public class DescriptionMetricImproved implements Metric {
 	int countAdjectives = 0;
 	int lastIndexAdjective = 0;
 
-	public int posTagger(String description) throws IOException {
+	public int posTagger(String rdfPredicate) throws IOException {
 
 		// Loading Parts of speech-maxent model
 		InputStream inputStream = new FileInputStream("src/main/resources/de-pos-maxent.bin");
@@ -65,14 +67,14 @@ public class DescriptionMetricImproved implements Metric {
 
 		// Tokenizing the sentence using WhitespaceTokenizer class
 		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
-		String[] tokens = whitespaceTokenizer.tokenize(description);
+		String[] tokens = whitespaceTokenizer.tokenize(rdfPredicate);
 
 		// Generating tags
 		String[] tags = tagger.tag(tokens);
 
 		// Instantiating the POSSample class
-		POSSample descriptionTags = new POSSample(tokens, tags);
-		String posTags = descriptionTags.toString();
+		POSSample predicateTags = new POSSample(tokens, tags);
+		String posTags = predicateTags.toString();
 
 		// Counting occurrences of nouns
 		while (lastIndexNoun != -1) {
@@ -138,7 +140,9 @@ public class DescriptionMetricImproved implements Metric {
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		int score = 1;
 		Resource dataset = model.createResource(datasetUri);
-		if (!(dataset.hasProperty(DCTerms.description))) {
+		if (!(dataset.hasProperty(DCTerms.description)) && (dataset.hasProperty(DCTerms.title))) {
+			String title = dataset.getProperty(DCTerms.title).getObject().toString();
+			score = posTagger(title);
 			return score;
 		} else if (dataset.hasProperty(DCTerms.description)) {
 			String description = dataset.getProperty(DCTerms.description).getObject().toString();

@@ -90,4 +90,20 @@ public class DescriptionMetricImprovedTest {
 		Assert.assertEquals("It contains best posTags", 5, stars.intValue());
 	}
 
+	@Test
+	public void checkTitle() throws Exception {
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrigesmittelderrasterderanzahldereistagefrdeutschland";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It checks for title predicate", 1, stars.intValue());
+	}
+
+	@Test
+	public void checkEmptyTitle() throws Exception {
+		DescriptionMetricImproved metric = new DescriptionMetricImproved();
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_fahrradabstellanlagen";
+		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("It checks for title predicate", 1, stars.intValue());
+	}
+
 }
