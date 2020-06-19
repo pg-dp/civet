@@ -150,9 +150,9 @@ public class ProviderIdentityMetric implements Metric {
 				RDFNode distribution = distributions.next();
 
 				if (distribution.isResource()) {
-					Resource distribution_resource = (Resource) distribution;
-					if (distribution_resource.hasProperty(DCAT.accessURL)
-							&& isValidURL(distribution_resource.getProperty(DCAT.accessURL).getObject().toString())) {
+					Resource distributionResource = (Resource) distribution;
+					if (distributionResource.hasProperty(DCAT.accessURL)
+							&& isValidURL(distributionResource.getProperty(DCAT.accessURL).getObject().toString())) {
 						numberOfAccessUrl++;
 					}
 				}
