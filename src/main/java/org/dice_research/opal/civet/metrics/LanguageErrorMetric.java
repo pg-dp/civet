@@ -11,6 +11,7 @@ import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
 import java.util.List;
+
 /**
  * Checks the grammar of the description of the model and rate the model accordingly .
  * JLANGTOOl lib is used for the grammar checking .
@@ -20,6 +21,7 @@ import java.util.List;
  * it has given 1 star else null with no description or no language Tag
  * Scoring Scheme is calculated as error per description length. Refer {@code scoringScheme}
  * for the further analysis of the scoring distribution
+ *
  * @author Vikrant Singh
  */
 
@@ -31,12 +33,12 @@ public class LanguageErrorMetric implements Metric {
             "support for other languages could be added easily";
 
     @Override
-    public Integer compute(Model model, String datasetUri) throws Exception, LiteralRequiredException {
+    public Integer compute(Model model, String datasetUri) throws Exception {
 
         Resource dataset = ResourceFactory.createResource(datasetUri);
-        JLanguageTool langTool ;
+        JLanguageTool langTool;
         String language = " ";
-        int score  ;
+        int score;
 
         Statement statement = model.getProperty(dataset, DCTerms.description);
         if (statement == null) {
@@ -47,16 +49,11 @@ public class LanguageErrorMetric implements Metric {
         String[] wordsCount = description.split(" ");
         double wordsCountLength = wordsCount.length;
 
-        NodeIterator languageIterator = model.listObjectsOfProperty(dataset, DCTerms.description);
-
-        //get the language from language Tag
-        while (languageIterator.hasNext()) {
-            RDFNode languageNode = languageIterator.next();
-            if (languageNode.isLiteral())
-                language = languageNode.asLiteral().getLanguage();
-            else
-                return null;
-        }
+        RDFNode languageNode = statement.getObject();
+        if (languageNode.isLiteral())
+            language = languageNode.asLiteral().getLanguage();
+        else
+            return null;
 
         //makes the JLangTool Object for a particular Language
         switch (language.toLowerCase()) {
@@ -70,7 +67,7 @@ public class LanguageErrorMetric implements Metric {
                 langTool = new JLanguageTool(new GermanyGerman());
                 break;
             default:
-                return  null ;
+                return null;
         }
 
         //makes a list of errors
@@ -84,7 +81,7 @@ public class LanguageErrorMetric implements Metric {
 
     private int scoringScheme(double errorCount) {
         //calculates the score
-        int score = 0 ;
+        int score = 0;
 
         if (errorCount > 0.75)
             score = 1;
