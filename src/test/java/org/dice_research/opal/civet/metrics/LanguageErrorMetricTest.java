@@ -12,13 +12,12 @@ import org.junit.Test;
 
 public class LanguageErrorMetricTest {
 
-    final String TEST_FILE = "TestDataLanguageErrorMetric.ttl";
-    TestData testdata;
-    Model model;
+    private final String TEST_FILE = "TestDataLanguageErrorMetric.ttl";
+    private Model model;
 
     @Before
-    public void setUp() throws Exception {
-        testdata = new TestData();
+    public void setUp() {
+        TestData testdata = new TestData();
         model = testdata.getModel(TEST_FILE);
     }
 
