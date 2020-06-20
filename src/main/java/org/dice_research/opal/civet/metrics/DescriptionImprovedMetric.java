@@ -36,7 +36,7 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
  * @author Aamir Mohammed
  */
 
-public class DescriptionMetricImproved implements Metric {
+public class DescriptionImprovedMetric implements Metric {
 
 	private static final String DESCRIPTION = "If dct:description contains <5 nouns, verbs or adjectives then 1 star"
 			+ "else if dct:description contains >5 and <10 nouns, verbs or adjectives then 2 stars"
@@ -143,11 +143,9 @@ public class DescriptionMetricImproved implements Metric {
 		if (!(dataset.hasProperty(DCTerms.description)) && (dataset.hasProperty(DCTerms.title))) {
 			String title = dataset.getProperty(DCTerms.title).getObject().toString();
 			score = posTagger(title);
-			return score;
 		} else if (dataset.hasProperty(DCTerms.description)) {
 			String description = dataset.getProperty(DCTerms.description).getObject().toString();
 			score = posTagger(description);
-			return score;
 		}
 		return score;
 	}
