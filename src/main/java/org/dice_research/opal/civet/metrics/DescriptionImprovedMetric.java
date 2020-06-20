@@ -49,12 +49,12 @@ public class DescriptionImprovedMetric implements Metric {
 	private final String nounTag = "NN";
 	private final String verbTag = "VVFIN";
 	private final String adjectiveTag = "ADJA";
-	int countNouns = 0;
-	int lastIndexNoun = 0;
-	int countVerbs = 0;
-	int lastIndexVerb = 0;
-	int countAdjectives = 0;
-	int lastIndexAdjective = 0;
+	private int countNouns = 0;
+	private int lastIndexNoun = 0;
+	private int countVerbs = 0;
+	private int lastIndexVerb = 0;
+	private int countAdjectives = 0;
+	private int lastIndexAdjective = 0;
 
 	public int posTagger(String rdfPredicate) throws IOException {
 
