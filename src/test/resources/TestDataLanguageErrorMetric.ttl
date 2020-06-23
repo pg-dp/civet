@@ -28,7 +28,7 @@
 
 <http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_agricultural_land_classification_detailed_post1988_survey_alcr008951>
     a                  dcat:Dataset ;
-    dct:description    "rown copyht and databse right [year]."@en ;
+    dct:description    "rown copyht and databse rght [year]."@en ;
     dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
                          dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
                          <http://xmlns.com/foaf/0.1/name>
