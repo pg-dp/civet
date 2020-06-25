@@ -45,18 +45,7 @@ public class DescriptionImprovedMetric implements Metric {
 			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars"
 			+ "else if no dct:description but dct:title then evaluate title and give stars";
 
-	// German parts of speech tags for noun, verb and adjective
-	private final String nounTag = "NN";
-	private final String verbTag = "VVFIN";
-	private final String adjectiveTag = "ADJA";
-	private int countNouns = 0;
-	private int lastIndexNoun = 0;
-	private int countVerbs = 0;
-	private int lastIndexVerb = 0;
-	private int countAdjectives = 0;
-	private int lastIndexAdjective = 0;
-
-	public int posTagger(String rdfPredicate) throws IOException {
+	public int checkPartsOfSpeech(String rdfPredicate) throws IOException {
 
 		// Loading Parts of speech-maxent model
 		InputStream inputStream = new FileInputStream("src/main/resources/de-pos-maxent.bin");
@@ -76,7 +65,13 @@ public class DescriptionImprovedMetric implements Metric {
 		POSSample predicateTags = new POSSample(tokens, tags);
 		String posTags = predicateTags.toString();
 
+		// German parts of speech tags for noun, verb and adjective
+		final String nounTag = "NN", verbTag = "VVFIN", adjectiveTag = "ADJA";
+
 		// Counting occurrences of nouns
+		int countNouns = 0;
+		int lastIndexNoun = 0;
+
 		while (lastIndexNoun != -1) {
 			lastIndexNoun = posTags.indexOf(nounTag, lastIndexNoun);
 
@@ -87,6 +82,9 @@ public class DescriptionImprovedMetric implements Metric {
 		}
 
 		// Counting occurrences of verbs
+		int countVerbs = 0;
+		int lastIndexVerb = 0;
+
 		while (lastIndexVerb != -1) {
 			lastIndexVerb = posTags.indexOf(verbTag, lastIndexVerb);
 
@@ -97,6 +95,9 @@ public class DescriptionImprovedMetric implements Metric {
 		}
 
 		// Counting occurrences of adjectives
+		int countAdjectives = 0;
+		int lastIndexAdjective = 0;
+
 		while (lastIndexAdjective != -1) {
 			lastIndexAdjective = posTags.indexOf(adjectiveTag, lastIndexAdjective);
 
@@ -107,25 +108,25 @@ public class DescriptionImprovedMetric implements Metric {
 		}
 
 		// Sum up all posTags in one variable to rate the metric
-		int allPosTags = countNouns + countVerbs + countAdjectives;
+		int totalPosTags = countNouns + countVerbs + countAdjectives;
 
 		// Now rating for the description is given
-		if (allPosTags <= 5) {
+		if (totalPosTags <= 5) {
 			// Very less posTags
 			return 1;
 		}
 
-		else if (allPosTags <= 10) {
+		else if (totalPosTags <= 10) {
 			// less posTags
 			return 2;
 		}
 
-		else if (allPosTags <= 15) {
+		else if (totalPosTags <= 15) {
 			// average posTags
 			return 3;
 		}
 
-		else if (allPosTags <= 20) {
+		else if (totalPosTags <= 20) {
 			// above average posTags
 			return 4;
 		}
@@ -141,11 +142,9 @@ public class DescriptionImprovedMetric implements Metric {
 		int score = 1;
 		Resource dataset = model.createResource(datasetUri);
 		if (!(dataset.hasProperty(DCTerms.description)) && (dataset.hasProperty(DCTerms.title))) {
-			String title = dataset.getProperty(DCTerms.title).getObject().toString();
-			score = posTagger(title);
+			score = checkPartsOfSpeech(dataset.getProperty(DCTerms.title).getObject().toString());
 		} else if (dataset.hasProperty(DCTerms.description)) {
-			String description = dataset.getProperty(DCTerms.description).getObject().toString();
-			score = posTagger(description);
+			score = checkPartsOfSpeech(dataset.getProperty(DCTerms.description).getObject().toString());
 		}
 		return score;
 	}
