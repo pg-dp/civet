@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests {@link DescriptionMetric}.
+ * Tests {@link DescriptionMetric-Improved}.
  * 
  * @author Aamir Mohammed
  */
@@ -28,84 +28,90 @@ public class DescriptionMetricTest {
 	}
 
 	@Test
-	public void checkEmptyTitleDescription() throws Exception {
+	public void checkLessPosTags() throws Exception {
 
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf";
-		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Empty description and title", 0, stars.intValue());
+		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_stadtkr"
+				+ "efeldgeodatenparkenstadtkrefeld";
+		Integer stars = metric.compute(model, datasetUri);
+		Assert.assertEquals("It contains less posTags", 2, stars.intValue());
 	}
 
 	@Test
-	public void atleastDescription() throws Exception {
+	public void noDescriptionProperty() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
-		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Atleast description", 1, stars.intValue());
+		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_"
+				+ "tglichestationsmessungendermittlerenwindgeschwindigkeitinms";
+		Integer stars = metric.compute(model, datasetUri);
+		Assert.assertEquals("It contains no description property", 1, stars.intValue());
 	}
 
 	@Test
-	public void atleastTitle() throws Exception {
+	public void checkVeryLessPosTags() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_tglichestationsmessungendersonnenscheindauerinstunden";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_"
+				+ "stadtbonnstandortederbusparkpltze";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Atleast title", 1, stars.intValue());
+		Assert.assertEquals("It contains very less posTags", 1, stars.intValue());
 	}
 
 	@Test
-	public void equalTitleDescription() throws Exception {
+	public void checkEmptyDescription() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vbb-fahrplandatenfebruarbisdezember2016";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_"
+				+ "standortederdauerzhlstellenradverkehrindsseldorf";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of title is equal to description", 1, stars.intValue());
+		Assert.assertEquals("It contains empty description value", 1, stars.intValue());
 	}
 
 	@Test
-	public void shortTitle() throws Exception {
+	public void checkAveragePosTags() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_stadtmoersbersichtskartederinnenstadtvonmoers";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_hvv-"
+				+ "fahrplandatengtfsapril2018bisdezember2018";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of title is less than 15", 1, stars.intValue());
+		Assert.assertEquals("It contains average posTags", 3, stars.intValue());
 	}
 
 	@Test
-	public void shortDescription() throws Exception {
+	public void checkAboveAveragePosTags() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrigerasterderrealenevapotranspirationbergrasundsandigemlehmperkalendermonat";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrliche"
+				+ "rasterdesmittlerenvegetationsbeginnsindeutschland";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of description is less than or equal to 25", 2, stars.intValue());
+		Assert.assertEquals("It contains above average posTags", 4, stars.intValue());
 	}
 
 	@Test
-	public void averageDescription() throws Exception {
+	public void checkBestPosTags() throws Exception {
+
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/bb5292fc-c6c2-455f-879c-3d05ed957176";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_"
+				+ "wettervorhersagemodellcosmo-de";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of description is less than or equal to 50", 3, stars.intValue());
+		Assert.assertEquals("It contains best posTags", 5, stars.intValue());
 	}
 
 	@Test
-	public void goodDescription() throws Exception {
+	public void checkTitle() throws Exception {
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_brckenundsonstigeingenieurbauwerke";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_vieljhrigesmittel"
+				+ "derrasterderanzahldereistagefrdeutschland";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of description is less than or equal to 75", 4, stars.intValue());
+		Assert.assertEquals("It checks for title predicate", 1, stars.intValue());
 	}
 
 	@Test
-	public void bestDescription() throws Exception {
+	public void checkEmptyTitle() throws Exception {
 		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_contispreferredareas";
+		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_fahrradabstellanlagen";
 		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("If the length of description is greater than 75", 5, stars.intValue());
-	}
-
-	@Test
-	public void titleWithNoDescription() throws Exception {
-		DescriptionMetric metric = new DescriptionMetric();
-		final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/_mcloudde_flussgebietseinheiten-dewrrl";
-		Integer stars = metric.compute(model, TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Check If the title exists and no dct:description", 1, stars.intValue());
+		Assert.assertEquals("It checks for empty title predicate", 1, stars.intValue());
 	}
 
 }
