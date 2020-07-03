@@ -51,6 +51,12 @@
 			<version>[1.7.28,2)</version>
 		</dependency>
 
+		<!-- Dependency for open-nlp -->
+		<dependency>
+			<groupId>org.apache.opennlp</groupId>
+			<artifactId>opennlp-tools</artifactId>
+			<version>1.9.2</version>
+		</dependency>
 
 		<!-- Test -->
 

@@ -1,122 +1,174 @@
 package org.dice_research.opal.civet.metrics;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCTerms;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSSample;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.tokenize.WhitespaceTokenizer;
+
 /**
- * The Description metric compares two RDF (Resource Description Framework)
- * properties dct:description, dct:title and gives the stars based on the
- * information it provides.
+ * The Description metric - Improved version checks the RDF property
+ * dct:description. If the dct:description contains more number nouns, verbs and
+ * adjectives then high stars are awarded, and less are awarded in a descending
+ * order. If there is no description predicate, then check the same for
+ * dct:title and rate the dataset.
  * 
- * Rating Criteria is as follows: "If there is empty dct:description and
- * dct:title then give 0 star"+ "If there is dct:description and dct:title empty
- * then give 1 star"+ "If there is dct:title and dct:description empty then give
- * 1 star"+ "If there is equal length of both dct:description and dct:title then
- * give 1 star"+ "If length of dct:title is less than 15 then give 1 star"+ "If
- * length of dct:description is less than or equal to 25 then give 2 star"+ "If
- * length of dct:description is less than or equal to 50 then give 3 star"+ "If
- * length of dct:description is less than or equal to 75 then give 4 star"+ "If
- * length of dct:description is more than 75 then give 5 star"
+ * Rating Criteria is as follows: "If dct:description contains <5 nouns, verbs
+ * or adjectives then 1 star" + "else if dct:description contains >5 and <10
+ * nouns, verbs or adjectives then 2 stars" + "else if dct:description contains
+ * >10 and <15 nouns, verbs or adjectives then 3 stars" + "else if
+ * dct:description contains >15 and <20 nouns, verbs or adjectives then 4 stars"
+ * + "else if dct:description contains >20 nouns, verbs or adjectives then 5
+ * stars"
+ * 
+ * Note: POS is an abbreviation of Parts of Speech
+ * 
+ * @see:"https://opennlp.apache.org/docs/1.9.0/manual/opennlp.html"
+ * @see:"http://csjarchive.cogsci.rpi.edu/Proceedings/2013/papers/0263/paper0263.pdf"
+ * @see:"https://pressbooks.bccampus.ca/technicalwriting/chapter/importanceverbs/"
+ * @see:"https://www.diva-portal.org/smash/get/diva2:231227/fulltext01.pdf"
  * 
  * @author Aamir Mohammed
  */
+
 public class DescriptionMetric implements Metric {
 
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTIONS = "If there is empty dct:description and dct:title then give 0 star"
-			+ " If there is dct:description and dct:title empty then give 1 star"
-			+ " If there is dct:title and dct:description empty then give 1 star"
-			+ " If there is equal length of both dct:description and dct:title then give 1 star"
-			+ " If length of dct:title is less than 15 then give 1 star"
-			+ " If length of dct:description is less than or equal to 25 then give 2 stars"
-			+ " If length of dct:description is less than or equal to 50 then give 3 stars"
-			+ " If length of dct:description is less than or equal to 75 then give 4 stars"
-			+ " If length of dct:description is more than 75 then give 5 star";
+	private static final String DESCRIPTION = "If dct:description contains <5 nouns, verbs or adjectives then 1 star"
+			+ "else if dct:description contains >5 and <10 nouns, verbs or adjectives then 2 stars"
+			+ "else if dct:description contains >10 and <15 nouns, verbs or adjectives then 3 stars"
+			+ "else if dct:description contains >15 and <20 nouns, verbs or adjectives then 4 stars"
+			+ "else if dct:description contains >20 nouns, verbs or adjectives then 5 stars"
+			+ "else if no dct:description but dct:title then evaluate title and give stars";
 
-	public static int compareDescriptionWithTitle(String description, String title) {
+	// German parts of speech tags for noun, verb and adjective
+	private static final String nounTag = "NN";
+	private static final String verbTag = "VVFIN";
+	private static final String adjectiveTag = "ADJA";
+
+	public int checkPartsOfSpeech(String rdfPredicate) throws IOException {
+
 		/*
-		 * In this function, it compares dct:title and dct:description according to the
-		 * conditions given in statements
-		 * 
+		 * Loading Parts of speech-maxent model "de.pos.maxent.bin" is a raw pre-trained
+		 * model from "http://opennlp.sourceforge.net/models-1.5/" for German texts to
+		 * detect parts of speech. It is language-dependent and only performs well if
+		 * the model language matches the language of the input text.
 		 */
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("de-pos-maxent.bin");
+		POSModel model = new POSModel(inputStream);
 
-		if (title.isEmpty() && description.isEmpty()) {
-			// No title and description
-			return 0;
+		// Instantiating POSTaggerME class
+		POSTaggerME tagger = new POSTaggerME(model);
+
+		// Tokenizing the sentence using WhitespaceTokenizer class
+		WhitespaceTokenizer whitespaceTokenizer = WhitespaceTokenizer.INSTANCE;
+		String[] tokens = whitespaceTokenizer.tokenize(rdfPredicate);
+
+		// Generating tags
+		String[] tags = tagger.tag(tokens);
+
+		// Instantiating the POSSample class
+		POSSample predicateTags = new POSSample(tokens, tags);
+		String posTags = predicateTags.toString();
+
+		// Counting occurrences of nouns
+		int countNouns = 0;
+		int lastIndexNoun = 0;
+
+		while (lastIndexNoun != -1) {
+			lastIndexNoun = posTags.indexOf(nounTag, lastIndexNoun);
+
+			if (lastIndexNoun != -1) {
+				countNouns++;
+				lastIndexNoun += nounTag.length();
+			}
 		}
 
-		else if (title.isEmpty() && !(description.isEmpty())) {
-			// Atleast description
+		// Counting occurrences of verbs
+		int countVerbs = 0;
+		int lastIndexVerb = 0;
+
+		while (lastIndexVerb != -1) {
+			lastIndexVerb = posTags.indexOf(verbTag, lastIndexVerb);
+
+			if (lastIndexVerb != -1) {
+				countVerbs++;
+				lastIndexVerb += verbTag.length();
+			}
+		}
+
+		// Counting occurrences of adjectives
+		int countAdjectives = 0;
+		int lastIndexAdjective = 0;
+
+		while (lastIndexAdjective != -1) {
+			lastIndexAdjective = posTags.indexOf(adjectiveTag, lastIndexAdjective);
+
+			if (lastIndexAdjective != -1) {
+				countAdjectives++;
+				lastIndexAdjective += adjectiveTag.length();
+			}
+		}
+
+		// Sum up all posTags in one variable to rate the metric
+		int totalPosTags = countNouns + countVerbs + countAdjectives;
+
+		// Now rating for the description is given
+		if (totalPosTags <= 5) {
+			// Very less posTags
 			return 1;
 		}
 
-		else if (!(title.isEmpty()) && description.isEmpty()) {
-			// Atleast title
-			return 1;
-		}
-
-		else if (description.equals(title)) {
-			// Bad usage of text
-			return 1;
-		}
-
-		else if (title.length() < 15) {
-			// Bad title
-			return 1;
-		}
-
-		else if (description.length() > 15 && description.length() <= 25) {
-			// Below average description
+		else if (totalPosTags <= 10) {
+			// less posTags
 			return 2;
 		}
 
-		else if (description.length() > 25 && description.length() <= 50) {
-			// Average description
+		else if (totalPosTags <= 15) {
+			// average posTags
 			return 3;
 		}
 
-		else if (description.length() > 50 && description.length() <= 75) {
-			// Above average description
+		else if (totalPosTags <= 20) {
+			// above average posTags
 			return 4;
 		}
 
 		else {
-			// Good description
+			// Best use of posTags
 			return 5;
 		}
 	}
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-		LOGGER.info("Processing dataset " + datasetUri);
+		int score = 1;
 		Resource dataset = model.createResource(datasetUri);
-		int scores = 1;
-		if (dataset.hasProperty(DCTerms.title) && !(dataset.hasProperty(DCTerms.description))) {
-			return scores;
-		} else if (!(dataset.hasProperty(DCTerms.title)) && dataset.hasProperty(DCTerms.description)) {
-			return scores;
-		} else if (dataset.hasProperty(DCTerms.title) && (dataset.hasProperty(DCTerms.description))) {
-			String dct_description = dataset.getProperty(DCTerms.description).getObject().toString();
-			String dct_title = dataset.getProperty(DCTerms.title).getObject().toString();
-			scores = compareDescriptionWithTitle(dct_description, dct_title);
-			return scores;
+		if (!(dataset.hasProperty(DCTerms.description)) && (dataset.hasProperty(DCTerms.title))) {
+			String title = dataset.getProperty(DCTerms.title).getLiteral().getString();
+			score = checkPartsOfSpeech(title);
+		} else if (dataset.hasProperty(DCTerms.description)) {
+			String description = dataset.getProperty(DCTerms.description).getLiteral().getString();
+			score = checkPartsOfSpeech(description);
 		}
-		return scores;
+		return score;
 	}
 
 	@Override
-	public String getDescription() {
-		return DESCRIPTIONS;
+	public String getDescription() throws Exception {
+		return DESCRIPTION;
 	}
 
 	@Override
 	public String getUri() throws Exception {
-		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
+		return Opal.OPAL_METRIC_DESCRIPTION.getURI();
 	}
 
 }
