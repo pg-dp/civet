@@ -6,10 +6,12 @@ import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.AmericanEnglish;
+import org.languagetool.language.BritishEnglish;
 import org.languagetool.language.French;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,7 +35,8 @@ public class LanguageErrorMetric implements Metric {
             " Works for English, German and French " +
             "support for other languages could be added easily";
 
-    private static final JLanguageTool langToolEnglish = new JLanguageTool(new AmericanEnglish()) ;
+    private static final JLanguageTool langToolBritishEnglish = new JLanguageTool(new BritishEnglish()) ;
+    private static final JLanguageTool langToolAmericanEnglish = new JLanguageTool(new AmericanEnglish()) ;
     private static final JLanguageTool langToolGerman = new JLanguageTool(new GermanyGerman());
     private static final JLanguageTool langToolFrench = new JLanguageTool(new French());
 
@@ -66,7 +69,7 @@ public class LanguageErrorMetric implements Metric {
 
         switch (language.toLowerCase()) {
             case "en":
-                matches = langToolEnglish.check(description);
+                matches = minErrors(description);
                 break;
             case "fr":
                 matches = langToolFrench.check(description);
@@ -101,6 +104,16 @@ public class LanguageErrorMetric implements Metric {
             score = 5;
 
         return score;
+    }
+
+    private List<RuleMatch> minErrors(String description) throws IOException {
+        List<RuleMatch> matchesAmericanEnglish = langToolAmericanEnglish.check(description);
+        List<RuleMatch> matchesBritishEnglish = langToolBritishEnglish.check(description);
+
+        if(matchesAmericanEnglish.size() > matchesBritishEnglish.size())
+            return matchesBritishEnglish ;
+
+        return matchesAmericanEnglish ;
     }
 
     @Override
